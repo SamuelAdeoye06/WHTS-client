@@ -18,9 +18,6 @@ const THREAT_CATS = [
 ]
 
 const RISK_LABEL = { high: 'HIGH RISK', mid: 'MED RISK', low: 'SECURE PATH' }
-// Tracks which quiz slugs the user has failed — persists across quiz sessions
-const [failedScenarios, setFailedScenarios] = useState([])
-const [showRepPrompt, setShowRepPrompt] = useState(false)
 
 
 /* ── Quiz Modal Component ── */
@@ -176,6 +173,9 @@ function QuizModal({ slug, onClose, onFail }) {
 export default function Threats() {
   const [activeQuiz, setActiveQuiz] = useState(null)
 
+  // Tracks which quiz slugs the user has failed — persists across quiz sessions
+  const [failedScenarios, setFailedScenarios] = useState([])
+  const [showRepPrompt, setShowRepPrompt] = useState(false)
   return (
     <>
       {/* ── Quiz Modal ── */}
