@@ -68,8 +68,25 @@ const AGENCIES = [
 
 export default function Home() {
   const statsRef = useRef(null)
+  const heroVideoRef = useRef(null)
   const [statsVisible, setStatsVisible] = useState(false)
   const [muted, setMuted] = useState(true)
+
+  useEffect(() => {
+    const video = heroVideoRef.current
+    if (!video) return
+
+    video.muted = muted
+    const playVideo = () => {
+      const playPromise = video.play()
+      if (playPromise?.catch) playPromise.catch(() => {})
+    }
+
+    if (video.readyState >= 2) playVideo()
+    else video.addEventListener('canplay', playVideo, { once: true })
+
+    return () => video.removeEventListener('canplay', playVideo)
+  }, [muted])
 
   /* Intersection observer to trigger counters when stats scroll into view */
   useEffect(() => {
@@ -93,6 +110,7 @@ export default function Home() {
         {/* Full-width video background */}
         <div className="hero-media" aria-hidden="true">
           <video
+            ref={heroVideoRef}
             className="hero-media-video"
             src={heroVideo}
             autoPlay
