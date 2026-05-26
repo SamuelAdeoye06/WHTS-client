@@ -4,11 +4,32 @@
    ============================================ */
 
 /* ── Hero ── */
+/* ── Threats page — distinct dark purple-to-navy gradient ── */
+.threats-page {
+  background: linear-gradient(160deg, #0a0014 0%, #0d0a2e 40%, #071126 100%);
+  min-height: 100vh;
+}
+
 .threats-hero {
   position: relative;
   overflow: hidden;
-  background: var(--cyber-bg);
-  border-bottom: 1px solid rgba(120, 214, 255, 0.1);
+  background: transparent;
+  border-bottom: 1px solid rgba(160, 80, 255, 0.18);
+}
+
+/* Purple cyber grid overlay for threats page only */
+.threats-hero .cyber-grid {
+  background-image:
+    linear-gradient(rgba(160, 80, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(160, 80, 255, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Threats sections get subtle purple tint */
+.threats-section-alt {
+  background: rgba(80, 20, 120, 0.12);
+  border-top: 1px solid rgba(160, 80, 255, 0.1);
+  border-bottom: 1px solid rgba(160, 80, 255, 0.1);
 }
 
 /* ── Quiz grid cards ── */

@@ -94,103 +94,112 @@ export default function Home() {
 
   return (
     <>
-      {/* ════════════════════════════════════════
-          HERO SECTION — video background
-          ════════════════════════════════════════ */}
-{/* ════════════════════════════════════════
-    HERO SECTION — two column layout
-    ════════════════════════════════════════ */}
-    <header className="hero">
-      {/* Subtle cyber grid behind everything */}
-      <div className="cyber-grid" aria-hidden="true" />
+  
+      <header className="hero position-relative overflow-hidden">
 
-      <div className="container hero-content">
-        <div className="row align-items-center g-5 min-vh-hero">
-
-          {/* ── LEFT — Text content ── */}
-          <div className="col-12 col-lg-6">
-
-            {/* Live badge */}
-            <div className="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill mb-4"
-              style={{ border: '1px solid rgba(120,214,255,0.25)', background: 'rgba(255,255,255,0.04)' }}>
-              <span className="pill low" style={{ padding: '0.2rem 0.55rem' }}>
-                <span className="dot" />
-                <span className="fw-bold" style={{ fontSize: '0.68rem' }}>LIVE INTELLIGENCE</span>
-              </span>
-              <span className="text-muted-cyber small">Real-time threat detection · Secure reporting</span>
-            </div>
-
-            <h1 className="glow-text mb-3">
-              Protecting Individuals &amp; Organizations Against Modern Cyber Threats
-            </h1>
-
-            <p className="mb-4" style={{ color: 'rgba(233,243,255,0.82)', fontSize: 'clamp(1rem,1.2vw,1.1rem)', maxWidth: '54ch' }}>
-              The Watch Eyes delivers intelligence-backed cybersecurity guidance —
-              helping you identify scams, report incidents, and recover with confidence.
-            </p>
-
-            <div className="d-flex flex-column flex-sm-row gap-2 flex-wrap">
-              <Link className="btn btn-alert" to="/report">
-                <i className="bi bi-exclamation-triangle me-2" />
-                Report an Incident
-              </Link>
-              <Link className="btn btn-cyber" to="/report#recover">
-                <i className="bi bi-shield-check me-2" />
-                Recover Now
-              </Link>
-              <Link className="btn btn-outline-cyber" to="/threats">
-                Explore Threats
-              </Link>
-            </div>
-
-            {/* Threat level indicator — compact, sits below CTAs */}
-            <div className="d-flex align-items-center gap-3 mt-4 pt-3"
-              style={{ borderTop: '1px solid rgba(120,214,255,0.12)' }}>
-              <span className="pill mid">
-                <span className="dot" />
-                <span className="fw-bold" style={{ fontSize: '0.7rem' }}>MONITORING</span>
-              </span>
-              <div className="scan-bar flex-grow-1">
-                <span />
-              </div>
-              <span className="text-muted-cyber small" style={{ whiteSpace: 'nowrap' }}>
-                Threat level: Elevated
-              </span>
-            </div>
-          </div>
-
-          {/* ── RIGHT — Video ── */}
-          <div className="col-12 col-lg-6">
-            <div className="hero-video-wrap">
-              <video
-                className="hero-video"
-                src={heroVideo}
-                autoPlay
-                muted={muted}
-                loop
-                playsInline
-                preload="auto"
-              />
-              {/* Unmute toggle button */}
-              <button
-                className="hero-video-unmute"
-                onClick={() => setMuted(prev => !prev)}
-                aria-label="Toggle video sound"
-                title={muted ? 'Unmute video' : 'Mute video'}
-              >
-                {muted
-                  ? <i className="bi bi-volume-mute-fill"></i>   /* muted state — shows mute icon */
-                  : <i className="bi bi-volume-up-fill"></i>      /* playing sound — shows speaker icon */
-                }
-              </button>
-              {/* Glow border effect */}
-              <div className="hero-video-glow" aria-hidden="true" />
-            </div>
-          </div>
-
+        {/* Full-width video background */}
+        <div className="hero-media" aria-hidden="true">
+          <video
+            className="hero-media-video"
+            src={heroVideo}
+            autoPlay
+            muted={muted}
+            loop
+            playsInline
+            preload="auto"
+          />
+          {/* Dark overlay so text stays readable */}
+          <div className="hero-media-overlay" />
         </div>
-      </div>
-    </header>
+
+        <div className="cyber-grid" aria-hidden="true" />
+
+        <div className="container hero-content section-pad-lg">
+          <div className="row align-items-center g-5 min-vh-hero">
+
+            {/* Left — all text content */}
+            <div className="col-12 col-lg-7">
+              <div className="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill mb-4"
+                style={{ border: '1px solid rgba(120,214,255,0.25)', background: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(8px)' }}>
+                <span className="pill low" style={{ padding: '0.2rem 0.55rem' }}>
+                  <span className="dot" />
+                  <span className="fw-bold" style={{ fontSize: '0.68rem' }}>LIVE INTELLIGENCE</span>
+                </span>
+                <span className="text-muted-cyber small">Real-time threat detection · Secure reporting</span>
+              </div>
+
+              <h1 className="glow-text mb-3">
+                Protecting Individuals &amp; Organizations Against Modern Cyber Threats
+              </h1>
+
+              <p className="mb-4" style={{ color: 'rgba(233,243,255,0.88)', fontSize: 'clamp(1rem,1.2vw,1.1rem)', maxWidth: '58ch' }}>
+                The Watch Eyes delivers intelligence-backed cybersecurity guidance —
+                helping you identify scams, report incidents, and recover with confidence.
+              </p>
+
+              <div className="d-flex flex-column flex-sm-row gap-2 flex-wrap">
+                <Link className="btn btn-alert" to="/report">
+                  <i className="bi bi-exclamation-triangle me-2" />Report an Incident
+                </Link>
+                <Link className="btn btn-cyber" to="/report" state={{ scrollTo: 'recover' }}>
+                  <i className="bi bi-shield-check me-2" />Recover Now
+                </Link>
+                <Link className="btn btn-outline-cyber" to="/threats">
+                  Explore Threats
+                </Link>
+              </div>
+
+              <div className="d-flex align-items-center gap-3 mt-4 pt-3"
+                style={{ borderTop: '1px solid rgba(120,214,255,0.15)' }}>
+                <span className="pill mid">
+                  <span className="dot" /><span className="fw-bold" style={{ fontSize: '0.7rem' }}>MONITORING</span>
+                </span>
+                <div className="scan-bar flex-grow-1"><span /></div>
+                <span className="text-muted-cyber small" style={{ whiteSpace: 'nowrap' }}>Threat level: Elevated</span>
+              </div>
+            </div>
+
+            {/* Right — threat level panel */}
+            <div className="col-12 col-lg-5">
+              <div className="banner p-4" style={{ backdropFilter: 'blur(16px)', background: 'rgba(7,17,38,0.75)' }}>
+                <div className="d-flex align-items-center justify-content-between mb-3">
+                  <div>
+                    <div className="text-muted-cyber small mb-1">Current Threat Level</div>
+                    <div className="fw-bold fs-4 glow-text">Elevated</div>
+                  </div>
+                  <span className="pill mid">
+                    <span className="dot" /><span className="fw-bold" style={{ fontSize: '0.72rem' }}>MONITORING</span>
+                  </span>
+                </div>
+                <div className="scan-bar mb-2"><span /></div>
+                <div className="text-muted-cyber small mb-4">Continuously scanning for active threat signals</div>
+                <div className="d-flex align-items-start gap-3 mb-3">
+                  <div className="icon-box">🛡️</div>
+                  <div>
+                    <div className="fw-bold">Instant Guidance Available</div>
+                    <div className="text-muted-cyber small">Browse our threat library and take the Spot-a-Scam quiz.</div>
+                  </div>
+                </div>
+                <div className="d-grid gap-2">
+                  <Link className="btn btn-cyber" to="/threats">Explore Threat Library</Link>
+                  <Link className="btn btn-outline-cyber" to="/report">Submit a Secure Report</Link>
+                </div>
+
+                {/* Unmute button */}
+                <button
+                  className="hero-video-unmute"
+                  onClick={() => setMuted(p => !p)}
+                  aria-label="Toggle video sound"
+                  title={muted ? 'Unmute video' : 'Mute video'}
+                >
+                  <i className={`bi ${muted ? 'bi-volume-mute-fill' : 'bi-volume-up-fill'}`}></i>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </header>
 
       {/* ════════════════════════════════════════
           STATS SECTION

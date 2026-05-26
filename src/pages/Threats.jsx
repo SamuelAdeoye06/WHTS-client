@@ -71,105 +71,107 @@ function QuizModal({ slug, onClose, onFail }) {
 
 
   return (
-    <div className="quiz-modal-backdrop" onClick={e => e.target === e.currentTarget && onClose()}>
-      <div className="quiz-modal-box" role="dialog" aria-modal="true" aria-label={`Quiz: ${quiz.title}`}>
+    <div className="threats-page">
+      <div className="quiz-modal-backdrop" onClick={e => e.target === e.currentTarget && onClose()}>
+        <div className="quiz-modal-box" role="dialog" aria-modal="true" aria-label={`Quiz: ${quiz.title}`}>
 
-        {/* Header */}
-        <div className="quiz-modal-header">
-          <div className="d-flex align-items-center gap-2">
-            <span style={{ fontSize: '1.4rem' }}>{quiz.emoji}</span>
-            <div>
-              <div className="fw-bold text-white">{quiz.title}</div>
-              <div className="text-muted-cyber" style={{ fontSize: '0.72rem' }}>
-                {done ? 'Quiz Complete' : `Question ${step + 1} of ${total}`}
-              </div>
-            </div>
-          </div>
-          <button className="quiz-close-btn" onClick={onClose} aria-label="Close quiz">
-            <i className="bi bi-x-lg"></i>
-          </button>
-        </div>
-
-        {/* Progress bar */}
-        {!done && (
-          <div className="quiz-progress">
-            <div className="quiz-progress-fill" style={{ width: `${((step) / total) * 100}%` }} />
-          </div>
-        )}
-
-        {/* Phone mock content */}
-        {!done ? (
-          <div className="quiz-phone-mock">
-            <div className="quiz-phone-notch" />
-            <div className="quiz-phone-screen">
-
-              {/* Step label */}
-              <div className="text-muted-cyber small mb-2" style={{ fontSize: '0.7rem', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-                {q.q}
-              </div>
-
-              {/* Question */}
-              <div className="quiz-question">{q.prompt}</div>
-
-              {/* Options */}
-              <div className="quiz-options">
-                {q.options.map((opt, i) => {
-                  let cls = 'quiz-option'
-                  if (selected !== null) {
-                    if (i === q.correct)  cls += ' correct'
-                    else if (i === selected && i !== q.correct) cls += ' wrong'
-                    else cls += ' dimmed'
-                  }
-                  return (
-                    <button key={i} className={cls} onClick={() => handleAnswer(i)} disabled={selected !== null}>
-                      <span className="quiz-option-letter">{String.fromCharCode(65 + i)}</span>
-                      {opt}
-                    </button>
-                  )
-                })}
-              </div>
-
-              {/* Feedback */}
-              {feedback && (
-                <div className={`quiz-feedback ${feedback}`}>
-                  {feedback === 'correct'
-                    ? <><i className="bi bi-check-circle-fill me-2"></i>Correct!</>
-                    : <><i className="bi bi-x-circle-fill me-2"></i>Whoops! The right answer was highlighted above.</>
-                  }
+          {/* Header */}
+          <div className="quiz-modal-header">
+            <div className="d-flex align-items-center gap-2">
+              <span style={{ fontSize: '1.4rem' }}>{quiz.emoji}</span>
+              <div>
+                <div className="fw-bold text-white">{quiz.title}</div>
+                <div className="text-muted-cyber" style={{ fontSize: '0.72rem' }}>
+                  {done ? 'Quiz Complete' : `Question ${step + 1} of ${total}`}
                 </div>
-              )}
-
-              {/* Next button */}
-              {selected !== null && (
-                <button className="btn btn-cyber w-100 mt-3" onClick={handleNext}>
-                  {step + 1 >= total ? 'See Results' : 'Continue →'}
-                </button>
-              )}
+              </div>
             </div>
+            <button className="quiz-close-btn" onClick={onClose} aria-label="Close quiz">
+              <i className="bi bi-x-lg"></i>
+            </button>
           </div>
-        ) : (
-          /* Results screen */
-          <div className="quiz-results">
-            {(() => {
-              const r = getResult()
-              return (
-                <>
-                  <div className="quiz-result-score" style={{ color: r.color }}>{score}/{total}</div>
-                  <div className="quiz-result-label" style={{ color: r.color }}>{r.label}</div>
-                  <div className="text-muted-cyber text-center mb-4">{r.msg}</div>
-                  <div className="d-flex gap-2 justify-content-center flex-wrap">
-                    <button className="btn btn-outline-cyber" onClick={() => { setStep(0); setSelected(null); setFeedback(null); setScore(0); setDone(false) }}>
-                      <i className="bi bi-arrow-repeat me-2"></i>Retry
-                    </button>
-                    <button className="btn btn-cyber" onClick={onClose}>
-                      Done
-                    </button>
+
+          {/* Progress bar */}
+          {!done && (
+            <div className="quiz-progress">
+              <div className="quiz-progress-fill" style={{ width: `${((step) / total) * 100}%` }} />
+            </div>
+          )}
+
+          {/* Phone mock content */}
+          {!done ? (
+            <div className="quiz-phone-mock">
+              <div className="quiz-phone-notch" />
+              <div className="quiz-phone-screen">
+
+                {/* Step label */}
+                <div className="text-muted-cyber small mb-2" style={{ fontSize: '0.7rem', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+                  {q.q}
+                </div>
+
+                {/* Question */}
+                <div className="quiz-question">{q.prompt}</div>
+
+                {/* Options */}
+                <div className="quiz-options">
+                  {q.options.map((opt, i) => {
+                    let cls = 'quiz-option'
+                    if (selected !== null) {
+                      if (i === q.correct)  cls += ' correct'
+                      else if (i === selected && i !== q.correct) cls += ' wrong'
+                      else cls += ' dimmed'
+                    }
+                    return (
+                      <button key={i} className={cls} onClick={() => handleAnswer(i)} disabled={selected !== null}>
+                        <span className="quiz-option-letter">{String.fromCharCode(65 + i)}</span>
+                        {opt}
+                      </button>
+                    )
+                  })}
+                </div>
+
+                {/* Feedback */}
+                {feedback && (
+                  <div className={`quiz-feedback ${feedback}`}>
+                    {feedback === 'correct'
+                      ? <><i className="bi bi-check-circle-fill me-2"></i>Correct!</>
+                      : <><i className="bi bi-x-circle-fill me-2"></i>Whoops! The right answer was highlighted above.</>
+                    }
                   </div>
-                </>
-              )
-            })()}
-          </div>
-        )}
+                )}
+
+                {/* Next button */}
+                {selected !== null && (
+                  <button className="btn btn-cyber w-100 mt-3" onClick={handleNext}>
+                    {step + 1 >= total ? 'See Results' : 'Continue →'}
+                  </button>
+                )}
+              </div>
+            </div>
+          ) : (
+            /* Results screen */
+            <div className="quiz-results">
+              {(() => {
+                const r = getResult()
+                return (
+                  <>
+                    <div className="quiz-result-score" style={{ color: r.color }}>{score}/{total}</div>
+                    <div className="quiz-result-label" style={{ color: r.color }}>{r.label}</div>
+                    <div className="text-muted-cyber text-center mb-4">{r.msg}</div>
+                    <div className="d-flex gap-2 justify-content-center flex-wrap">
+                      <button className="btn btn-outline-cyber" onClick={() => { setStep(0); setSelected(null); setFeedback(null); setScore(0); setDone(false) }}>
+                        <i className="bi bi-arrow-repeat me-2"></i>Retry
+                      </button>
+                      <button className="btn btn-cyber" onClick={onClose}>
+                        Done
+                      </button>
+                    </div>
+                  </>
+                )
+              })()}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
@@ -339,7 +341,7 @@ export default function Threats() {
       {/* ════════════════════════════
           SPOT A SCAM QUIZ GRID
           ════════════════════════════ */}
-      <section className="section-pad-lg" id="quizzes" style={{ background: 'rgba(5,9,19,0.6)' }}>
+      <section className="section-pad-lg threats-section-alt" id="quizzes">
         <div className="container">
           <div className="d-flex align-items-end justify-content-between gap-3 flex-wrap mb-4">
             <div>
