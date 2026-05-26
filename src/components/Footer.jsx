@@ -16,7 +16,7 @@ export default function Footer() {
         <div className="row g-4">
 
           {/* Brand column */}
-          <div className="col-12 col-lg-4">
+          <div className="col-12 col-lg-3">
             <div className="mb-3">
               <img
                 src={logoWhts}
@@ -105,7 +105,7 @@ export default function Footer() {
           </div>
 
           {/* Actions column */}
-          <div className="col-12 col-lg-4">
+          <div className="col-12 col-lg-3">
             <div className="footer-col-title">Take Action</div>
             <div className="d-grid gap-2 mb-3">
               <Link className="btn btn-alert" to="/report" state={{ scrollTo: 'report' }}>

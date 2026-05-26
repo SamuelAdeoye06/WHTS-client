@@ -89,6 +89,10 @@
   transform: scaleX(1);
 }
 
+.cyber-navbar .nav-dropdown-toggle::after {
+  display: none;
+}
+
 .cyber-navbar .nav-link.active-link {
   color: #fff !important;
 }
@@ -309,7 +313,7 @@
   display: block;
   position: absolute;
   left: 8px;
-  right: 22px; /* account for Bootstrap caret width */
+  right: 8px;
   bottom: -2px;
   height: 2px;
   background: linear-gradient(90deg, transparent, rgba(34, 240, 255, 0.9), transparent);

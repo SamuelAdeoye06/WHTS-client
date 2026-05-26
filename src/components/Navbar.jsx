@@ -13,7 +13,9 @@ export default function Navbar() {
   useEffect(() => { setNavOpen(false) }, [location])
 
   // Check if current path starts with a base to highlight dropdown parent
-  const isAboutActive = location.pathname.startsWith('/about')
+  const isAboutActive = location.pathname.startsWith('/about') || location.pathname === '/for-victims-government'
+  const isResourcesActive = ['/essential-eight', '/blog'].some(path => location.pathname.startsWith(path))
+  const isReportActive = location.pathname.startsWith('/report')
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark cyber-navbar">
@@ -74,7 +76,7 @@ export default function Navbar() {
 
             {/* Resources dropdown */}
             <li className="nav-item dropdown">
-              <a className="nav-link dropdown-toggle nav-dropdown-toggle"
+              <a className={`nav-link dropdown-toggle nav-dropdown-toggle ${isResourcesActive ? 'active-link' : ''}`}
                 href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Resources
                 <span className="nav-underline" aria-hidden="true"></span>
@@ -95,7 +97,7 @@ export default function Navbar() {
 
             {/* Report & Recover dropdown */}
             <li className="nav-item dropdown">
-              <a className="nav-link dropdown-toggle nav-dropdown-toggle"
+              <a className={`nav-link dropdown-toggle nav-dropdown-toggle ${isReportActive ? 'active-link' : ''}`}
                 href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Report &amp; Recover
                 <span className="nav-underline" aria-hidden="true"></span>
