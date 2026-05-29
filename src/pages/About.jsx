@@ -110,7 +110,7 @@ export default function About() {
         </section>
 
         {/* ── Government Affiliated Agencies ── */}
-        <section className="section-pad-lg" style={{ background: '#f8fafc' }}>
+        <section className="section-pad-lg" id="government-agencies" style={{ background: '#f8fafc' }}>
           <div className="container">
             <div className="text-center mb-5">
               <div className="section-label mb-2">Our Partners</div>
@@ -122,7 +122,7 @@ export default function About() {
             </div>
             <div className="row g-4">
               {GOV_AGENCIES.map(agency => (
-                <div key={agency.abbr} className="col-12 col-md-6 col-lg-3">
+                <div key={agency.abbr} className="col-12 col-md-6 col-lg-4">
                   <div className="official-card">
                     <div className="official-img-wrap">
                       <img src={agency.img} alt={agency.name} className="official-img" />

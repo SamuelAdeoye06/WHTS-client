@@ -117,13 +117,15 @@
 
 /* ── Responsive ── */
 @media (max-width: 767.98px) {
-  .official-img-wrap { height: 180px; }
+  .official-img-wrap { height: auto; }
+  .official-img { height: auto; }
   .about-timeline { padding-left: 1.5rem; }
 }
 
 @media (max-width: 575.98px) {
   .about-timeline-year { min-width: 32px; font-size: 0.72rem; }
-  .official-img-wrap { height: 160px; }
+  .official-img-wrap { height: auto; }
+  .official-img { height: auto; }
 }
 
 /* ── Officials image cards — full image + minimal label ── */
@@ -190,11 +192,13 @@
 
 /* ── Responsive ── */
 @media (max-width: 767.98px) {
-  .official-img-wrap { height: 220px; }
+  .official-img-wrap { height: auto; }
+  .official-img { height: auto; }
 }
 
 @media (max-width: 575.98px) {
-  .official-img-wrap { height: 200px; }
+  .official-img-wrap { height: auto; }
+  .official-img { height: auto; }
   .official-label-name { font-size: 0.78rem; }
 }
 

@@ -439,7 +439,7 @@ export default function Home() {
 
             {/* Link to full officials page */}
             <div className="text-center">
-              <Link className="btn btn-outline-cyber" to="/about">
+              <Link className="btn btn-outline-cyber" to="/about#government-agencies">
                 <i className="bi bi-people me-2"></i>View All Affiliated Agencies
               </Link>
             </div>

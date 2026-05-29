@@ -326,7 +326,7 @@
   }
 
   .cinematic-video {
-    object-fit: contain;   /* show full video, no cropping */
+    object-fit: cover;   /* fill full width of the frame on mobile */
     object-position: center;
   }
 
