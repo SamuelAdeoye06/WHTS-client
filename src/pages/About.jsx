@@ -2,6 +2,15 @@ import { Link } from 'react-router-dom'
 import '../styles/cyber.css'
 import './About.css'
 
+import agencyDescFtc from '../assets/media/agency-desc-ftc.jpeg'
+import agencyDescUsps from '../assets/media/agency-desc-usps.jpeg'
+import agencyDescInterpol from '../assets/media/agency-desc-interpol.jpeg'
+import agencyDescCisa from '../assets/media/agency-desc-cisa.jpeg'
+import agencyDescDhs from '../assets/media/agency-desc-dhs.jpeg'
+import agencyDescFbi from '../assets/media/agency-desc-fbi.jpeg'
+import agencyDescSecretService from '../assets/media/agency-desc-secret-service.jpeg'
+import agencyDescIrs from '../assets/media/agency-desc-irs.jpeg'
+
 const TIMELINE = [
   { year: '2018', title: 'WHTSIPA Founded', desc: 'The Watch Eyes organisation was established to track and expose cybercriminals targeting individuals and businesses.' },
   { year: '2019', title: 'ACSW Partnership', desc: 'America Cyber Security World formally partnered with WHTSIPA, expanding reach across federal and international frameworks.' },
@@ -16,6 +25,17 @@ const PILLARS = [
   { icon: '📢', title: 'Expose', desc: 'We expose fraudulent operations through coordinated reporting with INTERPOL, FBI, IRS, and other affiliated agencies.' },
   { icon: '🛡️', title: 'Protect', desc: 'We protect individuals and organizations with real-time threat intelligence, education, and guided recovery workflows.' },
   { icon: '⚖️', title: 'Pursue', desc: 'We pursue accountability — every valid report contributes to ongoing investigations and official cybercrime records.' },
+]
+
+const GOV_AGENCIES = [
+  { abbr: 'FTC',      name: 'Federal Trade Commission',                       role: 'Consumer Protection & Fraud Enforcement',   img: agencyDescFtc },
+  { abbr: 'USPIS',    name: 'US Postal Inspection Service',                   role: 'Mail Fraud & Parcel Scam Investigation',    img: agencyDescUsps },
+  { abbr: 'INTERPOL', name: 'INTERPOL',                                       role: 'International Cross-Border Cybercrime',      img: agencyDescInterpol },
+  { abbr: 'CISA',     name: 'Cybersecurity & Infrastructure Security Agency', role: 'National Cyber Infrastructure Protection',   img: agencyDescCisa },
+  { abbr: 'DHS',      name: 'Department of Homeland Security',                role: 'Counter Intelligence of Threats',            img: agencyDescDhs },
+  { abbr: 'FBI',      name: 'FBI / Department of Justice',                    role: 'Cybercrime Investigation & IC3',             img: agencyDescFbi },
+  { abbr: 'USSS',     name: 'United States Secret Service',                   role: 'Financial Cybercrime & Access Device Fraud', img: agencyDescSecretService },
+  { abbr: 'IRS',      name: 'Internal Revenue Service',                       role: 'Tax Fraud & Financial Crime Investigation',  img: agencyDescIrs },
 ]
 
 export default function About() {
@@ -85,6 +105,41 @@ export default function About() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Government Affiliated Agencies ── */}
+        <section className="section-pad-lg" style={{ background: '#f8fafc' }}>
+          <div className="container">
+            <div className="text-center mb-5">
+              <div className="section-label mb-2">Our Partners</div>
+              <h2 className="fw-bold mb-2" style={{ color: '#0f172a' }}>Government Affiliated Agencies</h2>
+              <p style={{ color: '#4a5568', maxWidth: '56ch', margin: '0 auto' }}>
+                WHTSIPA operates in formal alignment with these US government agencies and
+                international law enforcement bodies. Every valid report is shared with the relevant authority.
+              </p>
+            </div>
+            <div className="row g-4">
+              {GOV_AGENCIES.map(agency => (
+                <div key={agency.abbr} className="col-12 col-md-6 col-lg-3">
+                  <div className="official-card">
+                    <div className="official-img-wrap">
+                      <img src={agency.img} alt={agency.name} className="official-img" />
+                    </div>
+                    <div className="official-label-light">
+                      <div className="official-label-abbr-light">{agency.abbr}</div>
+                      <div className="official-label-name-light">{agency.name}</div>
+                      <div className="official-label-role-light">{agency.role}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="text-center mt-4">
+              <Link className="btn btn-outline-primary px-4" to="/about-officials" style={{ borderRadius: 12, fontWeight: 600 }}>
+                <i className="bi bi-people me-2"></i>Meet The Officials
+              </Link>
             </div>
           </div>
         </section>

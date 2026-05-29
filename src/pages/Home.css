@@ -320,6 +320,16 @@
 
 /* ── Responsive ── */
 @media (max-width: 767.98px) {
+    .cinematic-frame {
+    aspect-ratio: 9 / 16;  /* portrait — matches actual video */
+    max-height: 85vh;
+  }
+
+  .cinematic-video {
+    object-fit: contain;   /* show full video, no cropping */
+    object-position: center;
+  }
+
   .home-video-section { padding: 3rem 0 0; }
   .cinematic-play-btn { width: 68px; height: 68px; font-size: 1.7rem; }
   .cinematic-play-title { font-size: 0.95rem; }

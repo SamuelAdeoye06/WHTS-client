@@ -249,3 +249,232 @@
   font-size: 0.72rem;
   color: #6b7280;
 }
+
+/* ════════════════════════════════════
+   OFFICIAL PLAYER — AboutOfficials
+   ════════════════════════════════════ */
+
+.official-player-card {
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.official-player-card:hover {
+  box-shadow: 0 12px 40px rgba(0,0,0,0.14);
+  transform: translateY(-2px);
+}
+
+/* ── Video frame — portrait to match client's videos ── */
+.official-player-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9 / 16;   /* portrait — matches client videos */
+  max-height: 520px;
+  background: #0a0a14;
+  cursor: pointer;
+  overflow: hidden;
+  border-bottom: 2px solid;
+}
+
+.official-player-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.official-player-gradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+  pointer-events: none;
+}
+
+.official-player-watermark {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  pointer-events: none;
+  user-select: none;
+}
+
+.official-player-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.3);
+}
+
+.official-play-btn {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 2px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.8rem;
+  padding-left: 5px;
+  backdrop-filter: blur(6px);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.official-play-btn:hover {
+  transform: scale(1.1);
+  opacity: 0.9;
+}
+
+/* ── Controls ── */
+.official-player-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  background: #111827;
+}
+
+.official-ctrl {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.7);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.25rem 0.4rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  transition: color 0.18s ease, background 0.18s ease;
+  flex-shrink: 0;
+}
+
+.official-ctrl:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.1);
+}
+
+.official-ctrl-progress {
+  flex: 1;
+  cursor: pointer;
+  padding: 7px 0;
+}
+
+.official-progress-track {
+  height: 3px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.official-progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.1s linear;
+}
+
+.official-ctrl-time {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.45);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Caption ── */
+.official-caption {
+  padding: 1.25rem;
+}
+
+.official-caption-codename {
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 0.15rem;
+}
+
+.official-caption-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 0.15rem;
+}
+
+.official-caption-type {
+  font-size: 0.78rem;
+  color: #6b7280;
+}
+
+.official-threat-badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  border: 1px solid;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.official-caption-desc {
+  font-size: 0.85rem;
+  color: #4a5568;
+  line-height: 1.6;
+  margin: 0.75rem 0;
+}
+
+.official-caption-capabilities {
+  margin-bottom: 0.75rem;
+}
+
+.official-cap-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.official-cap-tag {
+  display: inline-flex;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  background: #f0f4ff;
+  border: 1px solid #c7d2fe;
+  font-size: 0.72rem;
+  color: #1e40af;
+  font-weight: 500;
+}
+
+.official-caption-since {
+  font-size: 0.72rem;
+  color: #d1d5db;
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 767.98px) {
+  .official-player-frame {
+    max-height: 420px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .official-caption { padding: 1rem; }
+  .official-caption-name { font-size: 0.95rem; }
+  .official-player-frame { max-height: 360px; }
+}
