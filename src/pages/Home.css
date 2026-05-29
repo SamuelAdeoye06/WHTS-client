@@ -3,85 +3,336 @@
    src/pages/Home.css
    ============================================ */
 
-/* ── Hero ── */
-/* ── Hero — full video background ── */
-.hero {
-  min-height: 100vh;
+/* ── Hero — light theme standalone video ── */
+.hero-light {
+  background: #ffffff;
+  padding: 3.5rem 0 4rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.hero-light-text {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.hero-light-heading {
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+  color: #0f172a;
+}
+
+.hero-light-sub {
+  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+  color: #4a5568;
+  max-width: 56ch;
+  line-height: 1.65;
+}
+
+/* ════════════════════════════
+   VIDEO SECTION
+   ════════════════════════════ */
+.home-video-section {
+  background: #0a0a14;
+  padding: 4rem 0 0;
+}
+
+.home-video-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #60a5fa;
+  margin-bottom: 0.75rem;
+}
+
+.home-video-label-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3b82f6;
+  box-shadow: 0 0 12px #3b82f6;
+  animation: pulseDot 2s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.6; transform: scale(0.8); }
+}
+
+.home-video-heading {
+  font-size: clamp(1.5rem, 2.8vw, 2.2rem);
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.home-video-sub {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.55);
+  max-width: 58ch;
+  margin: 0 auto;
+  line-height: 1.65;
+}
+
+/* ── Cinematic player ── */
+.cinematic-player {
+  width: 100%;
+  background: #000000;
+  margin-top: 2.5rem;
+}
+
+/* Top bar */
+.cinematic-topbar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 1.25rem;
+  background: #111827;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.cinematic-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.cinematic-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+}
+
+.cinematic-dots span:nth-child(1) { background: #ef4444; }
+.cinematic-dots span:nth-child(2) { background: #eab308; }
+.cinematic-dots span:nth-child(3) { background: #22c55e; }
+
+.cinematic-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  letter-spacing: 0.02em;
+}
+
+.cinematic-duration {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.4);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Video frame */
+.cinematic-frame {
   position: relative;
+  width: 100%;
+  /* Full-width, ~56.25% height = 16:9. Use aspect-ratio */
+  aspect-ratio: 16 / 9;
+  background: #000;
+  cursor: pointer;
+  overflow: hidden;
 }
 
-.hero-media {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-
-.hero-media-video {
+.cinematic-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
   display: block;
 }
 
-.hero-media-overlay {
+/* Bottom gradient for controls readability */
+.cinematic-gradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 35%;
+  background: linear-gradient(transparent, rgba(0,0,0,0.75));
+  pointer-events: none;
+}
+
+/* WHTS watermark */
+.cinematic-watermark {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.5rem;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.22);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Play overlay */
+.cinematic-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(5, 9, 19, 0.85) 0%,
-    rgba(7, 17, 38, 0.72) 50%,
-    rgba(5, 9, 19, 0.80) 100%
-  );
-}
-
-.hero-content {
-  position: relative;
-  z-index: 2;
-}
-
-.hero h1 {
-  font-weight: 820;
-  line-height: 1.08;
-  letter-spacing: -0.02em;
-  font-size: clamp(1.7rem, 3vw, 3.2rem);
-}
-
-/* Unmute button — bottom right of the banner card */
-.hero-video-unmute {
-  position: absolute;
-  bottom: 14px;
-  right: 14px;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 1px solid rgba(120, 214, 255, 0.35);
-  background: rgba(7, 17, 38, 0.75);
-  color: rgba(233, 243, 255, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
+  background: rgba(0,0,0,0.42);
+}
+
+.cinematic-play-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  text-align: center;
+}
+
+.cinematic-play-btn {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   backdrop-filter: blur(8px);
-  transition: background 0.2s ease, border-color 0.2s ease;
-  z-index: 5;
+  transition: background 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+  padding-left: 6px; /* optical center */
 }
-.hero-video-unmute:hover {
-  background: rgba(34, 240, 255, 0.15);
-  border-color: rgba(34, 240, 255, 0.6);
+
+.cinematic-play-btn:hover {
+  background: rgba(255,255,255,0.25);
+  transform: scale(1.1);
+  box-shadow: 0 0 48px rgba(255,255,255,0.2);
+}
+
+.cinematic-play-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.cinematic-play-title {
+  font-size: 1.1rem;
+  font-weight: 700;
   color: #fff;
+  letter-spacing: 0.02em;
 }
 
-@media (max-width: 991.98px) {
-  .hero { min-height: unset; padding: 60px 0; }
+.cinematic-play-sub {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
+
+/* Controls bar */
+.cinematic-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1.25rem;
+  background: #111827;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.cinematic-controls-left {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.cinematic-ctrl {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.75);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.3rem 0.45rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  transition: color 0.18s ease, background 0.18s ease;
+}
+
+.cinematic-ctrl:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.1);
+}
+
+.cinematic-time {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.5);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  padding-left: 0.25rem;
+}
+
+/* Progress bar */
+.cinematic-progress {
+  flex: 1;
+  cursor: pointer;
+  padding: 8px 0;
+}
+
+.cinematic-progress-track {
+  position: relative;
+  height: 4px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 4px;
+}
+
+.cinematic-progress-fill {
+  height: 100%;
+  background: #3b82f6;
+  border-radius: 4px;
+  transition: width 0.1s linear;
+}
+
+.cinematic-progress-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #3b82f6;
+  box-shadow: 0 0 8px rgba(59,130,246,0.6);
+  transition: left 0.1s linear;
+}
+
+.cinematic-controls-right {
+  flex-shrink: 0;
+}
+
+.cinematic-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.45);
+  display: flex;
+  align-items: center;
+}
+
+/* ── Responsive ── */
+@media (max-width: 767.98px) {
+  .home-video-section { padding: 3rem 0 0; }
+  .cinematic-play-btn { width: 68px; height: 68px; font-size: 1.7rem; }
+  .cinematic-play-title { font-size: 0.95rem; }
+  .cinematic-topbar { padding: 0.55rem 1rem; }
+  .cinematic-controls { padding: 0.5rem 1rem; }
+  .cinematic-controls-right { display: none; }
+}
+
 @media (max-width: 575.98px) {
-  .hero { padding: 40px 0; }
+  .cinematic-play-btn { width: 56px; height: 56px; font-size: 1.4rem; }
+  .cinematic-time { display: none; }
+  .cinematic-play-sub { display: none; }
 }
-
 /* ── Agency marquee carousel ── */
 .agency-marquee-wrap {
   overflow: hidden;
@@ -161,29 +412,11 @@
 
 /* ── Home page responsive ── */
 @media (max-width: 991.98px) {
-  .hero { padding: 48px 0; }
-  .min-vh-hero { min-height: unset; }
-
-  .hero h1 { font-size: clamp(1.5rem, 4vw, 2.4rem); }
-
-  .hero-video-wrap {
-    width: 85%;
-    margin: 0 auto;
-    max-height: 55vh;
-  }
-
   /* Agency cards — 2 per row on tablet */
   .agency-desc-img { min-height: 240px; max-height: 320px; }
 }
 
 @media (max-width: 575.98px) {
-  .hero { padding: 36px 0; }
-  .hero h1 { font-size: clamp(1.4rem, 5vw, 2rem); }
-
-  .hero-video-wrap {
-    width: 100%;
-    max-height: 50vh;
-  }
 
   /* Agency cards full width on mobile */
   .agency-desc-img { min-height: 200px; max-height: 280px; }

@@ -24,25 +24,25 @@ const OFFICIALS = [
 
 export default function AboutOfficials() {
   return (
-    <>
+    <div className="page-light">
+
       {/* ── Hero — centered ── */}
       <header className="about-hero">
-        <div className="cyber-grid" aria-hidden="true" />
-        <div className="container position-relative text-center" style={{ zIndex: 2, paddingTop: '4rem', paddingBottom: '4rem' }}>
+        <div className="container text-center" style={{ paddingTop: '4rem', paddingBottom: '4rem' }}>
           <div className="section-label mb-2">The Officials</div>
-          <h1 className="glow-text fw-bold mb-3">
+          <h1 className="fw-bold mb-3" style={{ color: '#0f172a', fontSize: 'clamp(1.8rem,3vw,2.8rem)', lineHeight: 1.1 }}>
             Government Agencies &amp; Affiliated Partners
           </h1>
-          <p className="text-muted-cyber mx-auto mb-4" style={{ maxWidth: '58ch', fontSize: '1.05rem' }}>
+          <p className="mx-auto mb-4" style={{ maxWidth: '58ch', fontSize: '1.05rem', color: '#4a5568' }}>
             WHTSIPA operates in formal alignment with these US government agencies and
             international law enforcement bodies. Every valid incident report submitted
             through our platform is shared with the relevant authority.
           </p>
           <div className="d-flex gap-3 justify-content-center flex-wrap">
-            <Link className="btn btn-cyber" to="/about">
+            <Link className="btn btn-primary px-4" to="/about" style={{ borderRadius: 12, fontWeight: 600 }}>
               <i className="bi bi-arrow-left me-2"></i>About WHTS
             </Link>
-            <Link className="btn btn-alert" to="/report">
+            <Link className="btn btn-danger px-4" to="/report" style={{ borderRadius: 12, fontWeight: 600 }}>
               <i className="bi bi-exclamation-triangle me-2"></i>Report an Incident
             </Link>
           </div>
@@ -50,25 +50,19 @@ export default function AboutOfficials() {
       </header>
 
       {/* ── Officials image grid ── */}
-      <section className="section-pad-lg">
+      <section className="section-pad-lg" style={{ background: '#ffffff' }}>
         <div className="container">
           <div className="row g-4">
             {OFFICIALS.map(official => (
               <div key={official.abbr} className="col-12 col-md-6 col-lg-4">
                 <div className="official-card">
-                  {/* Full image — no description text */}
                   <div className="official-img-wrap">
-                    <img
-                      src={official.img}
-                      alt={official.name}
-                      className="official-img"
-                    />
+                    <img src={official.img} alt={official.name} className="official-img" />
                   </div>
-                  {/* Minimal label bar at bottom */}
-                  <div className="official-label">
-                    <div className="official-label-abbr">{official.abbr}</div>
-                    <div className="official-label-name">{official.name}</div>
-                    <div className="official-label-role">{official.role}</div>
+                  <div className="official-label-light">
+                    <div className="official-label-abbr-light">{official.abbr}</div>
+                    <div className="official-label-name-light">{official.name}</div>
+                    <div className="official-label-role-light">{official.role}</div>
                   </div>
                 </div>
               </div>
@@ -78,26 +72,27 @@ export default function AboutOfficials() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="section-pad" style={{ background: 'rgba(5,9,19,0.55)' }}>
+      <section className="section-pad" style={{ background: '#f8fafc' }}>
         <div className="container">
-          <div className="banner p-4 p-md-5 text-center">
+          <div className="about-cta-banner p-4 p-md-5 text-center">
             <div className="section-label mb-3">Take Action</div>
-            <h2 className="fw-bold glow-text mb-3">Ready to Report?</h2>
-            <p className="text-muted-cyber mb-4 mx-auto" style={{ maxWidth: '50ch' }}>
+            <h2 className="fw-bold mb-3" style={{ color: '#0f172a' }}>Ready to Report?</h2>
+            <p className="mb-4 mx-auto" style={{ maxWidth: '50ch', color: '#4a5568' }}>
               Submit a secure incident report through WHTS and let our affiliated agencies
               take it from there. Your report matters.
             </p>
             <div className="d-flex justify-content-center gap-3 flex-wrap">
-              <Link className="btn btn-alert" to="/report">
+              <Link className="btn btn-danger px-4" to="/report" style={{ borderRadius: 12, fontWeight: 600 }}>
                 <i className="bi bi-exclamation-triangle me-2"></i>Report an Incident
               </Link>
-              <Link className="btn btn-outline-cyber" to="/about">
+              <Link className="btn btn-outline-primary px-4" to="/about" style={{ borderRadius: 12, fontWeight: 600 }}>
                 <i className="bi bi-info-circle me-2"></i>Learn About WHTS
               </Link>
             </div>
           </div>
         </div>
       </section>
-    </>
+
+    </div>
   )
 }

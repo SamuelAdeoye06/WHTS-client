@@ -17,13 +17,22 @@
 
 body {
   margin: 0;
-  background-color: var(--cyber-bg);
-  color: #f0f4ff;
+  background-color: #ffffff;
+  color: #1a1a2e;
   font-family: 'Segoe UI', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 #root {
   width: 100%;
   min-height: 100vh;
+  overflow-x: hidden;
+}
+
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
 }

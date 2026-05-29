@@ -139,79 +139,98 @@ export default function Blog() {
     )
   }
 
-  return (
-    <>
-      {/* ── Hero ── */}
-      <header className="blog-hero">
-        <div className="cyber-grid" aria-hidden="true" />
-        <div className="container position-relative" style={{ zIndex: 2, paddingTop: '4rem', paddingBottom: '4rem' }}>
-          <div className="text-center">
-            <div className="section-label mb-2">Knowledge Base</div>
-            <h1 className="glow-text fw-bold mb-3">
-              Latest Alerts on<br />
-              <span style={{ color: 'var(--cyan)' }}>WeHelpTrackScammersIpAddress.com</span>
-            </h1>
-            <p className="text-muted-cyber mx-auto" style={{ maxWidth: '52ch' }}>
-              Guides, advisories, and intelligence updates to keep you informed
-              and protected against evolving cyber threats.
-            </p>
-          </div>
-        </div>
-      </header>
+    return (
+        <div className="page-light">
 
-      {/* ── Articles ── */}
-      <section className="section-pad-lg">
-        <div className="container">
-
-          {/* Category filter */}
-          <div className="d-flex gap-2 flex-wrap mb-5">
-            {CATEGORIES.map(cat => (
-              <button
-                key={cat}
-                className={`blog-filter-btn ${activeCategory === cat ? 'active' : ''}`}
-                onClick={() => setActiveCategory(cat)}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          {/* Articles grid */}
-          <div className="row g-4">
-            {filtered.map((article, i) => (
-              <div key={article.slug} className="col-12 col-md-6 col-lg-4">
-                <div
-                  className="blog-card h-100"
-                  onClick={() => setActiveArticle(article.slug)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => e.key === 'Enter' && setActiveArticle(article.slug)}
-                >
-                  <div className="blog-card-emoji">{article.emoji}</div>
-                  <div className="p-4">
-                    <div className="d-flex align-items-center gap-2 mb-2">
-                      <span className="section-label" style={{ fontSize: '0.65rem' }}>{article.category}</span>
-                    </div>
-                    <h3 className="fw-bold mb-2" style={{ fontSize: '1rem', color: '#f0f4ff', lineHeight: 1.4 }}>
-                      {article.title}
-                    </h3>
-                    <p className="text-muted-cyber small mb-3">{article.excerpt}</p>
-                    <div className="d-flex align-items-center justify-content-between">
-                      <div className="text-muted-cyber" style={{ fontSize: '0.75rem' }}>
-                        {article.date} · {article.readTime}
-                      </div>
-                      <span className="blog-read-more">
-                        Read <i className="bi bi-arrow-right ms-1"></i>
-                      </span>
-                    </div>
-                  </div>
+        {/* ── Hero ── */}
+        <header className="template-hero blog-hero">
+            <div className="container">
+            <nav aria-label="breadcrumb" className="template-breadcrumb">
+                <Link to="/">Home</Link>
+                <span>Knowledge Base</span>
+            </nav>
+            <div className="row align-items-center g-4">
+                <div className="col-12 col-lg-7">
+                <h1 className="template-hero-title">Knowledge Base</h1>
+                <p className="template-hero-copy">
+                    Guides, advisories, and intelligence updates to keep you informed
+                    and protected against evolving cyber threats.
+                </p>
                 </div>
-              </div>
-            ))}
-          </div>
+                <div className="col-12 col-lg-5">
+                <div className="template-hero-art" aria-hidden="true">
+                    <div className="art-desk"></div>
+                    <div className="art-person art-person-left">
+                    <span className="art-head"></span>
+                    <span className="art-body"></span>
+                    <span className="art-laptop"></span>
+                    </div>
+                    <div className="art-person art-person-right">
+                    <span className="art-head"></span>
+                    <span className="art-body"></span>
+                    <span className="art-paper"></span>
+                    </div>
+                    <div className="art-shield"><i className="bi bi-newspaper"></i></div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </header>
+
+        {/* ── Articles ── */}
+        <section className="section-pad-lg" style={{ background: '#ffffff' }}>
+            <div className="container">
+
+            {/* Category filter */}
+            <div className="d-flex gap-2 flex-wrap mb-5">
+                {CATEGORIES.map(cat => (
+                <button
+                    key={cat}
+                    className={`blog-filter-btn ${activeCategory === cat ? 'active' : ''}`}
+                    onClick={() => setActiveCategory(cat)}
+                >
+                    {cat}
+                </button>
+                ))}
+            </div>
+
+            {/* Articles grid */}
+            <div className="row g-4">
+                {filtered.map((article) => (
+                <div key={article.slug} className="col-12 col-md-6 col-lg-4">
+                    <div
+                    className="blog-card-light h-100"
+                    onClick={() => setActiveArticle(article.slug)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => e.key === 'Enter' && setActiveArticle(article.slug)}
+                    >
+                    <div className="blog-card-emoji-light">{article.emoji}</div>
+                    <div className="p-4">
+                        <div className="d-flex align-items-center gap-2 mb-2">
+                        <span className="section-label" style={{ fontSize: '0.65rem' }}>{article.category}</span>
+                        </div>
+                        <h3 className="fw-bold mb-2" style={{ fontSize: '1rem', color: '#0f172a', lineHeight: 1.4 }}>
+                        {article.title}
+                        </h3>
+                        <p className="mb-3" style={{ color: '#4a5568', fontSize: '0.88rem' }}>{article.excerpt}</p>
+                        <div className="d-flex align-items-center justify-content-between">
+                        <div style={{ color: '#9ca3af', fontSize: '0.75rem' }}>
+                            {article.date} · {article.readTime}
+                        </div>
+                        <span className="blog-read-more-light">
+                            Read <i className="bi bi-arrow-right ms-1"></i>
+                        </span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                ))}
+            </div>
+
+            </div>
+        </section>
 
         </div>
-      </section>
-    </>
-  )
+    )
 }

@@ -3,12 +3,64 @@
    src/pages/ThreatDetail.css
    ============================================ */
 
+.threat-detail-page {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #0a0014 0%, #0d0a2e 40%, #071126 100%);
+  color: #f0f4ff;
+}
+
 /* ── Hero ── */
 .threat-detail-hero {
   position: relative;
   overflow: hidden;
-  background: var(--cyber-bg);
-  border-bottom: 1px solid rgba(120, 214, 255, 0.1);
+  background: transparent;
+  border-bottom: 1px solid rgba(160, 80, 255, 0.18);
+}
+
+.threat-detail-page .cyber-grid {
+  background-image:
+    linear-gradient(rgba(160, 80, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(160, 80, 255, 0.04) 1px, transparent 1px);
+}
+
+.threat-detail-page h1,
+.threat-detail-page h2,
+.threat-detail-page h3,
+.threat-detail-page h4,
+.threat-detail-page .fw-bold {
+  color: #f0f4ff !important;
+}
+
+.threat-detail-page .text-muted-cyber {
+  color: rgba(233, 243, 255, 0.72) !important;
+}
+
+.threat-detail-page .breadcrumb-item.active,
+.threat-detail-page .breadcrumb-item,
+.threat-detail-page p,
+.threat-detail-page span {
+  color: inherit;
+}
+
+.threat-detail-page .about-cta-banner {
+  background: linear-gradient(180deg, rgba(34,240,255,0.08), rgba(255,255,255,0.03));
+  border: 1px solid rgba(120, 214, 255, 0.24);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow2);
+}
+
+.threat-detail-page .about-cta-banner [style*="color: #0f172a"],
+.threat-detail-page .about-cta-banner [style*="color: #4a5568"] {
+  color: rgba(233, 243, 255, 0.82) !important;
+}
+
+.threat-detail-page [style*="color: #0f172a"] {
+  color: #f0f4ff !important;
+}
+
+.threat-detail-page [style*="color: #4a5568"],
+.threat-detail-page [style*="color: #6b7280"] {
+  color: rgba(233, 243, 255, 0.72) !important;
 }
 
 /* ── Breadcrumb ── */

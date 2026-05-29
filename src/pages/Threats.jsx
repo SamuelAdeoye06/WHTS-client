@@ -196,7 +196,7 @@ export default function Threats() {
     })
   }
   return (
-    <>
+    <div className="threats-page">
       {/* ── Quiz Modal ── */}
       {activeQuiz && (
         <QuizModal
@@ -405,6 +405,6 @@ export default function Threats() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   )
 }

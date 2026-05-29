@@ -8,6 +8,66 @@
 .threats-page {
   background: linear-gradient(160deg, #0a0014 0%, #0d0a2e 40%, #071126 100%);
   min-height: 100vh;
+  color: #f0f4ff;
+}
+
+.site-dark,
+.site-dark main,
+.site-dark .threats-page {
+  background: linear-gradient(160deg, #0a0014 0%, #0d0a2e 40%, #071126 100%) !important;
+}
+
+.site-dark .threats-page h1,
+.site-dark .threats-page h2,
+.site-dark .threats-page h3,
+.site-dark .threats-page h4,
+.site-dark .threats-page .fw-bold,
+.site-dark .threats-page .text-white {
+  color: #f0f4ff !important;
+}
+
+.site-dark .threats-page .text-muted-cyber {
+  color: rgba(233, 243, 255, 0.72) !important;
+}
+
+.site-dark .threats-page .card-glass,
+.site-dark .threats-page .banner {
+  background: linear-gradient(180deg, rgba(34,240,255,0.08), rgba(255,255,255,0.03)) !important;
+  border-color: rgba(120, 214, 255, 0.24) !important;
+  box-shadow: var(--shadow2) !important;
+}
+
+.site-dark .threats-page .icon-box {
+  background: rgba(255,255,255,0.06) !important;
+  border-color: rgba(120, 214, 255, 0.18) !important;
+  box-shadow: 0 0 22px rgba(34,240,255,0.08) !important;
+}
+
+.site-dark .threats-page .pill {
+  background: rgba(255,255,255,0.05) !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  color: #f0f4ff !important;
+}
+
+.site-dark .threats-page .btn-cyber,
+.site-dark .threats-page .btn-alert,
+.site-dark .threats-page .btn-outline-cyber {
+  color: #f0f4ff !important;
+}
+
+.site-dark .threats-page .btn-cyber {
+  background: linear-gradient(180deg, rgba(34,240,255,0.16), rgba(42,168,255,0.08)) !important;
+  border-color: rgba(34,240,255,0.34) !important;
+}
+
+.site-dark .threats-page .btn-alert {
+  background: linear-gradient(180deg, rgba(255,59,85,0.20), rgba(255,59,85,0.08)) !important;
+  border-color: rgba(255,59,85,0.45) !important;
+}
+
+.site-dark .threats-page .btn-outline-cyber {
+  background: transparent !important;
+  border-color: rgba(120,214,255,0.35) !important;
 }
 
 .threats-hero {

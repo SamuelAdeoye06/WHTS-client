@@ -7,8 +7,8 @@
 .about-hero {
   position: relative;
   overflow: hidden;
-  background: var(--cyber-bg);
-  border-bottom: 1px solid rgba(120, 214, 255, 0.1);
+  background: #f0f4ff;   /* light blue-white */
+  border-bottom: 1px solid #d1d5db;
 }
 
 /* ── Pillars ── */
@@ -196,4 +196,56 @@
 @media (max-width: 575.98px) {
   .official-img-wrap { height: 200px; }
   .official-label-name { font-size: 0.78rem; }
+}
+
+/* ── Shared light theme components ── */
+.about-cta-banner {
+  background: #f0f4ff;
+  border: 1px solid #c7d2fe;
+  border-radius: 20px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+
+.about-timeline-year-light {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #1d4ed8;
+  min-width: 38px;
+  padding-top: 1rem;
+  flex-shrink: 0;
+}
+
+.about-timeline-card-light {
+  flex: 1;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+}
+
+.official-label-light {
+  padding: 0.85rem 1rem;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+}
+
+.official-label-abbr-light {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #1d4ed8;
+  margin-bottom: 0.15rem;
+}
+
+.official-label-name-light {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.1rem;
+}
+
+.official-label-role-light {
+  font-size: 0.72rem;
+  color: #6b7280;
 }

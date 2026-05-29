@@ -32,9 +32,11 @@ function Layout() {
     matchPath({ path: pattern, end: true }, location.pathname)
   )
   const isBare = BARE_ROUTES.includes(location.pathname) || !isKnownRoute
+  const isDarkTheme = location.pathname === '/threats' ||
+    location.pathname.startsWith('/threats/')
 
   return (
-    <>
+    <div className={isDarkTheme ? 'site-shell site-dark' : 'site-shell site-light'}>
       <ScrollManager />
       {!isBare && <Navbar />}
       <main>
@@ -55,7 +57,7 @@ function Layout() {
         </Routes>
       </main>
       {!isBare && <Footer />}
-    </>
+    </div>
   )
 }
 

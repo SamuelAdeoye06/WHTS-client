@@ -56,133 +56,133 @@ const GOV_SERVICES = [
 ]
 
 export default function ForVictimsGovernment() {
-  return (
-    <>
-      {/* ── Hero ── */}
-      <header className="fvg-hero">
-        <div className="cyber-grid" aria-hidden="true" />
-        <div className="container position-relative" style={{ zIndex: 2, paddingTop: '4rem', paddingBottom: '4rem' }}>
-          <div className="text-center">
-            <div className="section-label mb-2">Who We Serve</div>
-            <h1 className="glow-text fw-bold mb-3">For Victims &amp; Government</h1>
-            <p className="text-muted-cyber mx-auto mb-5" style={{ maxWidth: '58ch', fontSize: '1.05rem' }}>
-              WHTSIPA serves two critical audiences — individuals and families affected by
-              cybercrime, and government agencies and organisations working to combat it.
-            </p>
-            <div className="d-flex justify-content-center gap-3 flex-wrap">
-              <a className="btn btn-alert" href="#victims">
-                <i className="bi bi-heart me-2"></i>I'm a Victim — Help Me
-              </a>
-              <a className="btn btn-cyber" href="#government">
-                <i className="bi bi-building me-2"></i>Government &amp; Organisations
-              </a>
-            </div>
-          </div>
-        </div>
-      </header>
+    return (
+        <div className="page-light">
 
-      {/* ════════════════ VICTIMS SECTION ════════════════ */}
-      <section className="section-pad-lg" id="victims">
-        <div className="container">
-          <div className="row g-5 align-items-start">
-            <div className="col-12 col-lg-5">
-              <div className="section-label mb-2">For Individuals &amp; Families</div>
-              <h2 className="fw-bold mb-3">You've Been Scammed.<br />Here's What to Do.</h2>
-              <p className="text-muted-cyber mb-4">
-                Being targeted by a cybercriminal is frightening and disorienting.
-                WHTS provides clear, step-by-step guidance to help you stop the damage,
-                recover your accounts, and report to the right authorities.
-              </p>
-
-              {/* Victim types */}
-              <div className="fw-bold small mb-3" style={{ color: 'var(--cyan)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                We Support
-              </div>
-              <div className="d-flex flex-wrap gap-2 mb-4">
-                {VICTIM_TYPES.map(v => (
-                  <span key={v.label} className="pill" style={{ fontSize: '0.75rem' }}>
-                    <span className="me-1">{v.emoji}</span>{v.label}
-                  </span>
-                ))}
-              </div>
-
-              <Link className="btn btn-alert" to="/report">
-                <i className="bi bi-exclamation-triangle me-2"></i>Get Help Now
-              </Link>
-            </div>
-
-            <div className="col-12 col-lg-7">
-              <div className="fw-bold mb-3 small" style={{ textTransform: 'uppercase', letterSpacing: '0.06em', color: 'rgba(233,243,255,0.55)' }}>
-                Immediate Action Steps
-              </div>
-              <div className="timeline">
-                {VICTIM_STEPS.map((step, i) => (
-                  <div key={i} className="t-item">
-                    <div className="t-marker" style={{ fontSize: '1rem', width: 36, height: 36 }}>{step.icon}</div>
-                    <div>
-                      <div className="fw-bold">{step.title}</div>
-                      <div className="text-muted-cyber small">{step.desc}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Divider ── */}
-      <div style={{ height: 1, background: 'rgba(120,214,255,0.1)', margin: '0' }} />
-
-      {/* ════════════════ GOVERNMENT SECTION ════════════════ */}
-      <section className="section-pad-lg fvg-gov-section" id="government">
-        <div className="container">
-          <div className="text-center mb-5">
-            <div className="section-label mb-2">For Government &amp; Organisations</div>
-            <h2 className="fw-bold mb-2">Authorised by the United States Government</h2>
-            <p className="text-muted-cyber mx-auto" style={{ maxWidth: '58ch' }}>
-              WHTSIPA operates under alignment with US Government cybersecurity frameworks.
-              We provide intelligence, reporting, and coordination services for public sector
-              agencies, law enforcement partners, and registered organisations.
-            </p>
-          </div>
-
-          <div className="row g-4 mb-5">
-            {GOV_SERVICES.map(service => (
-              <div key={service.title} className="col-12 col-md-6 col-lg-4">
-                <div className="card-glass card-hover p-4 h-100">
-                  <div className="icon-box mb-3">{service.icon}</div>
-                  <div className="fw-bold mb-2">{service.title}</div>
-                  <div className="text-muted-cyber small">{service.desc}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Government CTA */}
-          <div className="banner p-4 p-md-5">
-            <div className="row align-items-center g-4">
-              <div className="col-12 col-lg-8">
-                <div className="section-label mb-2">Partnership</div>
-                <h3 className="fw-bold mb-2">Work With WHTSIPA</h3>
-                <p className="text-muted-cyber mb-0">
-                  Government agencies, law enforcement bodies, and registered organisations
-                  can contact WHTS to establish formal data sharing, reporting partnerships,
-                  or collaborative cybercrime investigation support.
+        {/* ── Hero ── */}
+        <header className="fvg-hero">
+            <div className="container" style={{ paddingTop: '4rem', paddingBottom: '4rem' }}>
+            <div className="text-center">
+                <div className="section-label mb-2">Who We Serve</div>
+                <h1 className="fw-bold mb-3" style={{ color: '#0f172a', fontSize: 'clamp(1.8rem,3vw,2.8rem)', lineHeight: 1.1 }}>
+                For Victims &amp; Government
+                </h1>
+                <p className="mx-auto mb-5" style={{ maxWidth: '58ch', fontSize: '1.05rem', color: '#4a5568' }}>
+                WHTSIPA serves two critical audiences — individuals and families affected by
+                cybercrime, and government agencies and organisations working to combat it.
                 </p>
-              </div>
-              <div className="col-12 col-lg-4 d-flex flex-column gap-2">
-                <Link className="btn btn-cyber" to="/contact">
-                  <i className="bi bi-building me-2"></i>Contact Us
-                </Link>
-                <Link className="btn btn-outline-cyber" to="/about-officials">
-                  <i className="bi bi-people me-2"></i>View Our Officials
-                </Link>
-              </div>
+                <div className="d-flex justify-content-center gap-3 flex-wrap">
+                <a className="btn btn-danger px-4" href="#victims" style={{ borderRadius: 12, fontWeight: 600 }}>
+                    <i className="bi bi-heart me-2"></i>I'm a Victim — Help Me
+                </a>
+                <a className="btn btn-primary px-4" href="#government" style={{ borderRadius: 12, fontWeight: 600 }}>
+                    <i className="bi bi-building me-2"></i>Government &amp; Organisations
+                </a>
+                </div>
             </div>
-          </div>
+            </div>
+        </header>
+
+        {/* ════════════════ VICTIMS SECTION ════════════════ */}
+        <section className="section-pad-lg" id="victims" style={{ background: '#ffffff' }}>
+            <div className="container">
+            <div className="row g-5 align-items-start">
+                <div className="col-12 col-lg-5">
+                <div className="section-label mb-2">For Individuals &amp; Families</div>
+                <h2 className="fw-bold mb-3" style={{ color: '#0f172a' }}>You've Been Scammed.<br />Here's What to Do.</h2>
+                <p className="mb-4" style={{ color: '#4a5568' }}>
+                    Being targeted by a cybercriminal is frightening and disorienting.
+                    WHTS provides clear, step-by-step guidance to help you stop the damage,
+                    recover your accounts, and report to the right authorities.
+                </p>
+
+                <div className="fw-bold small mb-3" style={{ color: '#1d4ed8', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                    We Support
+                </div>
+                <div className="d-flex flex-wrap gap-2 mb-4">
+                    {VICTIM_TYPES.map(v => (
+                    <span key={v.label} className="fvg-pill">
+                        <span className="me-1">{v.emoji}</span>{v.label}
+                    </span>
+                    ))}
+                </div>
+
+                <Link className="btn btn-danger px-4" to="/report" style={{ borderRadius: 12, fontWeight: 600 }}>
+                    <i className="bi bi-exclamation-triangle me-2"></i>Get Help Now
+                </Link>
+                </div>
+
+                <div className="col-12 col-lg-7">
+                <div className="fw-bold mb-3 small" style={{ textTransform: 'uppercase', letterSpacing: '0.06em', color: '#6b7280' }}>
+                    Immediate Action Steps
+                </div>
+                <div className="d-flex flex-column gap-2">
+                    {VICTIM_STEPS.map((step, i) => (
+                    <div key={i} className="fvg-step-item">
+                        <div className="fvg-step-icon">{step.icon}</div>
+                        <div>
+                        <div className="fw-bold" style={{ color: '#0f172a' }}>{step.title}</div>
+                        <div style={{ color: '#4a5568', fontSize: '0.88rem' }}>{step.desc}</div>
+                        </div>
+                    </div>
+                    ))}
+                </div>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <div style={{ height: 1, background: '#e2e8f0' }} />
+
+        {/* ════════════════ GOVERNMENT SECTION ════════════════ */}
+        <section className="section-pad-lg" id="government" style={{ background: '#f8fafc' }}>
+            <div className="container">
+            <div className="text-center mb-5">
+                <div className="section-label mb-2">For Government &amp; Organisations</div>
+                <h2 className="fw-bold mb-2" style={{ color: '#0f172a' }}>Authorised by the United States Government</h2>
+                <p className="mx-auto" style={{ maxWidth: '58ch', color: '#4a5568' }}>
+                WHTSIPA operates under alignment with US Government cybersecurity frameworks.
+                We provide intelligence, reporting, and coordination services for public sector
+                agencies, law enforcement partners, and registered organisations.
+                </p>
+            </div>
+
+            <div className="row g-4 mb-5">
+                {GOV_SERVICES.map(service => (
+                <div key={service.title} className="col-12 col-md-6 col-lg-4">
+                    <div className="fvg-service-card p-4 h-100">
+                    <div className="fvg-service-icon">{service.icon}</div>
+                    <div className="fw-bold mb-2" style={{ color: '#0f172a' }}>{service.title}</div>
+                    <div style={{ color: '#4a5568', fontSize: '0.88rem' }}>{service.desc}</div>
+                    </div>
+                </div>
+                ))}
+            </div>
+
+            <div className="about-cta-banner p-4 p-md-5">
+                <div className="row align-items-center g-4">
+                <div className="col-12 col-lg-8">
+                    <div className="section-label mb-2">Partnership</div>
+                    <h3 className="fw-bold mb-2" style={{ color: '#0f172a' }}>Work With WHTSIPA</h3>
+                    <p className="mb-0" style={{ color: '#4a5568' }}>
+                    Government agencies, law enforcement bodies, and registered organisations
+                    can contact WHTS to establish formal data sharing, reporting partnerships,
+                    or collaborative cybercrime investigation support.
+                    </p>
+                </div>
+                <div className="col-12 col-lg-4 d-flex flex-column gap-2">
+                    <Link className="btn btn-primary" to="/contact" style={{ borderRadius: 12, fontWeight: 600 }}>
+                    <i className="bi bi-building me-2"></i>Contact Us
+                    </Link>
+                    <Link className="btn btn-outline-secondary" to="/about-officials" style={{ borderRadius: 12, fontWeight: 600 }}>
+                    <i className="bi bi-people me-2"></i>View Our Officials
+                    </Link>
+                </div>
+                </div>
+            </div>
+            </div>
+        </section>
+
         </div>
-      </section>
-    </>
-  )
+    )
 }

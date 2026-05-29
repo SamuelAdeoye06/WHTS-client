@@ -7,8 +7,8 @@
 .report-hero {
   position: relative;
   overflow: hidden;
-  background: var(--cyber-bg);
-  border-bottom: 1px solid rgba(120, 214, 255, 0.1);
+  background: #f0f4ff;   /* light blue-white */
+  border-bottom: 1px solid #d1d5db;
 }
 
 /* ── Cyber form inputs ── */
@@ -48,6 +48,34 @@
 
 textarea.cyber-input { resize: vertical; min-height: 120px; }
 
+.page-light .cyber-label {
+  color: #0f172a;
+}
+
+.page-light .cyber-input,
+.page-light .cyber-select {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+.page-light .cyber-input::placeholder {
+  color: #94a3b8 !important;
+}
+
+.page-light .cyber-input:focus,
+.page-light .cyber-select:focus {
+  background: #ffffff !important;
+  border-color: #1d4ed8 !important;
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12) !important;
+  color: #0f172a !important;
+}
+
+.page-light .cyber-select option {
+  background: #ffffff;
+  color: #0f172a;
+}
+
 /* ── Report type tabs ── */
 .report-type-tabs {
   display: flex;
@@ -57,6 +85,11 @@ textarea.cyber-input { resize: vertical; min-height: 120px; }
   border-radius: 16px;
   padding: 0.4rem;
   width: fit-content;
+}
+
+.page-light .report-type-tabs {
+  background: #f8fafc;
+  border-color: #cbd5e1;
 }
 
 .report-tab {
@@ -71,15 +104,30 @@ textarea.cyber-input { resize: vertical; min-height: 120px; }
   transition: background 0.2s ease, color 0.2s ease;
 }
 
+.page-light .report-tab {
+  color: #334155;
+}
+
 .report-tab.active {
   background: rgba(34, 240, 255, 0.12);
   border: 1px solid rgba(34, 240, 255, 0.3);
   color: #fff;
 }
 
+.page-light .report-tab.active {
+  background: #07104a;
+  border-color: #07104a;
+  color: #ffffff;
+}
+
 .report-tab:hover:not(.active) {
   background: rgba(255, 255, 255, 0.05);
   color: rgba(233, 243, 255, 0.9);
+}
+
+.page-light .report-tab:hover:not(.active) {
+  background: #eef2ff;
+  color: #07104a;
 }
 
 /* ── File drop zone ── */
@@ -91,6 +139,16 @@ textarea.cyber-input { resize: vertical; min-height: 120px; }
   text-align: center;
   cursor: pointer;
   transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.page-light .file-drop-zone {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.page-light .file-drop-zone:hover {
+  background: #eef2ff;
+  border-color: #1d4ed8;
 }
 
 .file-drop-zone:hover {
@@ -113,6 +171,12 @@ textarea.cyber-input { resize: vertical; min-height: 120px; }
   white-space: nowrap;
 }
 
+.page-light .file-chip {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+  color: #07104a;
+}
+
 /* ── Recovery tabs ── */
 .recovery-tabs {
   display: flex;
@@ -132,10 +196,22 @@ textarea.cyber-input { resize: vertical; min-height: 120px; }
   transition: all 0.2s ease;
 }
 
+.page-light .recovery-tab {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
 .recovery-tab:hover {
   border-color: rgba(34, 240, 255, 0.4);
   background: rgba(34, 240, 255, 0.06);
   color: #fff;
+}
+
+.page-light .recovery-tab:hover {
+  background: #eef2ff;
+  border-color: #1d4ed8;
+  color: #07104a;
 }
 
 .recovery-tab.active {
@@ -143,6 +219,28 @@ textarea.cyber-input { resize: vertical; min-height: 120px; }
   background: rgba(34, 240, 255, 0.12);
   color: #fff;
   box-shadow: 0 0 18px rgba(34, 240, 255, 0.1);
+}
+
+.page-light .recovery-tab.active {
+  background: #07104a;
+  border-color: #07104a;
+  color: #ffffff;
+  box-shadow: none;
+}
+
+.page-light #recover {
+  background: #f8fafc !important;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.page-light #recover .t-item {
+  background: #ffffff;
+  border-color: #e2e8f0;
+}
+
+.page-light #recover .t-item .small {
+  color: #334155 !important;
 }
 
 /* ── Report page responsive ── */

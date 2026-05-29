@@ -12,18 +12,42 @@ export default function Navbar() {
 
   useEffect(() => { setNavOpen(false) }, [location])
 
-  // Check if current path starts with a base to highlight dropdown parent
   const isAboutActive = location.pathname.startsWith('/about') || location.pathname === '/for-victims-government'
-  const isResourcesActive = ['/essential-eight', '/blog'].some(path => location.pathname.startsWith(path))
+  const isResourcesActive = ['/essential-eight', '/blog'].includes(location.pathname)
   const isReportActive = location.pathname.startsWith('/report')
 
+  // Dark pages keep the existing dark navbar
+  // Light pages get a white navbar
+  const isDarkPage = location.pathname === '/threats' ||
+    location.pathname.startsWith('/threats/')
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark cyber-navbar">
-      <div className="container">
+    <nav className={`navbar navbar-expand-lg cyber-navbar ${isDarkPage ? 'navbar-dark' : 'navbar-light navbar-white'}`}>
+      <div className="container nav-inner">
 
         <Link className="navbar-brand" to="/" aria-label="WHTS home">
           <img src={logoWhts} alt="The Watch Eyes - WHTS" className="brand-logo" />
         </Link>
+
+        <div className="nav-top-actions">
+          <Link className="nav-search-btn" to="/blog">
+            {/* <i className="bi bi-search"></i> */}
+            <span>Resources</span>
+          </Link>
+          <Link className="btn btn-report-cta btn-sm-nav" to="/report" state={{ scrollTo: 'report' }}>
+            <i className="bi bi-shield-exclamation me-1"></i>Report
+          </Link>
+          {user ? (
+            <button className="nav-utility-link" type="button" onClick={() => { logout(); navigate('/') }}>
+              Sign out
+            </button>
+          ) : (
+            <>
+              <Link className="nav-utility-link" to="/signin">Sign in</Link>
+              <Link className="nav-utility-link" to="/signup">Sign up</Link>
+            </>
+          )}
+        </div>
 
         <button className="navbar-toggler border-0" type="button"
           aria-controls="mainNav" aria-expanded={navOpen}
@@ -31,10 +55,11 @@ export default function Navbar() {
           <span className={`cyber-toggler-icon ${navOpen ? 'open' : ''}`}>
             <span /><span /><span />
           </span>
+          <span className="nav-menu-label">Menu</span>
         </button>
 
-        <div className={`collapse navbar-collapse ${navOpen ? 'show' : ''}`} id="mainNav">
-          <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-lg-1">
+        <div className={`collapse navbar-collapse nav-menu-row ${navOpen ? 'show' : ''}`} id="mainNav">
+          <ul className="navbar-nav mb-2 mb-lg-0 align-items-lg-center gap-lg-1">
 
             <li className="nav-item">
               <NavLink className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`} to="/">
@@ -132,7 +157,7 @@ export default function Navbar() {
           </ul>
 
           {/* Auth buttons + CTA */}
-          <div className="d-flex align-items-center gap-2 ms-lg-3 mt-3 mt-lg-0">
+          <div className="nav-auth-actions">
             {user ? (
               <>
                 <span className="nav-user-name">
@@ -150,7 +175,7 @@ export default function Navbar() {
                 <Link className="btn btn-cyber btn-sm-nav" to="/signup">Sign Up</Link>
               </>
             )}
-            <Link className="btn btn-report-cta btn-sm-nav" to="/report" state={{ scrollTo: 'report' }}>
+            <Link className="btn btn-report-cta btn-sm-nav nav-report-mobile" to="/report" state={{ scrollTo: 'report' }}>
               <i className="bi bi-shield-exclamation me-1"></i>Report
             </Link>
           </div>

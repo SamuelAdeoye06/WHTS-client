@@ -6,8 +6,8 @@
 .e8-hero {
   position: relative;
   overflow: hidden;
-  background: var(--cyber-bg);
-  border-bottom: 1px solid rgba(120, 214, 255, 0.1);
+  background: #f0f4ff;   /* light blue-white */
+  border-bottom: 1px solid #d1d5db;
 }
 
 /* ── Strategy cards ── */
@@ -113,4 +113,78 @@
 @media (max-width: 575.98px) {
   .e8-card { padding: 1rem; }
   .e8-card-header { flex-wrap: wrap; }
+}
+/* Light theme card variants */
+.e8-card-light {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+  user-select: none;
+}
+
+.e8-card-light:hover {
+  border-color: #93c5fd;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+}
+
+.e8-card-light--open {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+}
+
+.e8-icon-light {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.e8-card-body-light {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.e8-actions-light {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.e8-action-item-light {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.e8-scan-bar {
+  height: 4px;
+  border-radius: 4px;
+  background: #e2e8f0;
+  overflow: hidden;
+  position: relative;
+}
+
+.e8-scan-bar span {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+  animation: scanMove 2.2s ease-in-out infinite;
 }

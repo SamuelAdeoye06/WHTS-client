@@ -153,132 +153,140 @@ const STRATEGIES = [
 export default function EssentialEight() {
   const [expanded, setExpanded] = useState(null)
 
-  return (
-    <>
-      {/* ── Hero ── */}
-      <header className="e8-hero">
-        <div className="cyber-grid" aria-hidden="true" />
-        <div className="container position-relative" style={{ zIndex: 2, paddingTop: '4rem', paddingBottom: '4rem' }}>
-          <div className="row align-items-center g-5">
-            <div className="col-12 col-lg-7">
-              <div className="section-label mb-2">Cybersecurity Framework</div>
-              <h1 className="glow-text fw-bold mb-3">The Essential Eight</h1>
-              <p className="text-muted-cyber mb-4" style={{ maxWidth: '58ch', fontSize: '1.05rem' }}>
-                The Essential Eight are eight baseline mitigation strategies developed to
-                make it significantly harder for adversaries to compromise systems. WHTS
-                recommends all individuals and organisations implement these controls.
-              </p>
-              <div className="d-flex gap-3 flex-wrap">
-                <Link className="btn btn-cyber" to="/threats">
-                  <i className="bi bi-shield me-2"></i>Explore Threats
-                </Link>
-                <Link className="btn btn-alert" to="/report">
-                  <i className="bi bi-exclamation-triangle me-2"></i>Report an Incident
-                </Link>
-              </div>
-            </div>
-            <div className="col-12 col-lg-5">
-              <div className="banner p-4">
-                <div className="section-label mb-2">Why This Matters</div>
-                <h3 className="fw-bold mb-3">Baseline Protection for Everyone</h3>
-                <p className="text-muted-cyber small mb-3">
-                  This baseline makes it much harder for adversaries to compromise systems.
-                  Implementing all eight significantly reduces the risk of the most common
-                  attack vectors used against individuals, businesses, and government systems.
+    return (
+        <div className="page-light">
+
+        {/* ── Hero ── */}
+        <header className="template-hero e8-hero">
+            <div className="container">
+            <nav aria-label="breadcrumb" className="template-breadcrumb">
+                <Link to="/">Home</Link>
+                <span>Essential Eight</span>
+            </nav>
+            <div className="row align-items-center g-5">
+                <div className="col-12 col-lg-7">
+                <h1 className="template-hero-title">
+                    The Essential Eight
+                </h1>
+                <p className="template-hero-copy">
+                    The Essential Eight are eight baseline mitigation strategies developed to
+                    make it significantly harder for adversaries to compromise systems. WHTS
+                    recommends all individuals and organisations implement these controls.
                 </p>
-                <div className="scan-bar"><span /></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* ── Strategies grid ── */}
-      <section className="section-pad-lg">
-        <div className="container">
-          <div className="text-center mb-5">
-            <div className="section-label mb-2">The Eight Strategies</div>
-            <h2 className="fw-bold mb-2">Click Any Strategy to Expand</h2>
-            <p className="text-muted-cyber mx-auto" style={{ maxWidth: '52ch' }}>
-              Each strategy addresses a specific attack vector. Together they form a
-              comprehensive baseline that stops the majority of cyber attacks.
-            </p>
-          </div>
-
-          <div className="row g-3">
-            {STRATEGIES.map((s) => (
-              <div key={s.number} className="col-12 col-md-6 col-lg-6">
-                <div
-                  className={`e8-card ${expanded === s.number ? 'e8-card--open' : ''}`}
-                  onClick={() => setExpanded(expanded === s.number ? null : s.number)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => e.key === 'Enter' && setExpanded(expanded === s.number ? null : s.number)}
-                >
-                  {/* Card header */}
-                  <div className="e8-card-header">
-                    <div className="d-flex align-items-center gap-3">
-                      <div className="e8-number" style={{ color: s.color }}>{s.number}</div>
-                      <div className="e8-icon">{s.icon}</div>
-                      <div>
-                        <div className="fw-bold text-white">{s.title}</div>
-                        <div className="text-muted-cyber small">{s.summary}</div>
-                      </div>
-                    </div>
-                    <div className="d-flex align-items-center gap-2 flex-shrink-0 ms-3">
-                      <span className="e8-risk-badge" style={{ borderColor: s.color, color: s.color }}>
-                        {s.risk}
-                      </span>
-                      <i className={`bi bi-chevron-down e8-chevron ${expanded === s.number ? 'e8-chevron--open' : ''}`}></i>
-                    </div>
-                  </div>
-
-                  {/* Expanded content */}
-                  {expanded === s.number && (
-                    <div className="e8-card-body">
-                      <p className="text-muted-cyber small mb-3">{s.detail}</p>
-                      <div className="fw-bold small mb-2" style={{ color: s.color }}>
-                        <i className="bi bi-check2-circle me-2"></i>Action Steps
-                      </div>
-                      <ul className="e8-actions">
-                        {s.actions.map((a, i) => (
-                          <li key={i} className="e8-action-item">
-                            <i className="bi bi-arrow-right-short" style={{ color: s.color, flexShrink: 0 }}></i>
-                            <span className="small">{a}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                <div className="d-flex gap-3 flex-wrap">
+                    <Link className="btn btn-primary px-4" to="/threats" style={{ borderRadius: 12, fontWeight: 600 }}>
+                    <i className="bi bi-shield me-2"></i>Explore Threats
+                    </Link>
+                    <Link className="btn btn-danger px-4" to="/report" style={{ borderRadius: 12, fontWeight: 600 }}>
+                    <i className="bi bi-exclamation-triangle me-2"></i>Report an Incident
+                    </Link>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Tools CTA ── */}
-      <section className="section-pad" style={{ background: 'rgba(5,9,19,0.55)' }}>
-        <div className="container">
-          <div className="banner p-4 p-md-5 text-center">
-            <div className="section-label mb-3">WHTS Tools</div>
-            <h2 className="fw-bold glow-text mb-3">Get the Right Tools</h2>
-            <p className="text-muted-cyber mb-4 mx-auto" style={{ maxWidth: '52ch' }}>
-              WHTSIPA provides tools aligned with every Essential Eight strategy —
-              from patch management and MFA to EDR, backup solutions, and more.
-              Contact our team for guidance on the right tools for your situation.
-            </p>
-            <div className="d-flex justify-content-center gap-3 flex-wrap">
-              <Link className="btn btn-cyber" to="/contact">
-                <i className="bi bi-headset me-2"></i>Talk to Our Team
-              </Link>
-              <Link className="btn btn-outline-cyber" to="/threats">
-                <i className="bi bi-grid me-2"></i>Browse Threat Library
-              </Link>
+                </div>
+                <div className="col-12 col-lg-5">
+                  <div className="template-hero-art" aria-hidden="true">
+                    <div className="art-desk"></div>
+                    <div className="art-person art-person-left">
+                      <span className="art-head"></span>
+                      <span className="art-body"></span>
+                      <span className="art-laptop"></span>
+                    </div>
+                    <div className="art-person art-person-right">
+                      <span className="art-head"></span>
+                      <span className="art-body"></span>
+                      <span className="art-paper"></span>
+                    </div>
+                    <div className="art-shield"><i className="bi bi-shield-lock"></i></div>
+                  </div>
+                </div>
             </div>
-          </div>
+            </div>
+        </header>
+
+        {/* ── Strategies grid ── */}
+        <section className="section-pad-lg" style={{ background: '#ffffff' }}>
+            <div className="container">
+            <div className="text-center mb-5">
+                <div className="section-label mb-2">The Eight Strategies</div>
+                <h2 className="fw-bold mb-2" style={{ color: '#0f172a' }}>Click Any Strategy to Expand</h2>
+                <p style={{ color: '#4a5568', maxWidth: '52ch', margin: '0 auto' }}>
+                Each strategy addresses a specific attack vector. Together they form a
+                comprehensive baseline that stops the majority of cyber attacks.
+                </p>
+            </div>
+
+            <div className="row g-3">
+                {STRATEGIES.map((s) => (
+                <div key={s.number} className="col-12 col-md-6 col-lg-6">
+                    <div
+                    className={`e8-card-light ${expanded === s.number ? 'e8-card-light--open' : ''}`}
+                    onClick={() => setExpanded(expanded === s.number ? null : s.number)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => e.key === 'Enter' && setExpanded(expanded === s.number ? null : s.number)}
+                    >
+                    <div className="e8-card-header">
+                        <div className="d-flex align-items-center gap-3">
+                        <div className="e8-number" style={{ color: s.color }}>{s.number}</div>
+                        <div className="e8-icon-light">{s.icon}</div>
+                        <div>
+                            <div className="fw-bold" style={{ color: '#0f172a' }}>{s.title}</div>
+                            <div style={{ color: '#6b7280', fontSize: '0.82rem' }}>{s.summary}</div>
+                        </div>
+                        </div>
+                        <div className="d-flex align-items-center gap-2 flex-shrink-0 ms-3">
+                        <span className="e8-risk-badge" style={{ borderColor: s.color, color: s.color }}>
+                            {s.risk}
+                        </span>
+                        <i className={`bi bi-chevron-down e8-chevron ${expanded === s.number ? 'e8-chevron--open' : ''}`}></i>
+                        </div>
+                    </div>
+
+                    {expanded === s.number && (
+                        <div className="e8-card-body-light">
+                        <p style={{ color: '#4a5568', fontSize: '0.88rem', marginBottom: '0.85rem' }}>{s.detail}</p>
+                        <div className="fw-bold small mb-2" style={{ color: s.color }}>
+                            <i className="bi bi-check2-circle me-2"></i>Action Steps
+                        </div>
+                        <ul className="e8-actions-light">
+                            {s.actions.map((a, i) => (
+                            <li key={i} className="e8-action-item-light">
+                                <i className="bi bi-arrow-right-short" style={{ color: s.color, flexShrink: 0 }}></i>
+                                <span style={{ fontSize: '0.85rem', color: '#374151' }}>{a}</span>
+                            </li>
+                            ))}
+                        </ul>
+                        </div>
+                    )}
+                    </div>
+                </div>
+                ))}
+            </div>
+            </div>
+        </section>
+
+        {/* ── Tools CTA ── */}
+        <section className="section-pad" style={{ background: '#f8fafc' }}>
+            <div className="container">
+            <div className="about-cta-banner p-4 p-md-5 text-center">
+                <div className="section-label mb-3">WHTS Tools</div>
+                <h2 className="fw-bold mb-3" style={{ color: '#0f172a' }}>Get the Right Tools</h2>
+                <p className="mb-4 mx-auto" style={{ maxWidth: '52ch', color: '#4a5568' }}>
+                WHTSIPA provides tools aligned with every Essential Eight strategy —
+                from patch management and MFA to EDR, backup solutions, and more.
+                Contact our team for guidance on the right tools for your situation.
+                </p>
+                <div className="d-flex justify-content-center gap-3 flex-wrap">
+                <Link className="btn btn-primary px-4" to="/contact" style={{ borderRadius: 12, fontWeight: 600 }}>
+                    <i className="bi bi-headset me-2"></i>Talk to Our Team
+                </Link>
+                <Link className="btn btn-outline-secondary px-4" to="/threats" style={{ borderRadius: 12, fontWeight: 600 }}>
+                    <i className="bi bi-grid me-2"></i>Browse Threat Library
+                </Link>
+                </div>
+            </div>
+            </div>
+        </section>
+
         </div>
-      </section>
-    </>
-  )
+    )
 }

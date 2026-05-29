@@ -244,3 +244,352 @@
   .btn-alert,
   .btn-outline-cyber { font-size: 0.85rem; padding: 0.6rem 0.9rem; }
 }
+
+/* ============================================
+   LIGHT THEME — all pages except threats + auth
+   ============================================ */
+
+.page-light {
+  background: #ffffff;
+  color: #1a1a2e;
+}
+
+/* Section backgrounds on light pages */
+.page-light .section-alt {
+  background: #f8f9fa;
+}
+
+.page-light .section-mid {
+  background: #f0f4ff;
+}
+
+/* Text overrides */
+.page-light .text-muted-cyber {
+  color: #4a5568 !important;
+}
+
+.page-light .text-white {
+  color: #0f172a !important;
+}
+
+.page-light .glow-text {
+  color: #1a1a2e;
+  text-shadow: none;
+}
+
+.page-light h1,
+.page-light h2,
+.page-light h3,
+.page-light h4 {
+  color: #1a1a2e;
+}
+
+/* Card overrides */
+.page-light .card-glass {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  backdrop-filter: none;
+}
+
+.page-light .banner {
+  background: linear-gradient(180deg, #eef2ff, #f8f9fa);
+  border: 1px solid #d1d5db;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+
+.page-light .banner::before {
+  background: none;
+}
+
+/* Section label */
+.page-light .section-label {
+  color: #2563eb;
+}
+
+/* Pills on light bg */
+.page-light .pill {
+  background: rgba(0,0,0,0.06);
+  border-color: rgba(0,0,0,0.12);
+  color: #1a1a2e;
+}
+
+/* Stat boxes */
+.page-light .stat {
+  background: #f8f9fa;
+  border: 1px solid #e2e8f0;
+}
+
+.page-light .stat .value {
+  color: #1d4ed8;
+}
+
+/* Icon boxes */
+.page-light .icon-box {
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  box-shadow: none;
+}
+
+/* Timeline */
+.page-light .t-item {
+  background: #f8f9fa;
+  border: 1px solid #e2e8f0;
+}
+
+.page-light .t-marker {
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  color: #1d4ed8;
+}
+
+/* Buttons on light pages */
+.page-light .btn-cyber {
+  border-color: #07104a;
+  background: #07104a;
+  color: #ffffff !important;
+}
+
+.page-light .btn-cyber:hover {
+  box-shadow: none;
+  color: #fff !important;
+  background: #101b6b;
+}
+
+.page-light .btn-outline-cyber {
+  border-color: #07104a;
+  color: #07104a !important;
+}
+
+.page-light .btn-outline-cyber:hover {
+  border-color: #07104a;
+  color: #ffffff !important;
+  background: #07104a;
+}
+
+/* Cyber grid — very subtle on light */
+.page-light .cyber-grid {
+  background-image:
+    linear-gradient(rgba(29,78,216,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(29,78,216,0.04) 1px, transparent 1px);
+}
+
+/* Scan bar on light */
+.page-light .scan-bar {
+  background: #e2e8f0;
+}
+
+/* Dividers */
+.page-light hr {
+  border-color: #e2e8f0;
+}
+
+/* Template-style light hero used on primary light pages */
+.template-hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.92) 54%, rgba(210,236,247,0.78) 100%),
+    radial-gradient(circle at 72% 28%, rgba(55, 164, 210, 0.26) 0 12%, transparent 13%),
+    linear-gradient(135deg, rgba(7, 142, 190, 0.16) 25%, transparent 25% 50%, rgba(7, 142, 190, 0.1) 50% 75%, transparent 75%);
+  background-size: auto, 220px 220px, 150px 150px;
+  border-bottom: 1px solid #dbe6ef;
+  min-height: 382px;
+  display: flex;
+  align-items: center;
+  color: #020b5f;
+}
+
+.template-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(90deg, rgba(7, 142, 190, 0.05) 1px, transparent 1px),
+    linear-gradient(rgba(7, 142, 190, 0.05) 1px, transparent 1px);
+  background-size: 76px 76px;
+  pointer-events: none;
+}
+
+.template-hero .container {
+  position: relative;
+  z-index: 1;
+  padding-top: 1.5rem;
+  padding-bottom: 3.5rem;
+}
+
+.template-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 4.5rem;
+  color: #020b5f;
+  font-weight: 700;
+}
+
+.template-breadcrumb a {
+  color: #020b5f;
+}
+
+.template-breadcrumb a::after {
+  content: ">";
+  margin-left: 0.35rem;
+  text-decoration: none;
+}
+
+.template-hero-title {
+  font-size: clamp(2.3rem, 5vw, 4.25rem);
+  line-height: 1.02;
+  font-weight: 900;
+  color: #020b5f;
+  letter-spacing: 0;
+  margin-bottom: 1rem;
+}
+
+.template-hero-copy {
+  max-width: 56ch;
+  color: #020b5f;
+  font-size: clamp(1.12rem, 1.8vw, 1.55rem);
+  line-height: 1.32;
+  margin: 0;
+}
+
+.template-hero-art {
+  position: relative;
+  width: min(430px, 100%);
+  aspect-ratio: 1.45;
+  margin-left: auto;
+  animation: heroFloat 5s ease-in-out infinite;
+}
+
+.art-desk {
+  position: absolute;
+  left: 6%;
+  right: 4%;
+  bottom: 16%;
+  height: 8px;
+  background: #020b5f;
+  border-radius: 999px;
+}
+
+.art-person {
+  position: absolute;
+  bottom: 18%;
+  width: 34%;
+  height: 58%;
+}
+
+.art-person-left { left: 13%; }
+.art-person-right { right: 10%; transform: scaleX(-1); }
+
+.art-head {
+  position: absolute;
+  left: 42%;
+  top: 2%;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #2b2144;
+}
+
+.art-body {
+  position: absolute;
+  left: 30%;
+  top: 34%;
+  width: 64px;
+  height: 86px;
+  border-radius: 28px 28px 10px 10px;
+  background: #72dbc2;
+}
+
+.art-laptop {
+  position: absolute;
+  left: 5%;
+  bottom: 0;
+  width: 110px;
+  height: 58px;
+  border-radius: 6px 6px 2px 2px;
+  background: #020b5f;
+}
+
+.art-paper {
+  position: absolute;
+  left: -5%;
+  top: 28%;
+  width: 56px;
+  height: 72px;
+  border-radius: 4px;
+  background: #ffffff;
+  border: 3px solid #b7d9e8;
+  transform: rotate(18deg);
+}
+
+.art-shield {
+  position: absolute;
+  left: 50%;
+  bottom: 22%;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid #dbe6ef;
+  color: #020b5f;
+  display: grid;
+  place-items: center;
+  font-size: 1.7rem;
+  box-shadow: 0 12px 30px rgba(7, 16, 74, 0.12);
+}
+
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@media (max-width: 991.98px) {
+  .template-hero {
+    min-height: 320px;
+    text-align: center;
+  }
+
+  .template-breadcrumb {
+    justify-content: flex-start;
+    margin-bottom: 2rem;
+  }
+
+  .template-hero-art {
+    width: min(320px, 78vw);
+    margin: 2rem auto 0;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .template-hero .container {
+    padding-top: 1rem;
+    padding-bottom: 2.25rem;
+  }
+
+  .template-breadcrumb {
+    margin-bottom: 1.4rem;
+    font-size: 0.9rem;
+  }
+
+  .template-hero-title {
+    font-size: clamp(2rem, 10vw, 2.8rem);
+  }
+
+  .template-hero-copy {
+    font-size: 1rem;
+  }
+
+  .template-hero-art {
+    display: none;
+  }
+
+  .template-hero .d-flex.gap-3.flex-wrap {
+    justify-content: center;
+  }
+
+  .template-hero .btn {
+    width: 100%;
+  }
+}
