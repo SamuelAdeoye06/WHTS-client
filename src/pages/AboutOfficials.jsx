@@ -2,9 +2,10 @@ import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import '../styles/cyber.css'
 import './About.css'
+import theEquationPoster from '../assets/media/the-equation-image.png'
+import lazarusPoster from '../assets/media/lazarus-image.png'
 
-// ── OFFICIALS DATA ──
-// Replace each videoUrl with the actual Cloudinary URL when client provides the videos
+
 const OFFICIALS = [
   {
     id: 'equation',
@@ -17,6 +18,7 @@ const OFFICIALS = [
     capabilities: ['Firmware-level persistence', 'Zero-day exploit development', 'Air-gap bridging', 'Custom malware frameworks'],
     threat: 'EXTREME',
     videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/v1780028564/the-equation_z7elph.mp4', 
+    poster: theEquationPoster,
     color: '#3b82f6',
   },
   {
@@ -30,6 +32,7 @@ const OFFICIALS = [
     capabilities: ['DDoS campaigns', 'Data exfiltration', 'Website defacement', 'Doxxing operations'],
     threat: 'HIGH',
     videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/v1780028564/the-equation_z7elph.mp4',
+    poster: theEquationPoster,
     color: '#6b7280',
   },
   {
@@ -43,6 +46,7 @@ const OFFICIALS = [
     capabilities: ['Ransomware development', 'Banking trojan deployment', 'Botnet operations', 'Cryptomining malware'],
     threat: 'HIGH',
     videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/v1780028564/the-equation_z7elph.mp4',
+    poster: theEquationPoster,
     color: '#ef4444',
   },
   {
@@ -55,7 +59,8 @@ const OFFICIALS = [
     description: 'A North Korean state-sponsored advanced persistent threat group responsible for some of the largest financial cyber heists in history, including the $81M Bangladesh Bank theft and widespread cryptocurrency theft.',
     capabilities: ['Financial system targeting', 'Cryptocurrency theft', 'Destructive wiper attacks', 'Supply chain compromise'],
     threat: 'EXTREME',
-    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/v1780028564/the-equation_z7elph.mp4',
+    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/vc_h264/v1780248016/lazarus_nhudt2.mp4',
+    poster: lazarusPoster,
     color: '#a855f7',
   },
   {
@@ -69,6 +74,7 @@ const OFFICIALS = [
     capabilities: ['Classified exploit leaking', 'NSA tool exfiltration', 'Zero-day brokering', 'Critical infrastructure targeting'],
     threat: 'EXTREME',
     videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/v1780028564/the-equation_z7elph.mp4',
+    poster: theEquationPoster,
     color: '#f59e0b',
   },
   {
@@ -82,6 +88,7 @@ const OFFICIALS = [
     capabilities: ['Supply chain attacks', 'Long-term stealth persistence', 'Government espionage', 'Cloud infrastructure abuse'],
     threat: 'EXTREME',
     videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/v1780028564/the-equation_z7elph.mp4',
+    poster: theEquationPoster,
     color: '#22c55e',
   },
 ]
@@ -146,7 +153,7 @@ function OfficialPlayer({ official }) {
           src={official.videoUrl}
           playsInline
           preload="metadata"
-          poster=""
+          poster={official.poster}
         />
 
         {/* Gradient */}

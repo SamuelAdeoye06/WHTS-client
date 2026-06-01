@@ -332,3 +332,301 @@
 
   .quiz-card-item { padding: 1rem; }
 }
+/* ════════════════════════════
+   THREATS & TOOLS CARDS
+   Matching client reference layout
+   ════════════════════════════ */
+
+.tt-hero-red-bar-inline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('../assets/media/red-frame.png');
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  min-width: 320px;
+  min-height: 72px;
+  padding: 1rem 2rem;
+  border-radius: 14px;
+  text-align: center;
+  text-shadow: 0 2px 8px rgba(80, 0, 0, 0.32);
+  box-shadow: 0 12px 30px rgba(220, 38, 38, 0.16);
+}
+
+@media (max-width: 575.98px) {
+  .tt-hero-red-bar-inline {
+    width: 100%;
+    min-width: 0;
+    min-height: 58px;
+    font-size: 1.05rem;
+    padding: 0.85rem 1rem;
+  }
+}
+
+/* ── Main card ── */
+.tt-card-new {
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+/* Top bar — title + meta */
+.tt-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+  flex-wrap: wrap;
+}
+
+.tt-card-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #1d4ed8;
+}
+
+.tt-card-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.tt-available-on {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tt-available-label {
+  font-size: 0.72rem;
+  color: #16a34a;
+  font-weight: 700;
+}
+
+.tt-device-icons {
+  display: flex;
+  gap: 0.35rem;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.tt-card-success {
+  font-size: 0.82rem;
+}
+
+/* Body */
+.tt-card-body-new {
+  display: flex;
+  gap: 1rem;
+  padding: 1.25rem;
+  align-items: flex-start;
+}
+
+.tt-card-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.tt-card-desc {
+  color: #1a1a2e;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  margin-bottom: 1rem;
+}
+
+/* "How it works?" label */
+.tt-how-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  white-space: nowrap;
+}
+
+/* Red "Request Tools" button */
+.tt-request-btn {
+  display: inline-block;
+  background: #dc2626;
+  color: #fff !important;
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  border: 2px solid #991b1b;
+  transition: background 0.18s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.tt-request-btn:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+  color: #fff !important;
+}
+
+/* Dark navy step cards */
+.tt-steps-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.tt-step-card-dark {
+  flex: 1;
+  min-width: 140px;
+  background: #0f172a;
+  border-radius: 10px;
+  padding: 0.85rem;
+}
+
+.tt-step-card-num {
+  font-size: 1rem;
+  font-weight: 900;
+  color: #ffffff;
+  margin-bottom: 0.4rem;
+}
+
+.tt-step-card-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.3rem;
+}
+
+.tt-step-card-desc {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.5;
+}
+
+/* Right icon */
+.tt-card-icon-side {
+  width: 100px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 0.5rem;
+}
+
+.tt-card-icon-img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+/* Responsive */
+/* ── Threats & Tools cards — Mobile fix ── */
+@media (max-width: 767.98px) {
+
+  /* Card top — stack title above meta */
+  .tt-card-top {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .tt-card-meta {
+    align-items: flex-start;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  /* Body — keep icon on the RIGHT even on mobile */
+  .tt-card-body-new {
+    flex-direction: row;  /* keep side by side */
+    gap: 0.75rem;
+    padding: 1rem;
+    align-items: flex-start;
+  }
+
+  .tt-card-left {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Icon — smaller on mobile but stays on the right */
+  .tt-card-icon-side {
+    width: 64px;
+    flex-shrink: 0;
+    align-items: flex-start;
+    padding-top: 0;
+  }
+
+  .tt-card-icon-img {
+    width: 56px;
+    height: 56px;
+  }
+
+  /* Steps — stack vertically on mobile */
+  .tt-steps-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .tt-step-card-dark {
+    min-width: unset;
+    width: 100%;
+  }
+
+  /* How it works row — stack on very small */
+  .tt-how-label {
+    font-size: 0.88rem;
+  }
+
+  .tt-request-btn {
+    font-size: 0.82rem;
+    padding: 0.45rem 0.9rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .tt-card-body-new {
+    padding: 0.85rem;
+  }
+
+  .tt-card-top {
+    padding: 0.85rem 0.85rem 0.65rem;
+  }
+
+  .tt-card-icon-side {
+    width: 52px;
+  }
+
+  .tt-card-icon-img {
+    width: 46px;
+    height: 46px;
+  }
+
+  .tt-card-title {
+    font-size: 0.95rem;
+  }
+
+  .tt-card-desc {
+    font-size: 0.85rem;
+  }
+
+  .tt-step-card-dark {
+    padding: 0.65rem 0.75rem;
+  }
+
+  .tt-step-card-title {
+    font-size: 0.78rem;
+  }
+
+  .tt-step-card-desc {
+    font-size: 0.7rem;
+  }
+}

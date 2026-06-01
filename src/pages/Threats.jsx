@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { QUIZ_LIST, QUIZ_DATA } from '../data/quizData'
 import '../styles/cyber.css'
 import './Threats.css'
+import { THREATS_AND_TOOLS } from '../data/threatsToolsData'
 
 /* ── Threat categories linking to detail pages ── */
 const THREAT_CATS = [
@@ -270,8 +271,8 @@ export default function Threats() {
                 <a className="btn btn-cyber" href="#quizzes">
                   <i className="bi bi-controller me-2"></i>Start a Quiz
                 </a>
-                <a className="btn btn-outline-cyber" href="#categories">
-                  <i className="bi bi-grid me-2"></i>Threat Library
+                <a className="btn btn-outline-cyber" href="#threats-tools">
+                  <i className="bi bi-grid me-2"></i>Threats &amp; Tools
                 </a>
                 <Link className="btn btn-alert" to="/report">
                   <i className="bi bi-exclamation-triangle me-2"></i>Need Urgent Help?
@@ -302,7 +303,7 @@ export default function Threats() {
       {/* ════════════════════════════
           THREAT CATEGORIES
           ════════════════════════════ */}
-      <section className="section-pad-lg" id="categories">
+      {/* <section className="section-pad-lg" id="categories">
         <div className="container">
           <div className="d-flex align-items-end justify-content-between gap-3 flex-wrap mb-4">
             <div>
@@ -336,7 +337,7 @@ export default function Threats() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ════════════════════════════
           SPOT A SCAM QUIZ GRID
@@ -379,6 +380,99 @@ export default function Threats() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════
+          THREATS & TOOLS SECTION
+          ════════════════════════════ */}
+      <section className="section-pad-lg" id="threats-tools" style={{ background: '#ffffff' }}>
+        <div className="container">
+
+          {/* Section header */}
+          <div className="mb-5">
+            <div className="tt-hero-red-bar-inline mb-3">
+              <span>THREATS &amp; Tools</span>
+            </div>
+            <p style={{ color: '#4a5568', maxWidth: '70ch' }}>
+              At <strong>Threats &amp; Tools</strong>, we assert that knowledge and tools are Digital Power —
+              the strongest form of protection. Our Self-Defense Training Certifications program combines
+              practical real-world training with high quality, secure software tools.
+            </p>
+          </div>
+
+          {/* Threats list */}
+          <div className="d-flex flex-column gap-4">
+            {THREATS_AND_TOOLS.map(threat => (
+              <div key={threat.id} className="tt-card-new">
+
+                {/* Top bar */}
+                <div className="tt-card-top">
+                  <div className="tt-card-title">{threat.name}</div>
+                  <div className="tt-card-meta">
+                    <div className="tt-available-on">
+                      <span className="tt-available-label">Available On</span>
+                      <div className="tt-device-icons">
+                        <i className="bi bi-display"></i>
+                        <i className="bi bi-laptop"></i>
+                        <i className="bi bi-tablet"></i>
+                        <i className="bi bi-phone"></i>
+                      </div>
+                    </div>
+                    <div className="tt-card-success">
+                      <span style={{ color: '#dc2626', fontWeight: 700, fontSize: '0.8rem' }}>Success Rates:</span>
+                      <span style={{ color: '#16a34a', fontWeight: 700, fontSize: '0.9rem', marginLeft: '0.35rem' }}>
+                        {threat.successRate}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Body */}
+                <div className="tt-card-body-new">
+
+                  {/* Left — description + actions */}
+                  <div className="tt-card-left">
+                    <p className="tt-card-desc">{threat.description}</p>
+
+                    <div className="d-flex align-items-center gap-3 flex-wrap mb-3">
+                      <div className="tt-how-label">How it works?</div>
+                      <Link
+                        className="tt-request-btn"
+                        to="/report"
+                        state={{ scrollTo: 'contact' }}
+                      >
+                        Request Tools
+                      </Link>
+                    </div>
+
+                    {/* Step cards — dark navy */}
+                    <div className="tt-steps-row">
+                      {threat.steps.map((step, i) => (
+                        <div key={i} className="tt-step-card-dark">
+                          <div className="tt-step-card-num">{i + 1}</div>
+                          <div className="tt-step-card-title">{step.title}</div>
+                          <div className="tt-step-card-desc">{step.desc}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Right — icon */}
+                  <div className="tt-card-icon-side">
+                    <img
+                      src={`/src/assets/media/icons/${threat.icon}`}
+                      alt={threat.name}
+                      className="tt-card-icon-img"
+                      onError={e => { e.target.style.display = 'none' }}
+                    />
+                  </div>
+
+                </div>
+              </div>
+            ))}
+          </div>
+
         </div>
       </section>
 

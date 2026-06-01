@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation, matchPath } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation, matchPath, Navigate } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
@@ -54,7 +54,7 @@ function Layout() {
           <Route path="/essential-eight"        element={<EssentialEight />} />
           <Route path="/for-victims-government" element={<ForVictimsGovernment />} />
           <Route path="/blog"                   element={<Blog />} />
-          <Route path="/threats-tools"          element={<ThreatsTools />} />
+          <Route path="/threats-tools" element={<Navigate to="/threats" replace />} />
           <Route path="*"                       element={<NotFound />} />
         </Routes>
       </main>

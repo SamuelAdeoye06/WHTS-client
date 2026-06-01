@@ -67,25 +67,10 @@ export default function Navbar() {
               </NavLink>
             </li>
 
-            {/* Threats dropdown */}
-            <li className="nav-item dropdown">
-              <a className={`nav-link dropdown-toggle nav-dropdown-toggle ${location.pathname.startsWith('/threats') ? 'active-link' : ''}`}
-                href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <li className="nav-item">
+              <NavLink className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`} to="/threats">
                 Threats
-                <span className="nav-underline" aria-hidden="true"></span>
-              </a>
-              <ul className="dropdown-menu cyber-dropdown p-3">
-                <li>
-                  <Link className="dropdown-item cyber-dropdown-item" to="/threats">
-                    <i className="bi bi-grid me-2" style={{ color: '#1d4ed8' }}></i>Threat Library
-                  </Link>
-                </li>
-                <li>
-                  <Link className="dropdown-item cyber-dropdown-item" to="/threats-tools">
-                    <i className="bi bi-tools me-2" style={{ color: '#dc2626' }}></i>Threats &amp; Tools
-                  </Link>
-                </li>
-              </ul>
+              </NavLink>
             </li>
 
             {/* About dropdown */}
