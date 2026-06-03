@@ -19,10 +19,6 @@ export default function Contact() {
 
       <header className="template-hero contact-template-hero">
         <div className="container">
-          <nav aria-label="breadcrumb" className="template-breadcrumb">
-            <Link to="/">Home</Link>
-            <span>Contact us</span>
-          </nav>
           <div className="row align-items-center g-4">
             <div className="col-12 col-lg-7">
               <h1 className="template-hero-title">Contact us</h1>

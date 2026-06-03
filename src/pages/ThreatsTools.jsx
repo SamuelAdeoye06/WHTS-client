@@ -32,6 +32,33 @@ import iconSocialMediaThreat from '../assets/media/icons/icon-social-media-threa
 import iconBotnet from '../assets/media/icons/icon-botnet.png'
 
 
+const ICON_MAP = {
+  'icon-deepfake.png':             iconDeepfake,
+  'icon-credential-stuffing.png':  iconCredentialStuffing,
+  'icon-bec.png':                  iconBec,
+  'icon-cloud-misconfig.png':      iconCloudMisconfig,
+  'icon-insider-threat.png':       iconInsiderThreat,
+  'icon-sim-swap.png':             iconSimSwap,
+  'icon-spyware.png':              iconSpyware,
+  'icon-tracking.png':             iconTracking,
+  'icon-pentest.png':              iconPentest,
+  'icon-phishing.png':             iconPhising,
+  'icon-ransomware.png':           iconRansomware,
+  'icon-scam-fraud.png':           iconScamFraud,
+  'icon-reputation.png':           iconReputation,
+  'icon-account-takeover.png':     iconAccountTakeover,
+  'icon-data-breach.png':          iconDataBreach,
+  'icon-ddos.png':                 iconDdos,
+  'icon-api-security.png':         iconApiSecurity,
+  'icon-identity-theft.png':       iconIdentityTheft,
+  'icon-malware.png':              iconMalware,
+  'icon-crypto-drainer.png':       iconCryptoDrainer,
+  'icon-delivery-scam.png':        iconDeliveryScam,
+  'icon-unpatched-software.png':   iconUnpatchedSoftware,
+  'icon-cctv-surveillance.png':    iconCctvSurveillance,
+  'icon-social-media-threat.png':  iconSocialMediaThreat,
+  'icon-botnet.png':               iconBotnet,
+}
 // Active tab state
 const TABS = ['Types of Threats', 'Threat & Tool Analysis', 'How Our Tools Work', 'Request Tools']
 
@@ -113,23 +140,6 @@ export default function ThreatsTools() {
               </p>
             </div>
             <div className="row g-4">
-              {/* {THREATS_AND_TOOLS.map(threat => (
-                <div key={threat.id} className="col-6 col-md-4 col-lg-3">
-                  <Link to={`/threats/${threat.id}`} className="text-decoration-none">
-                    <div className="tt-threat-card">
-                      <div className="tt-threat-icon-wrap">
-                        <img
-                          src={`/src/assets/media/icons/${threat.icon}`}
-                          alt={threat.name}
-                          className="tt-threat-icon"
-                        />
-                       
-                      </div>
-                      <div className="tt-threat-name">{threat.name}</div>
-                    </div>
-                  </Link>
-                </div>
-              ))} */}
 
               {THREATS_AND_TOOLS.map(threat => (
                 <div key={threat.id} className="col-6 col-md-4 col-lg-3">
@@ -138,10 +148,11 @@ export default function ThreatsTools() {
                       <div className="tt-threat-card">
                         <div className="tt-threat-icon-wrap">
                           <img
-                            src={`/src/assets/media/icons/${threat.icon}`}
+                            src={ICON_MAP[threat.icon]}
                             alt={threat.name}
                             className="tt-threat-icon"
-                          />         
+                          />
+                          <div className="tt-threat-name">{threat.name}</div>
                         </div>
                       </div>
                     </Link>
@@ -149,10 +160,11 @@ export default function ThreatsTools() {
                     <div className="tt-threat-card" style={{ cursor: 'default' }}>
                       <div className="tt-threat-icon-wrap">
                         <img
-                          src={`/src/assets/media/icons/${threat.icon}`}
+                          src={ICON_MAP[threat.icon]}
                           alt={threat.name}
                           className="tt-threat-icon"
-                        />     
+                        />
+                        <div className="tt-threat-name">{threat.name}</div>
                       </div>
                     </div>
                   )}

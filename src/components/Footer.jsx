@@ -128,16 +128,17 @@ export default function Footer() {
 
         </div>
 
-        {/* Bottom bar */}
-        <div className="d-flex flex-column flex-md-row align-items-center justify-content-between gap-2 mt-4 pt-4"
-          style={{ borderTop: '1px solid rgba(120,214,255,0.12)' }}>
-          <div className="text-muted-cyber small">
-            © {year} WHTS · America Cyber Security World. All rights reserved.
-          </div>
-          <div className="d-flex gap-3">
-          <button className="footer-link-btn small" onClick={() => navigate('/contact')}>Contact</button>
-            <span className="text-muted-cyber small">Privacy Policy</span>
-            <span className="text-muted-cyber small">Terms of Use</span>
+        {/* Bottom bar — styled background */}
+        <div className="footer-bottom-bar">
+          <div className="footer-bottom-inner">
+            <div className="footer-bottom-copy">
+              © {year} WHTS · America Cyber Security World. All rights reserved.
+            </div>
+            <div className="footer-bottom-links">
+              <button className="footer-link-btn small" onClick={() => navigate('/contact')}>Contact</button>
+              <span className="text-muted-cyber small">Privacy Policy</span>
+              <span className="text-muted-cyber small">Terms of Use</span>
+            </div>
           </div>
         </div>
       </div>

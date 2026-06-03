@@ -4,8 +4,14 @@ import '../styles/cyber.css'
 import './About.css'
 import theEquationPoster from '../assets/media/the-equation-image.png'
 import lazarusPoster from '../assets/media/lazarus-image.png'
+import virusPoster from '../assets/media/virus-image.png'
+import anonymousPoster from '../assets/media/anonymous-image.png'
+import shadowBrokersPoster from '../assets/media/shadow-brokers-image.png'
+import apt29Poster from '../assets/media/apt29-image.png'
 
 
+
+// Clean, direct Cloudinary URLs avoiding on-the-fly transformations that cause connection drops
 const OFFICIALS = [
   {
     id: 'equation',
@@ -17,7 +23,7 @@ const OFFICIALS = [
     description: 'Considered the most sophisticated cyber-espionage group ever discovered. Linked to the NSA\'s Tailored Access Operations unit, the Equation Group pioneered firmware-level implants and zero-day exploits that remain unmatched in complexity.',
     capabilities: ['Firmware-level persistence', 'Zero-day exploit development', 'Air-gap bridging', 'Custom malware frameworks'],
     threat: 'EXTREME',
-    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/v1780028564/the-equation_z7elph.mp4', 
+    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/vc_h264/v1780406757/the-equation_vs2zsc.mp4', 
     poster: theEquationPoster,
     color: '#3b82f6',
   },
@@ -31,8 +37,8 @@ const OFFICIALS = [
     description: 'A decentralized international hacktivist collective known for coordinated cyber attacks against governments, corporations, and institutions perceived as corrupt. Operates through social media coordination with no central leadership.',
     capabilities: ['DDoS campaigns', 'Data exfiltration', 'Website defacement', 'Doxxing operations'],
     threat: 'HIGH',
-    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/v1780028564/the-equation_z7elph.mp4',
-    poster: theEquationPoster,
+    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/vc_h264/v1780406450/anonymous_mtu7vb.mp4',
+    poster: anonymousPoster,
     color: '#6b7280',
   },
   {
@@ -45,8 +51,8 @@ const OFFICIALS = [
     description: 'A prolific malware development and distribution network responsible for some of the most destructive ransomware and banking trojans deployed globally. Known for constant evolution to evade detection.',
     capabilities: ['Ransomware development', 'Banking trojan deployment', 'Botnet operations', 'Cryptomining malware'],
     threat: 'HIGH',
-    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/v1780028564/the-equation_z7elph.mp4',
-    poster: theEquationPoster,
+    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/vc_h264/v1780384928/virus_aol82c.mp4',
+    poster: virusPoster,
     color: '#ef4444',
   },
   {
@@ -56,7 +62,7 @@ const OFFICIALS = [
     type: 'Nation-State APT',
     origin: 'North Korea',
     since: 'Est. 2007',
-    description: 'A North Korean state-sponsored advanced persistent threat group responsible for some of the largest financial cyber heists in history, including the $81M Bangladesh Bank theft and widespread cryptocurrency theft.',
+    description: 'A North Korean state-sponsored advanced persistent threat group responsible for some of the largest financial cyber heists in history, including $81M Bangladesh Bank theft and widespread cryptocurrency theft.',
     capabilities: ['Financial system targeting', 'Cryptocurrency theft', 'Destructive wiper attacks', 'Supply chain compromise'],
     threat: 'EXTREME',
     videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/vc_h264/v1780248016/lazarus_nhudt2.mp4',
@@ -73,8 +79,8 @@ const OFFICIALS = [
     description: 'A mysterious threat actor that leaked classified NSA hacking tools including EternalBlue — the exploit that powered the WannaCry and NotPetya attacks affecting hundreds of thousands of systems worldwide.',
     capabilities: ['Classified exploit leaking', 'NSA tool exfiltration', 'Zero-day brokering', 'Critical infrastructure targeting'],
     threat: 'EXTREME',
-    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/v1780028564/the-equation_z7elph.mp4',
-    poster: theEquationPoster,
+    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/v1780463969/shadow-brokers_ga6tmk.mp4',
+    poster: shadowBrokersPoster,
     color: '#f59e0b',
   },
   {
@@ -87,8 +93,8 @@ const OFFICIALS = [
     description: 'A Russian intelligence-linked advanced persistent threat group responsible for the SolarWinds supply chain attack, the DNC breach, and ongoing espionage campaigns against governments, think tanks, and COVID-19 vaccine researchers.',
     capabilities: ['Supply chain attacks', 'Long-term stealth persistence', 'Government espionage', 'Cloud infrastructure abuse'],
     threat: 'EXTREME',
-    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/v1780028564/the-equation_z7elph.mp4',
-    poster: theEquationPoster,
+    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/vc_h264/v1780492583/apt29_lwnncf.mp4',
+    poster: apt29Poster,
     color: '#22c55e',
   },
 ]
@@ -98,7 +104,6 @@ const THREAT_COLORS = {
   'HIGH':    { bg: '#fffbeb', border: '#fde68a', text: '#d97706' },
 }
 
-// ── Mini video player for each official ──
 function OfficialPlayer({ official }) {
   const videoRef = useRef(null)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -112,11 +117,26 @@ function OfficialPlayer({ official }) {
     return `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`
   }
 
+  // Safe toggle utilizing the native HTML5 play promise to avoid AbortErrors
   const toggle = () => {
     const v = videoRef.current
     if (!v) return
-    if (v.paused) { v.play(); setIsPlaying(true) }
-    else { v.pause(); setIsPlaying(false) }
+
+    if (v.paused) {
+      const playPromise = v.play()
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlaying(true)
+          })
+          .catch(error => {
+            console.log("Play interrupted or stream reset layout caught safely:", error)
+          })
+      }
+    } else {
+      v.pause()
+      setIsPlaying(false)
+    }
   }
 
   const seek = (e) => {
@@ -144,8 +164,6 @@ function OfficialPlayer({ official }) {
 
   return (
     <div className="official-player-card">
-
-      {/* ── Video frame ── */}
       <div className="official-player-frame" onClick={toggle} style={{ borderColor: official.color + '44' }}>
         <video
           ref={videoRef}
@@ -155,16 +173,10 @@ function OfficialPlayer({ official }) {
           preload="metadata"
           poster={official.poster}
         />
-
-        {/* Gradient */}
         <div className="official-player-gradient" />
-
-        {/* Codename watermark */}
         <div className="official-player-watermark" style={{ color: official.color + '55' }}>
           {official.codename}
         </div>
-
-        {/* Play overlay */}
         {!isPlaying && (
           <div className="official-player-overlay">
             <button className="official-play-btn" style={{ borderColor: official.color, background: official.color + '22' }}>
@@ -174,7 +186,6 @@ function OfficialPlayer({ official }) {
         )}
       </div>
 
-      {/* ── Controls ── */}
       <div className="official-player-controls">
         <button className="official-ctrl" onClick={toggle}>
           <i className={`bi ${isPlaying ? 'bi-pause-fill' : 'bi-play-fill'}`}></i>
@@ -190,7 +201,6 @@ function OfficialPlayer({ official }) {
         </button>
       </div>
 
-      {/* ── Caption / info ── */}
       <div className="official-caption">
         <div className="d-flex align-items-start justify-content-between gap-2 mb-2">
           <div>
@@ -204,9 +214,7 @@ function OfficialPlayer({ official }) {
             {official.threat}
           </span>
         </div>
-
         <p className="official-caption-desc">{official.description}</p>
-
         <div className="official-caption-capabilities">
           <div className="official-cap-label">Key Capabilities</div>
           <div className="d-flex flex-wrap gap-1 mt-1">
@@ -215,10 +223,8 @@ function OfficialPlayer({ official }) {
             ))}
           </div>
         </div>
-
         <div className="official-caption-since">{official.since}</div>
       </div>
-
     </div>
   )
 }
@@ -226,8 +232,6 @@ function OfficialPlayer({ official }) {
 export default function AboutOfficials() {
   return (
     <div className="page-light">
-
-      {/* ── Hero ── */}
       <header className="about-hero">
         <div className="container text-center" style={{ paddingTop: '4rem', paddingBottom: '4rem' }}>
           <div className="section-label mb-2">The Officials</div>
@@ -249,7 +253,6 @@ export default function AboutOfficials() {
         </div>
       </header>
 
-      {/* ── Officials video grid ── */}
       <section className="section-pad-lg" style={{ background: '#ffffff' }}>
         <div className="container">
           <div className="row g-5">
@@ -262,7 +265,6 @@ export default function AboutOfficials() {
         </div>
       </section>
 
-      {/* ── CTA ── */}
       <section className="section-pad" style={{ background: '#f8fafc' }}>
         <div className="container">
           <div className="about-cta-banner p-4 p-md-5 text-center">
@@ -285,7 +287,6 @@ export default function AboutOfficials() {
           </div>
         </div>
       </section>
-
     </div>
   )
 }

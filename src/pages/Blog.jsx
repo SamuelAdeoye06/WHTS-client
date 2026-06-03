@@ -144,11 +144,7 @@ export default function Blog() {
 
         {/* ── Hero ── */}
         <header className="template-hero blog-hero">
-            <div className="container">
-            <nav aria-label="breadcrumb" className="template-breadcrumb">
-                <Link to="/">Home</Link>
-                <span>Knowledge Base</span>
-            </nav>
+          <div className="container">
             <div className="row align-items-center g-4">
                 <div className="col-12 col-lg-7">
                 <h1 className="template-hero-title">Knowledge Base</h1>
@@ -174,7 +170,7 @@ export default function Blog() {
                 </div>
                 </div>
             </div>
-            </div>
+          </div>
         </header>
 
         {/* ── Articles ── */}

@@ -142,3 +142,25 @@
 
   .cyber-breadcrumb { font-size: 0.75rem; }
 }
+/* ── Hero threat icon ── */
+.td-hero-icon {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 14px;
+  flex-shrink: 0;
+}
+.td-icon-invert {
+  filter: brightness(0) invert(1) opacity(0.85);
+}
+.td-icon-natural {
+  filter: brightness(1.05) saturate(0.85) opacity(0.92);
+}
+
+@media (max-width: 575.98px) {
+  .td-hero-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+  }
+}

@@ -4,6 +4,89 @@ import { QUIZ_LIST } from '../data/quizData'
 import '../styles/cyber.css'
 import './ThreatDetail.css'
 
+import iconDeepfake from '../assets/media/icons/icon-deepfake.png'
+import iconCredentialStuffing from '../assets/media/icons/icon-credential-stuffing.png'
+import iconBec from '../assets/media/icons/icon-bec.png'
+import iconCloudMisconfig from '../assets/media/icons/icon-cloud-misconfig.png'
+import iconInsiderThreat from '../assets/media/icons/icon-insider-threat.png'
+import iconSimSwap from '../assets/media/icons/icon-sim-swap.png'
+import iconSpyware from '../assets/media/icons/icon-spyware.png'
+import iconTracking from '../assets/media/icons/icon-tracking.png'
+import iconPentest from '../assets/media/icons/icon-pentest.png'
+import iconPhishing from '../assets/media/icons/icon-phishing.png'
+import iconRansomware from '../assets/media/icons/icon-ransomware.png'
+import iconScamFraud from '../assets/media/icons/icon-scam-fraud.png'
+import iconReputation from '../assets/media/icons/icon-reputation.png'
+import iconAccountTakeover from '../assets/media/icons/icon-account-takeover.png'
+import iconDataBreach from '../assets/media/icons/icon-data-breach.png'
+import iconDdos from '../assets/media/icons/icon-ddos.png'
+import iconApiSecurity from '../assets/media/icons/icon-api-security.png'
+import iconIdentityTheft from '../assets/media/icons/icon-identity-theft.png'
+import iconMalware from '../assets/media/icons/icon-malware.png'
+import iconCryptoDrainer from '../assets/media/icons/icon-crypto-drainer.png'
+import iconDeliveryScam from '../assets/media/icons/icon-delivery-scam.png'
+import iconUnpatchedSoftware from '../assets/media/icons/icon-unpatched-software.png'
+import iconCctvSurveillance from '../assets/media/icons/icon-cctv-surveillance.png'
+import iconSocialMediaThreat from '../assets/media/icons/icon-social-media-threat.png'
+import iconBotnet from '../assets/media/icons/icon-botnet.png'
+
+// Maps every ThreatDetail slug → the client's PNG icon
+const SLUG_ICON_MAP = {
+  'deepfake':             iconDeepfake,
+  'credential-stuffing':  iconCredentialStuffing,
+  'bec':                  iconBec,
+  'cloud-security':       iconCloudMisconfig,
+  'insider-threat':       iconInsiderThreat,
+  'phone-hack':           iconSimSwap,
+  'sim-swap':             iconSimSwap,
+  'spyware-detection':    iconSpyware,
+  'stalking-scam':        iconTracking,
+  'pentest':              iconPentest,
+  'phishing-emails':      iconPhishing,
+  'ransomware':           iconRansomware,
+  'romance-scam':         iconScamFraud,
+  'scam-fraud':           iconScamFraud,
+  'reputation':           iconReputation,
+  'compromised-device':   iconAccountTakeover,
+  'account-takeover':     iconAccountTakeover,
+  'data-breach':          iconDataBreach,
+  'ddos-protection':      iconDdos,
+  'api-security':         iconApiSecurity,
+  'identity-theft':       iconIdentityTheft,
+  'malware':              iconMalware,
+  'malware-link':         iconMalware,
+  'crypto-drainer':       iconCryptoDrainer,
+  'fake-job':             iconDeliveryScam,
+  'delivery-scam':        iconDeliveryScam,
+  'unpatched-software':   iconUnpatchedSoftware,
+  'cctv-surveillance':    iconCctvSurveillance,
+  'fake-profile':         iconSocialMediaThreat,
+  'social-media-threat':  iconSocialMediaThreat,
+  'instagram-hack':       iconSocialMediaThreat,
+  'facebook-hack':        iconSocialMediaThreat,
+  'botnet':               iconBotnet,
+  'wifi-hack':            iconSimSwap,
+  'call-scam':            iconPhishing,
+  'tax-refund-scam':      iconScamFraud,
+  'ai-videos':            iconDeepfake,
+}
+
+const INVERT_ICONS = new Set([
+  'icon-account-takeover.png','icon-api-security.png','icon-bec.png',
+  'icon-credential-stuffing.png','icon-crypto-drainer.png','icon-data-breach.png',
+  'icon-ddos.png','icon-identity-theft.png','icon-malware.png','icon-phishing.png',
+  'icon-scam-fraud.png','icon-sim-swap.png','icon-social-media-threat.png','icon-unpatched-software.png',
+])
+
+// Which slugs map to an inverted icon
+const INVERT_SLUGS = new Set([
+  'credential-stuffing','bec','compromised-device','account-takeover','crypto-drainer',
+  'data-breach','ddos-protection','identity-theft','malware','malware-link','phishing-emails',
+  'romance-scam','scam-fraud','phone-hack','sim-swap','fake-profile','social-media-threat',
+  'instagram-hack','facebook-hack','unpatched-software','call-scam','tax-refund-scam',
+  'wifi-hack',
+])
+
 const RISK_COLOR = {
   high: { border: 'rgba(255,59,85,0.4)',  bg: 'rgba(255,59,85,0.08)',  text: 'var(--red)'   },
   mid:  { border: 'rgba(255,209,102,0.4)', bg: 'rgba(255,209,102,0.08)', text: 'var(--yellow)' },
@@ -84,7 +167,15 @@ export default function ThreatDetail() {
                 </div>
 
                 <div className="d-flex align-items-center gap-3 mb-3">
-                  <span style={{ fontSize: '2.5rem' }}>{threat.emoji}</span>
+                  {SLUG_ICON_MAP[slug] ? (
+                    <img
+                      src={SLUG_ICON_MAP[slug]}
+                      alt={threat.title}
+                      className={`td-hero-icon${INVERT_SLUGS.has(slug) ? ' td-icon-invert' : ' td-icon-natural'}`}
+                    />
+                  ) : (
+                    <span style={{ fontSize: '2.5rem' }}>{threat.emoji}</span>
+                  )}
                   <h1 className="fw-bold mb-0" style={{ color: '#0f172a', fontSize: 'clamp(1.6rem,3vw,2.5rem)' }}>{threat.title}</h1>
                 </div>
 

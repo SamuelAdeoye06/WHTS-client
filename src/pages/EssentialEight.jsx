@@ -158,11 +158,7 @@ export default function EssentialEight() {
 
         {/* ── Hero ── */}
         <header className="template-hero e8-hero">
-            <div className="container">
-            <nav aria-label="breadcrumb" className="template-breadcrumb">
-                <Link to="/">Home</Link>
-                <span>Essential Eight</span>
-            </nav>
+          <div className="container">
             <div className="row align-items-center g-5">
                 <div className="col-12 col-lg-7">
                 <h1 className="template-hero-title">
@@ -199,7 +195,7 @@ export default function EssentialEight() {
                   </div>
                 </div>
             </div>
-            </div>
+          </div>
         </header>
 
         {/* ── Strategies grid ── */}

@@ -15,18 +15,61 @@
 }
 
 .tt-hero-red-bar {
-  background-image: url('../assets/media/red-frame.png');
-  background-size: 100% 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-  padding: 1.25rem 2rem;
-  text-align: center;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2rem 1rem 1.5rem;
   max-width: 480px;
   width: 100%;
-  border-radius: 14px;
-  box-shadow: 0 12px 30px rgba(220, 38, 38, 0.16);
+  border-radius: 4px 16px 16px 4px;
+  background: linear-gradient(135deg, #b91c1c 0%, #dc2626 45%, #ef4444 100%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.12) inset,
+    0 4px 6px rgba(0,0,0,0.2),
+    0 12px 40px rgba(185,28,28,0.40),
+    0 0 60px rgba(220,38,38,0.20);
   margin-left: 0;
   margin-right: auto;
+  overflow: hidden;
+}
+
+/* left accent stripe */
+.tt-hero-red-bar::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: rgba(0,0,0,0.25);
+  border-radius: 4px 0 0 4px;
+}
+
+/* subtle diagonal glare */
+.tt-hero-red-bar::after {
+  content: '';
+  position: absolute;
+  top: -30%;
+  left: -10%;
+  width: 60%;
+  height: 160%;
+  background: linear-gradient(
+    115deg,
+    rgba(255,255,255,0.18) 0%,
+    rgba(255,255,255,0.04) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+@media (max-width: 991.98px) {
+  .tt-hero-red-bar {
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 4px 16px 16px 4px;
+  }
 }
 
 @media (max-width: 991.98px) {
@@ -38,11 +81,14 @@
 
 .tt-hero-title {
   color: #ffffff;
-  font-size: clamp(1.5rem, 3.2vw, 2.2rem);
+  font-size: clamp(1.4rem, 3vw, 2rem);
   font-weight: 900;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   margin: 0;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
 /* ── Hero Animation Container ── */

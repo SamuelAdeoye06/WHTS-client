@@ -338,25 +338,61 @@
    ════════════════════════════ */
 
 .tt-hero-red-bar-inline {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-image: url('../assets/media/red-frame.png');
-  background-size: 100% 100%;
-  background-position: center;
-  background-repeat: no-repeat;
+  /* Rich layered red gradient — no image dependency */
+  background: linear-gradient(135deg, #b91c1c 0%, #dc2626 45%, #ef4444 100%);
   color: #fff;
   font-size: 1.4rem;
   font-weight: 900;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   min-width: 320px;
   min-height: 72px;
-  padding: 1rem 2rem;
-  border-radius: 14px;
+  padding: 1rem 2.5rem 1rem 2rem;
+  border-radius: 4px 16px 16px 4px;
   text-align: center;
-  text-shadow: 0 2px 8px rgba(80, 0, 0, 0.32);
-  box-shadow: 0 12px 30px rgba(220, 38, 38, 0.16);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.12) inset,
+    0 4px 6px rgba(0,0,0,0.2),
+    0 12px 40px rgba(185,28,28,0.40),
+    0 0 60px rgba(220,38,38,0.20);
+  overflow: hidden;
+}
+
+/* Left dark accent stripe */
+.tt-hero-red-bar-inline::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 6px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 4px 0 0 4px;
+}
+
+/* Diagonal glare highlight */
+.tt-hero-red-bar-inline::after {
+  content: '';
+  position: absolute;
+  top: -30%; left: -10%;
+  width: 60%; height: 160%;
+  background: linear-gradient(
+    115deg,
+    rgba(255,255,255,0.18) 0%,
+    rgba(255,255,255,0.04) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+/* Ensure text sits above the pseudo-elements */
+.tt-hero-red-bar-inline span {
+  position: relative;
+  z-index: 1;
 }
 
 @media (max-width: 575.98px) {
@@ -371,11 +407,18 @@
 
 /* ── Main card ── */
 .tt-card-new {
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(120, 214, 255, 0.18);
   border-radius: 16px;
   overflow: hidden;
-  background: #ffffff;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+  transition: border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.tt-card-new:hover {
+  border-color: rgba(120, 214, 255, 0.42);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
 }
 
 /* Top bar — title + meta */
@@ -385,14 +428,14 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 1rem 1.25rem 0.75rem;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid rgba(120, 214, 255, 0.10);
   flex-wrap: wrap;
 }
 
 .tt-card-title {
   font-size: 1.05rem;
   font-weight: 800;
-  color: #1d4ed8;
+  color: var(--cyan);
 }
 
 .tt-card-meta {
@@ -411,14 +454,14 @@
 
 .tt-available-label {
   font-size: 0.72rem;
-  color: #16a34a;
+  color: var(--green);
   font-weight: 700;
 }
 
 .tt-device-icons {
   display: flex;
   gap: 0.35rem;
-  color: #374151;
+  color: rgba(233, 243, 255, 0.75);
   font-size: 0.9rem;
 }
 
@@ -440,7 +483,7 @@
 }
 
 .tt-card-desc {
-  color: #1a1a2e;
+  color: rgba(233, 243, 255, 0.78);
   font-size: 0.9rem;
   line-height: 1.65;
   margin-bottom: 1rem;
@@ -450,32 +493,33 @@
 .tt-how-label {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #1a1a2e;
+  color: #f0f4ff;
   white-space: nowrap;
 }
 
 /* Red "Request Tools" button */
 .tt-request-btn {
   display: inline-block;
-  background: #dc2626;
-  color: #fff !important;
+  background: rgba(220, 38, 38, 0.15);
+  color: #fca5a5 !important;
   font-weight: 700;
   font-size: 0.88rem;
   padding: 0.5rem 1.1rem;
   border-radius: 8px;
   text-decoration: none;
-  border: 2px solid #991b1b;
-  transition: background 0.18s ease, transform 0.15s ease;
+  border: 1.5px solid rgba(220, 38, 38, 0.45);
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.15s ease;
   white-space: nowrap;
 }
 
 .tt-request-btn:hover {
-  background: #b91c1c;
-  transform: translateY(-1px);
+  background: rgba(220, 38, 38, 0.28);
+  border-color: rgba(220, 38, 38, 0.75);
   color: #fff !important;
+  transform: translateY(-1px);
 }
 
-/* Dark navy step cards */
+/* Dark navy step cards — slightly lighter on the dark page to create contrast */
 .tt-steps-row {
   display: flex;
   gap: 0.75rem;
@@ -486,15 +530,21 @@
 .tt-step-card-dark {
   flex: 1;
   min-width: 140px;
-  background: #0f172a;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(120, 214, 255, 0.14);
   border-radius: 10px;
   padding: 0.85rem;
+  transition: border-color 0.2s ease;
+}
+
+.tt-step-card-dark:hover {
+  border-color: rgba(120, 214, 255, 0.35);
 }
 
 .tt-step-card-num {
   font-size: 1rem;
   font-weight: 900;
-  color: #ffffff;
+  color: var(--cyan);
   margin-bottom: 0.4rem;
 }
 
@@ -507,7 +557,7 @@
 
 .tt-step-card-desc {
   font-size: 0.75rem;
-  color: rgba(255,255,255,0.65);
+  color: rgba(255, 255, 255, 0.58);
   line-height: 1.5;
 }
 
@@ -524,7 +574,19 @@
 .tt-card-icon-img {
   width: 80px;
   height: 80px;
-  object-fit: contain;
+  object-fit: cover;
+  object-position: center center;
+  border-radius: 10px;
+}
+
+/* Dark-coloured icons — invert to white so they show on the dark card background */
+.tt-card-icon-img.tt-icon-invert {
+  filter: brightness(0) invert(1) opacity(0.72);
+}
+
+/* Light/coloured icons — already visible, just slight opacity softening */
+.tt-card-icon-img.tt-icon-natural {
+  filter: brightness(1.05) saturate(0.85) opacity(0.90);
 }
 
 /* Responsive */
@@ -628,5 +690,283 @@
 
   .tt-step-card-desc {
     font-size: 0.7rem;
+  }
+}
+
+/* ── Threats & Tools dark section ── */
+.threats-tools-section {
+  background: rgba(10, 0, 20, 0.45);
+  border-top: 1px solid rgba(120, 214, 255, 0.1);
+}
+
+.threats-tools-section p,
+.threats-tools-section strong {
+  color: rgba(233, 243, 255, 0.85) !important;
+}
+
+
+.tt-success-label {
+  color: #f87171;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.tt-success-value {
+  color: var(--green);
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-left: 0.35rem;
+}
+
+/* ════════════════════════════════════════════
+   SECTION TABS NAV
+   ════════════════════════════════════════════ */
+.threats-tab-nav {
+  background: rgba(5, 9, 19, 0.85);
+  border-bottom: 1px solid rgba(120, 214, 255, 0.18);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.threats-tab-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.threats-tab-row::-webkit-scrollbar { display: none; }
+
+.threats-tab-btn {
+  flex: 1;
+  min-width: 120px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: rgba(233, 243, 255, 0.60);
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  position: relative;
+}
+
+.threats-tab-btn:hover {
+  color: rgba(233, 243, 255, 0.88);
+  background: rgba(120, 214, 255, 0.05);
+}
+
+.threats-tab-btn.active {
+  color: #ffffff;
+  border-bottom-color: var(--cyan);
+  background: rgba(34, 240, 255, 0.06);
+}
+
+@media (max-width: 767.98px) {
+  .threats-tab-btn {
+    font-size: 0.8rem;
+    padding: 0.85rem 0.9rem;
+    min-width: 90px;
+    letter-spacing: 0;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .threats-tab-btn {
+    font-size: 0.72rem;
+    padding: 0.75rem 0.5rem;
+    min-width: 0;
+    flex: 1;
+    letter-spacing: 0;
+  }
+}
+
+/* Hero buttons — 2 per row on mobile */
+@media (max-width: 575.98px) {
+  .threats-hero-btns {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  .threats-hero-btns .btn {
+    width: 100%;
+    font-size: 0.8rem;
+    padding: 0.55rem 0.6rem;
+  }
+}
+
+
+/* ════════════════════════════════════════════
+   BY WHTSIPA TAG
+   ════════════════════════════════════════════ */
+.by-whtsipa-tag {
+  display: inline-block;
+  color: #ef4444;
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+
+/* ════════════════════════════════════════════
+   SECTION 2 — TYPES OF THREATS
+   ════════════════════════════════════════════ */
+
+/* Info cards (Type of Threats / Tool Analysis / How Tools Work / Request) */
+.tot-info-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(120, 214, 255, 0.18);
+  border-radius: 18px;
+  padding: 1.5rem;
+  height: 100%;
+  transition: border-color 0.22s ease, transform 0.22s ease, background 0.22s ease;
+}
+.tot-info-card:hover {
+  border-color: rgba(120, 214, 255, 0.42);
+  background: rgba(255, 255, 255, 0.07);
+  transform: translateY(-3px);
+}
+.tot-info-icon {
+  font-size: 2rem;
+  line-height: 1;
+  margin-bottom: 0.85rem;
+}
+.tot-info-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #f0f4ff;
+  margin-bottom: 0.6rem;
+}
+.tot-info-desc {
+  font-size: 0.86rem;
+  color: rgba(233, 243, 255, 0.72);
+  line-height: 1.65;
+}
+
+/* Threat cards grid */
+.tot-threat-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(120, 214, 255, 0.14);
+  border-radius: 14px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.22s ease, background 0.22s ease, transform 0.18s ease;
+}
+.tot-threat-card:hover {
+  border-color: rgba(120, 214, 255, 0.38);
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-2px);
+}
+.tot-threat-emoji {
+  font-size: 1.3rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+/* Icon image in Types of Threats cards */
+.tot-threat-icon-img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+.tot-threat-icon-img.tt-icon-invert {
+  filter: brightness(0) invert(1) opacity(0.72);
+}
+.tot-threat-icon-img.tt-icon-natural {
+  filter: brightness(1.05) saturate(0.85) opacity(0.90);
+}
+.tot-threat-title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--cyan);
+  line-height: 1.3;
+}
+.tot-threat-desc {
+  font-size: 0.82rem;
+  color: rgba(233, 243, 255, 0.72);
+  line-height: 1.6;
+  margin-bottom: 0.85rem;
+  flex: 1;
+}
+.tot-learn-link {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: rgba(34, 240, 255, 0.85);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: color 0.18s ease;
+  margin-top: auto;
+}
+.tot-learn-link:hover { color: #ffffff; }
+
+/* Purchase / can't find note */
+.tot-purchase-note {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(120, 214, 255, 0.18);
+  border-radius: 18px;
+  padding: 1.75rem 2rem;
+}
+
+@media (max-width: 767.98px) {
+  .tot-info-card    { padding: 1.25rem; }
+  .tot-threat-card  { padding: 1rem; }
+  .tot-purchase-note { padding: 1.25rem; }
+  .tot-threat-title { font-size: 0.84rem; }
+  .tot-threat-desc  { font-size: 0.78rem; }
+}
+
+/* ── Threats & Tools section divider ── */
+.tt-section-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.tt-section-divider-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(120, 214, 255, 0.18);
+}
+.tt-section-divider-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  white-space: nowrap;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid rgba(34, 240, 255, 0.22);
+  border-radius: 20px;
+  background: rgba(34, 240, 255, 0.05);
+}
+
+/* Info cards — compact padding on mobile for 2-per-row */
+@media (max-width: 575.98px) {
+  .tot-info-card {
+    padding: 1rem 0.85rem;
+  }
+  .tot-info-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.6rem;
+  }
+  .tot-info-title {
+    font-size: 0.82rem;
+  }
+  .tot-info-desc {
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+  .by-whtsipa-tag {
+    font-size: 0.68rem;
   }
 }
