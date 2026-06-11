@@ -81,13 +81,24 @@ const TYPES_TO_TT_ID = {
   'insider-threat':      'insider-threat',
   'sim-swap':            'sim-swap',
   'spyware-detection':   'spyware',
+  'tracking':            'tracking',
+  'pentest':             'pentest',
   'phishing-emails':     'phishing',
   'ransomware':          'ransomware',
+  'scam-fraud':          'scam-fraud',
+  'reputation':          'reputation',
   'account-takeover':    'account-takeover',
   'data-breach':         'data-breach',
   'ddos-protection':     'ddos',
+  'api-security':        'api-security',
   'identity-theft':      'identity-theft',
   'malware':             'malware',
+  'crypto-drainer':      'crypto-drainer',
+  'delivery-scam':       'delivery-scam',
+  'unpatched-software':  'unpatched-software',
+  'cctv-surveillance':   'cctv-surveillance',
+  'social-media-threat': 'social-media-threat',
+  'botnet':              'botnet',
 }
 
 const TYPES_OF_THREATS = [
@@ -114,10 +125,10 @@ const TYPES_OF_THREATS = [
     link: 'spyware-detection' },
   { icon: 'icon-tracking.png',            title: 'Tracking a Tracker',                         risk: 'mid',
     desc: 'We neutralize digital threats by tracking scammers using Grabify Tools that generate links to capture information from imposters.',
-    link: null },
+    link: 'tracking' },
   { icon: 'icon-pentest.png',             title: 'Penetration Testing',                        risk: 'low',
     desc: 'Comprehensive testing for servers and applications to identify possible threats and block vulnerabilities before attackers do.',
-    link: null },
+    link: 'pentest' },
   { icon: 'icon-phishing.png',            title: 'Phishing Threats',                           risk: 'high',
     desc: 'Deceptive emails, texts and websites trick users into revealing credentials. Our AI-powered email filtering and real-time link scanning tools protect you.',
     link: 'phishing-emails' },
@@ -126,10 +137,10 @@ const TYPES_OF_THREATS = [
     link: 'ransomware' },
   { icon: 'icon-scam-fraud.png',          title: 'Online Scam & Investment Fraud',             risk: 'high',
     desc: 'Romance, tech support and crypto scams cause massive losses. We offer victim recovery assistance and transaction monitoring tools.',
-    link: null },
+    link: 'scam-fraud' },
   { icon: 'icon-reputation.png',          title: 'Reputation & Brand Damage',                  risk: 'mid',
     desc: 'Public leaks of explicit content and attacks destroy trust. Our dark web cleanup and proactive reputation monitoring tools protect you.',
-    link: null },
+    link: 'reputation' },
   { icon: 'icon-account-takeover.png',    title: 'Account Takeover Fraud',                     risk: 'high',
     desc: 'Hackers seize control of online accounts for financial gain. We offer session monitoring, risk-based authentication and rapid recovery tools.',
     link: 'account-takeover' },
@@ -141,7 +152,7 @@ const TYPES_OF_THREATS = [
     link: 'ddos-protection' },
   { icon: 'icon-api-security.png',        title: 'API Security Threats',                       risk: 'mid',
     desc: 'Exploited APIs expose backend data. Our secure API gateways with rate limiting, real-time threat detection and penetration testing tools protect you.',
-    link: null },
+    link: 'api-security' },
   { icon: 'icon-identity-theft.png',      title: 'Identity Theft & Fraud Threats',             risk: 'high',
     desc: 'Stolen identities used for loans, accounts or espionage. We offer 24/7 dark web monitoring, credit alerts and identity restoration insurance.',
     link: 'identity-theft' },
@@ -150,22 +161,22 @@ const TYPES_OF_THREATS = [
     link: 'malware' },
   { icon: 'icon-crypto-drainer.png',      title: 'Crypto Drainer Threats',                     risk: 'high',
     desc: 'Airdrop drainers steal crypto assets silently. We provide detection, wallet monitoring and active recovery tools.',
-    link: null },
+    link: 'crypto-drainer' },
   { icon: 'icon-delivery-scam.png',       title: 'Fake Package (UPS) & Delivery Scams',        risk: 'mid',
     desc: 'Fake delivery notifications trick victims into clicking malicious links. We offer real-time detection and link verification tools.',
-    link: null },
+    link: 'delivery-scam' },
   { icon: 'icon-unpatched-software.png',  title: 'Unpatched Software Threats',                 risk: 'mid',
     desc: 'Delayed updates create easy entry points. Our managed endpoint services and vulnerability scanning tools enforce best-practice patch management.',
-    link: null },
+    link: 'unpatched-software' },
   { icon: 'icon-cctv-surveillance.png',   title: 'CCTV Home & Office Surveillance Threats',    risk: 'mid',
     desc: 'Exposed camera feeds risk privacy. We protect footage with New Private Access Protection Key (NPAPK) and Surveillance Protection Tools.',
-    link: null },
+    link: 'cctv-surveillance' },
   { icon: 'icon-social-media-threat.png', title: 'Social Media Monitoring Threats',            risk: 'mid',
     desc: 'Account takeovers and reputation attacks via social platforms. We offer monitoring, protection tools and emergency lockdown options.',
-    link: null },
+    link: 'social-media-threat' },
   { icon: 'icon-botnet.png',              title: 'Botnets & Zombie Network Attacks',           risk: 'high',
     desc: 'Infected devices form zombie networks. Our Device Cleanup, Network Segmentation and Botnet Blocker Tools permanently eliminate infections.',
-    link: null },
+    link: 'botnet' },
 ]
 
 /* ════════════════════════════════════════════
@@ -331,14 +342,8 @@ export default function Threats() {
     setTimeout(() => setHighlightedCard(null), 2800)
   }
 
-  /* Double-click guard for Learn More */
-  const lastLearnClick = { current: 0 }
   const handleLearnMore = (ttId) => {
-    const now = Date.now()
-    if (now - lastLearnClick.current < 400) {
-      scrollToTTCard(ttId)
-    }
-    lastLearnClick.current = now
+    scrollToTTCard(ttId)
   }
 
   return (
@@ -745,16 +750,17 @@ export default function Threats() {
                   key={threat.id}
                   id={`tt-card-${threat.id}`}
                   className={`tt-card-new${highlightedCard === threat.id ? ' tt-card-highlighted' : ''}`}
-                  style={{ cursor: 'pointer' }}
-                  onClick={(e) => {
-                    if (e.target.closest('.tt-request-btn')) return
-                    navigate(`/threats/${detailSlug}`)
-                  }}
                 >
                   {/* Top bar — title left, icon right */}
                   <div className="tt-card-top">
                     <div className="tt-card-top-left">
-                      <div className="tt-card-title">{threat.name}</div>
+                      <div
+                        className="tt-card-title"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => navigate(`/threats/${detailSlug}`)}
+                      >
+                        {threat.name}
+                      </div>
                       <div className="tt-card-meta-inline">
                         <div className="tt-available-on">
                           <span className="tt-available-label">Available On</span>

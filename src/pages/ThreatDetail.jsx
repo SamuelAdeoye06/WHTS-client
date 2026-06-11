@@ -187,12 +187,12 @@ export default function ThreatDetail() {
                 </p>
 
                 <div className="d-flex flex-column flex-sm-row gap-2">
-                  <Link className="btn btn-danger px-4" to="/report" style={{ borderRadius: 12, fontWeight: 600 }}>
+                  <button className="btn btn-danger px-4" onClick={() => setActiveModal('report')} style={{ borderRadius: 12, fontWeight: 600 }}>
                     <i className="bi bi-exclamation-triangle me-2"></i>Report this threat
-                  </Link>
-                  <Link className="btn btn-outline-secondary px-4" to="/report" state={{ scrollTo: 'recover' }} style={{ borderRadius: 12, fontWeight: 600 }}>
+                  </button>
+                  <button className="btn btn-outline-secondary px-4" onClick={() => setActiveModal('recovery')} style={{ borderRadius: 12, fontWeight: 600 }}>
                     <i className="bi bi-shield-check me-2"></i>View recovery steps
-                  </Link>
+                  </button>
                 </div>
               </div>
 
@@ -283,10 +283,10 @@ export default function ThreatDetail() {
                       <p className="text-muted-cyber small mb-3">
                         <ToolsText text={threat.solutions} />
                       </p>
-                      <Link className="btn btn-cyber" to="/report#contact"
-                        onClick={e => { e.preventDefault(); setActiveModal('hire') }}>
+                      <button className="btn btn-cyber"
+                        onClick={() => setActiveModal('hire')}>
                         <i className="bi bi-headset me-2"></i>Hire Our Team
-                      </Link>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -364,7 +364,16 @@ export default function ThreatDetail() {
                         onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(120,214,255,0.3)'}
                         onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(120,214,255,0.1)'}
                       >
-                        <span>{t.emoji}</span>
+                        {SLUG_ICON_MAP[s] ? (
+                          <img
+                            src={SLUG_ICON_MAP[s]}
+                            alt={t.title}
+                            className={`${INVERT_SLUGS.has(s) ? 'td-icon-invert' : 'td-icon-natural'}`}
+                            style={{ width: '24px', height: '24px', objectFit: 'contain', borderRadius: '4px', flexShrink: 0 }}
+                          />
+                        ) : (
+                          <span>{t.emoji}</span>
+                        )}
                         <span className="small fw-bold text-white">{t.title}</span>
                       </Link>
                     ))}

@@ -515,18 +515,20 @@
   width: 100%;
 }
 
-.tt-card-desc {
-  color: #374151;
+.tt-card-desc,
+.threats-tools-section p.tt-card-desc {
+  color: #374151 !important;
   font-size: 0.9rem;
   line-height: 1.65;
   margin-bottom: 1rem;
 }
 
 /* "How it works?" label */
-.tt-how-label {
+.tt-how-label,
+.threats-tools-section .tt-how-label {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #1e293b;
+  color: #1e293b !important;
   white-space: nowrap;
 }
 
@@ -729,8 +731,8 @@
   }
 }
 
-/* Hero buttons — 2 per row on mobile */
-@media (max-width: 575.98px) {
+/* Hero buttons — 2 per row on tablet & mobile */
+@media (max-width: 991.98px) {
   .threats-hero-btns {
     display: grid !important;
     grid-template-columns: 1fr 1fr;
@@ -738,8 +740,8 @@
   }
   .threats-hero-btns .btn {
     width: 100%;
-    font-size: 0.8rem;
-    padding: 0.55rem 0.6rem;
+    font-size: 0.82rem;
+    padding: 0.58rem 0.7rem;
   }
 }
 
