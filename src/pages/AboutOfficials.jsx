@@ -79,7 +79,7 @@ const OFFICIALS = [
     description: 'A mysterious threat actor that leaked classified NSA hacking tools including EternalBlue — the exploit that powered the WannaCry and NotPetya attacks affecting hundreds of thousands of systems worldwide.',
     capabilities: ['Classified exploit leaking', 'NSA tool exfiltration', 'Zero-day brokering', 'Critical infrastructure targeting'],
     threat: 'EXTREME',
-    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/v1780463969/shadow-brokers_ga6tmk.mp4',
+    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/vc_h264/v1780463969/shadow-brokers_ga6tmk.mp4',
     poster: shadowBrokersPoster,
     color: '#f59e0b',
   },
@@ -117,21 +117,13 @@ function OfficialPlayer({ official }) {
     return `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`
   }
 
-  // Safe toggle utilizing the native HTML5 play promise to avoid AbortErrors
   const toggle = () => {
     const v = videoRef.current
     if (!v) return
-
     if (v.paused) {
       const playPromise = v.play()
       if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            setIsPlaying(true)
-          })
-          .catch(error => {
-            console.log("Play interrupted or stream reset layout caught safely:", error)
-          })
+        playPromise.then(() => setIsPlaying(true)).catch(err => console.log('Play error:', err))
       }
     } else {
       v.pause()
@@ -155,10 +147,26 @@ function OfficialPlayer({ official }) {
     v.addEventListener('timeupdate', onTime)
     v.addEventListener('loadedmetadata', onMeta)
     v.addEventListener('ended', onEnd)
-    return () => { v.removeEventListener('timeupdate', onTime); v.removeEventListener('loadedmetadata', onMeta); v.removeEventListener('ended', onEnd) }
+    return () => {
+      v.removeEventListener('timeupdate', onTime)
+      v.removeEventListener('loadedmetadata', onMeta)
+      v.removeEventListener('ended', onEnd)
+    }
   }, [])
 
   useEffect(() => { if (videoRef.current) videoRef.current.muted = muted }, [muted])
+
+  /* Scroll-pause: pause when scrolled out of view */
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v) return
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (!entry.isIntersecting && !v.paused) { v.pause(); setIsPlaying(false) } },
+      { threshold: 0.15 }
+    )
+    observer.observe(v)
+    return () => observer.disconnect()
+  }, [])
 
   const tc = THREAT_COLORS[official.threat]
 
@@ -171,7 +179,7 @@ function OfficialPlayer({ official }) {
           src={official.videoUrl}
           playsInline
           preload="metadata"
-          poster={official.poster}
+          crossOrigin="anonymous"
         />
         <div className="official-player-gradient" />
         <div className="official-player-watermark" style={{ color: official.color + '55' }}>
@@ -229,6 +237,156 @@ function OfficialPlayer({ official }) {
   )
 }
 
+/* ══════════════════════════════════════
+   COMBINED VIDEO — "The Hackers"
+   Full-width cinematic player shown
+   below all six official videos
+   ══════════════════════════════════════ */
+function CombinedVideo() {
+  const videoRef = useRef(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [muted,     setMuted]     = useState(true)
+  const [progress,  setProgress]  = useState(0)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration,  setDuration]  = useState(0)
+
+  const fmt = (s) => {
+    if (!s || isNaN(s)) return '0:00'
+    return `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`
+  }
+
+  const toggle = () => {
+    const v = videoRef.current
+    if (!v) return
+    if (v.paused) {
+      v.play().then(() => setIsPlaying(true)).catch(e => console.log('Play error:', e))
+    } else {
+      v.pause(); setIsPlaying(false)
+    }
+  }
+
+  const seek = (e) => {
+    const v = videoRef.current
+    if (!v) return
+    const r = e.currentTarget.getBoundingClientRect()
+    v.currentTime = ((e.clientX - r.left) / r.width) * v.duration
+  }
+
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v) return
+    const onTime = () => { setCurrentTime(v.currentTime); setProgress((v.currentTime/v.duration)*100||0) }
+    const onMeta = () => setDuration(v.duration)
+    const onEnd  = () => setIsPlaying(false)
+    v.addEventListener('timeupdate', onTime)
+    v.addEventListener('loadedmetadata', onMeta)
+    v.addEventListener('ended', onEnd)
+    return () => {
+      v.removeEventListener('timeupdate', onTime)
+      v.removeEventListener('loadedmetadata', onMeta)
+      v.removeEventListener('ended', onEnd)
+    }
+  }, [])
+
+  useEffect(() => { if (videoRef.current) videoRef.current.muted = muted }, [muted])
+
+  /* Scroll-pause */
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v) return
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (!entry.isIntersecting && !v.paused) { v.pause(); setIsPlaying(false) } },
+      { threshold: 0.15 }
+    )
+    observer.observe(v)
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <section className="section-pad-lg" style={{ background: '#0a0f1e' }}>
+      <div className="container">
+        <div className="text-center mb-5">
+          <div className="section-label mb-2" style={{ color: 'rgba(120,214,255,0.7)' }}>All Six Officials</div>
+          <h2 className="fw-bold mb-2" style={{ color: '#f0f4ff', fontSize: 'clamp(1.5rem, 2.5vw, 2.2rem)' }}>
+            The Officials — United
+          </h2>
+          <p className="mx-auto" style={{ maxWidth: '56ch', color: 'rgba(233,243,255,0.6)', fontSize: '0.95rem' }}>
+            A combined look at all six elite threat actors tracked by WHTSIPA. Understand
+            how they operate together to form the most sophisticated cyber threat landscape.
+          </p>
+        </div>
+
+        {/* Cinematic player — full width */}
+        <div className="combined-video-player">
+
+          {/* Top bar */}
+          <div className="combined-video-topbar">
+            <div className="combined-video-dots" aria-hidden="true">
+              <span style={{ background: '#ff5f57' }}></span>
+              <span style={{ background: '#febc2e' }}></span>
+              <span style={{ background: '#28c840' }}></span>
+            </div>
+            <div className="combined-video-title">WHTSIPA &amp; The Officials </div>
+            <div className="combined-video-duration">{fmt(duration)}</div>
+          </div>
+
+          {/* Video frame */}
+          <div className="combined-video-frame" onClick={toggle}>
+            <video
+              ref={videoRef}
+              className="combined-video-el"
+              src="https://res.cloudinary.com/dqch0tjrm/video/upload/v1781208116/the-hackers_vdy1uk.mp4"
+              playsInline
+              preload="metadata"
+              crossOrigin="anonymous"
+            />
+            <div className="combined-video-gradient" />
+            <div className="combined-video-watermark">whts-client.vercel.app</div>
+
+            {!isPlaying && (
+              <div className="combined-video-overlay">
+                <button className="combined-play-btn" aria-label="Play video">
+                  <i className="bi bi-play-fill"></i>
+                </button>
+                <div className="combined-play-sub">
+                  Tap to play · The Hackers · {fmt(duration)}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Controls */}
+          <div className="combined-video-controls">
+            <div className="combined-ctrl-left">
+              <button className="combined-ctrl-btn" onClick={toggle} aria-label={isPlaying ? 'Pause' : 'Play'}>
+                <i className={`bi ${isPlaying ? 'bi-pause-fill' : 'bi-play-fill'}`}></i>
+              </button>
+              <button className="combined-ctrl-btn" onClick={() => setMuted(p => !p)} aria-label="Toggle mute">
+                <i className={`bi ${muted ? 'bi-volume-mute-fill' : 'bi-volume-up-fill'}`}></i>
+              </button>
+              <span className="combined-ctrl-time">{fmt(currentTime)} / {fmt(duration)}</span>
+            </div>
+
+            <div className="combined-ctrl-progress" onClick={seek}>
+              <div className="combined-progress-track">
+                <div className="combined-progress-fill" style={{ width: `${progress}%` }} />
+                <div className="combined-progress-thumb" style={{ left: `${progress}%` }} />
+              </div>
+            </div>
+
+            <div className="combined-ctrl-right">
+              <span className="combined-ctrl-badge">
+                <i className="bi bi-shield-fill-check me-1"></i>WHTS
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  )
+}
+
 export default function AboutOfficials() {
   return (
     <div className="page-light">
@@ -264,6 +422,9 @@ export default function AboutOfficials() {
           </div>
         </div>
       </section>
+
+      {/* ── Combined "The Hackers" video — full width ── */}
+      <CombinedVideo />
 
       <section className="section-pad" style={{ background: '#f8fafc' }}>
         <div className="container">
