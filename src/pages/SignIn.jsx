@@ -3,6 +3,7 @@ import '../styles/cyber.css'
 import './Auth.css'
 import { useAuth } from '../context/AuthContext'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
+import api from '../services/api'
 import logoWhts from '../assets/media/logo-whts.jpg'
 
 export default function SignIn() {
@@ -16,34 +17,26 @@ export default function SignIn() {
 
   const set = (key) => (e) => setForm(prev => ({ ...prev, [key]: e.target.value }))
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        setError('')
-        if (!form.email || !form.password) {
-            setError('Please fill in all fields.')
-            return
-        }
-        setLoading(true)
-        // ── BACKEND: Replace this entire setTimeout block with: ──
-        // try {
-        //   setLoading(true)
-        //   const { data } = await api.post('/auth/login', { email: form.email, password: form.password })
-        //   login(data.user)          // data.user = { id, name, email, country }
-        //   navigate(from, scrollTo ? { state: { scrollTo } } : {})
-        // } catch (err) {
-        //   setError(err.response?.data?.message || 'Invalid email or password.')
-        // } finally {
-        //   setLoading(false)
-        // }
-        setTimeout(() => {
-            login({ email: form.email, name: 'User' })
-            setLoading(false)
-            // If they were redirected here from another page, go back there
-            const from = location.state?.from || '/'
-            const scrollTo = location.state?.scrollTo
-            navigate(from, scrollTo ? { state: { scrollTo } } : {})
-        }, 1000)
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setError('')
+    if (!form.email || !form.password) {
+        setError('Please fill in all fields.')
+        return
     }
+    setLoading(true)
+    try {
+        const { data } = await api.post('/auth/login', { email: form.email, password: form.password })
+        login({ ...data.user, token: data.token })
+        const from     = location.state?.from || '/'
+        const scrollTo = location.state?.scrollTo
+        navigate(from, scrollTo ? { state: { scrollTo } } : {})
+    } catch (err) {
+         setError(err.response?.data?.message || 'Invalid email or password.')
+    } finally {
+        setLoading(false)
+    }
+  }
 
   return (
     <div className="auth-split">

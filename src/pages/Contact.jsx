@@ -1,17 +1,28 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import api from '../services/api'
 import '../styles/cyber.css'
 import './Contact.css'
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
+  const [form, setForm]         = useState({ name: '', email: '', subject: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading]   = useState(false)
+  const [error, setError]       = useState('')
   const set = (k) => (e) => setForm(p => ({ ...p, [k]: e.target.value }))
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // ── BACKEND: POST /api/contact with form data ──
-    setSubmitted(true)
+    setError('')
+    setLoading(true)
+    try {
+      await api.post('/contact/submit', form)
+      setSubmitted(true)
+    } catch (err) {
+      setError(err.response?.data?.message || 'Something went wrong. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -55,19 +66,30 @@ export default function Contact() {
             <div className="col-12 col-lg-7">
               {submitted ? (
                 <div className="about-cta-banner p-5 text-center">
-                  <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✅</div>
+                  <div style={{ fontSize: '3rem', marginBottom: '1rem', color: '#0d9488' }}>
+                    <i className="bi bi-check-circle-fill"></i>
+                  </div>
                   <h3 className="fw-bold mb-3" style={{ color: '#0f172a' }}>Message Sent</h3>
                   <p className="mb-4" style={{ color: '#4a5568' }}>
-                    Thank you for reaching out. Our team will get back to you as soon as possible.
+                    Thank you for reaching out. Our team will get back to you within 48 hours.
                   </p>
-                  <button className="btn btn-outline-primary" style={{ borderRadius: 12 }}
-                    onClick={() => { setSubmitted(false); setForm({ name:'', email:'', subject:'', message:'' }) }}>
+                  <button
+                    className="btn btn-outline-primary"
+                    style={{ borderRadius: 12 }}
+                    onClick={() => { setSubmitted(false); setForm({ name: '', email: '', subject: '', message: '' }) }}
+                  >
                     Send Another Message
                   </button>
                 </div>
               ) : (
                 <div className="contact-form-card p-4 p-md-5">
                   <h3 className="fw-bold mb-4" style={{ color: '#0f172a' }}>Send us a Message</h3>
+                  {error && (
+                    <div className="alert alert-danger d-flex align-items-center gap-2 mb-3" style={{ borderRadius: 10 }}>
+                      <i className="bi bi-exclamation-circle-fill"></i>
+                      <span>{error}</span>
+                    </div>
+                  )}
                   <form onSubmit={handleSubmit}>
                     <div className="row g-3">
                       <div className="col-12 col-sm-6">
@@ -101,8 +123,16 @@ export default function Contact() {
                           value={form.message} onChange={set('message')} required />
                       </div>
                       <div className="col-12">
-                        <button type="submit" className="btn btn-primary w-100" style={{ padding: '0.85rem', borderRadius: 12, fontWeight: 600 }}>
-                          <i className="bi bi-send me-2"></i>Send Message
+                        <button
+                          type="submit"
+                          className="btn btn-primary w-100"
+                          style={{ padding: '0.85rem', borderRadius: 12, fontWeight: 600 }}
+                          disabled={loading}
+                        >
+                          {loading
+                            ? <><span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Sending…</>
+                            : <><i className="bi bi-send me-2"></i>Send Message</>
+                          }
                         </button>
                       </div>
                     </div>
@@ -136,7 +166,6 @@ export default function Contact() {
                       </div>
                       <div>
                         <div className="fw-bold small" style={{ color: '#0f172a' }}>Telegram</div>
-                        {/* ── CLIENT: Replace with actual Telegram link ── */}
                         <a href="https://t.me/WHTS_support" target="_blank" rel="noopener noreferrer"
                           style={{ color: '#4a5568', fontSize: '0.85rem', textDecoration: 'none' }}>
                           @WHTS_support
@@ -157,7 +186,9 @@ export default function Contact() {
                       </div>
                     </div>
                     <div className="d-flex align-items-center gap-3">
-                      <div className="contact-icon-box">💬</div>
+                      <div className="contact-icon-box" style={{ background: '#f0fdf4', border: '1px solid #bbf7d0' }}>
+                        <i className="bi bi-chat-dots-fill" style={{ color: '#16a34a' }}></i>
+                      </div>
                       <div>
                         <div className="fw-bold small" style={{ color: '#0f172a' }}>Live Chat</div>
                         <div style={{ color: '#4a5568', fontSize: '0.85rem' }}>Available on the Report page — a representative joins urgent cases.</div>

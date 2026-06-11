@@ -3,14 +3,6 @@ import { useEffect, useRef, useState } from 'react'
 import '../styles/cyber.css'
 import './Home.css'
 
-import agencyCisa from '../assets/media/agency-cisa.jpeg'
-import agencyDhs from '../assets/media/agency-dhs.jpeg'
-import agencyFbi from '../assets/media/agency-fbi.jpeg'
-import agencyFtc from '../assets/media/agency-ftc.jpeg'
-import agencyInterpol from '../assets/media/agency-interpol.jpeg'
-import agencyIrs from '../assets/media/agency-irs.jpeg'
-import agencySecretService from '../assets/media/agency-secret-service.jpeg'
-import agencyUsps from '../assets/media/agency-usps.jpeg'
 import heroImage from '../assets/media/hero-image.png'
 
 const heroVideo = 'https://res.cloudinary.com/dqch0tjrm/video/upload/v1779575838/hero-video-compressed_rdbyn5.mp4'
@@ -30,15 +22,6 @@ function useCounter(target, duration = 1400, trigger) {
   }, [trigger, target, duration])
   return count
 }
-
-const THREAT_CATS = [
-  { emoji: '🎣', title: 'Phishing & Scam Emails',    slug: 'phishing-emails',    desc: 'Identify deceptive messages designed to steal your credentials.' },
-  { emoji: '🧱', title: 'Ransomware',                slug: 'ransomware',          desc: 'Stop extortion attacks before they encrypt your files.' },
-  { emoji: '🎭', title: 'Deepfake & AI Fraud',       slug: 'deepfake',            desc: 'Detect manipulated video, audio, and identity impersonation.' },
-  { emoji: '🪪', title: 'Identity Theft',            slug: 'identity-theft',      desc: 'Secure your accounts and detect fraudulent activity early.' },
-  { emoji: '🧬', title: 'Malware & Spyware',         slug: 'malware',             desc: 'Prevent infection and stop malicious software at the source.' },
-  { emoji: '📡', title: 'Business Email Compromise', slug: 'bec',                 desc: 'Recognise impersonation attacks targeting your organisation.' },
-]
 
 const WHY_ITEMS = [
   { icon: '💰', title: 'Proven Recovery Power', desc: "We don't just investigate — we deliver positive results to all reported cases. With a 95%+ recovery rate on tradable cases, we've successfully recovered millions in stolen assets for victims worldwide." },
@@ -68,26 +51,23 @@ const MISSION_ITEMS = [
   { icon: '🏆', title: 'To Set a New Digital Record', desc: 'We are building the gold standard for ethical, transparent and effective scam recovery systems. Proving that technology and justice can work together for good!' },
 ]
 
-const AGENCIES = [
-  { name: 'Federal Trade Commission',                       abbr: 'FTC',      img: agencyFtc },
-  { name: 'US Postal Inspection Service',                   abbr: 'USPS',     img: agencyUsps },
-  { name: 'INTERPOL',                                       abbr: 'INTERPOL', img: agencyInterpol },
-  { name: 'Cybersecurity & Infrastructure Security Agency', abbr: 'CISA',     img: agencyCisa },
-  { name: 'Dept. of Homeland Security',                     abbr: 'DHS',      img: agencyDhs },
-  { name: 'FBI / Dept. of Justice',                         abbr: 'FBI',      img: agencyFbi },
-  { name: 'US Secret Service',                              abbr: 'USSS',     img: agencySecretService },
-  { name: 'Internal Revenue Service',                       abbr: 'IRS',      img: agencyIrs },
-]
-
 export default function Home() {
-  const statsRef     = useRef(null)
-  const heroVideoRef = useRef(null)
+  const statsRef        = useRef(null)
+  const heroVideoRef    = useRef(null)
+  const videoWrapRef    = useRef(null)
+  const lastTapRef      = useRef({ side: null, time: 0 })
+  const skipFeedbackRef = useRef(null)
+
   const [statsVisible, setStatsVisible] = useState(false)
-  const [muted,       setMuted]       = useState(true)
-  const [isPlaying,   setIsPlaying]   = useState(false)
-  const [progress,    setProgress]    = useState(0)
-  const [currentTime, setCurrentTime] = useState(0)
-  const [duration,    setDuration]    = useState(0)
+  const [muted,        setMuted]        = useState(true)
+  const [volume,       setVolume]       = useState(1)
+  const [showVolSlider,setShowVolSlider]= useState(false)
+  const [isPlaying,    setIsPlaying]    = useState(false)
+  const [progress,     setProgress]     = useState(0)
+  const [currentTime,  setCurrentTime]  = useState(0)
+  const [duration,     setDuration]     = useState(0)
+  const [skipHint,     setSkipHint]     = useState(null) // 'forward' | 'backward' | null
+  const [isFullscreen, setIsFullscreen] = useState(false)
 
   const formatTime = (secs) => {
     if (!secs || isNaN(secs)) return '0:00'
@@ -100,7 +80,7 @@ export default function Home() {
     const vid = heroVideoRef.current
     if (!vid) return
     if (vid.paused) { vid.play(); setIsPlaying(true) }
-    else { vid.pause(); setIsPlaying(false) }
+    else            { vid.pause(); setIsPlaying(false) }
   }
 
   const handleSeek = (e) => {
@@ -111,24 +91,102 @@ export default function Home() {
     vid.currentTime = pct * vid.duration
   }
 
+  /* Double-tap to skip — works on touch (mobile) and mouse (desktop) */
+  const handleFrameTap = (e) => {
+    const vid = heroVideoRef.current
+    if (!vid) return
+    const rect   = e.currentTarget.getBoundingClientRect()
+    const tapX   = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left
+    const side   = tapX < rect.width / 2 ? 'backward' : 'forward'
+    const now    = Date.now()
+    const last   = lastTapRef.current
+
+    if (last.side === side && now - last.time < 350) {
+      // Double tap detected
+      const skip = side === 'forward' ? 10 : -10
+      vid.currentTime = Math.min(Math.max(vid.currentTime + skip, 0), vid.duration)
+      setSkipHint(side)
+      clearTimeout(skipFeedbackRef.current)
+      skipFeedbackRef.current = setTimeout(() => setSkipHint(null), 700)
+      lastTapRef.current = { side: null, time: 0 } // reset
+    } else {
+      // First tap — record it; wait for possible second
+      lastTapRef.current = { side, time: now }
+      // If no second tap after 350ms, treat as play/pause
+      clearTimeout(skipFeedbackRef.current)
+      skipFeedbackRef.current = setTimeout(() => {
+        if (lastTapRef.current.side === side) {
+          handleVideoClick()
+          lastTapRef.current = { side: null, time: 0 }
+        }
+      }, 360)
+    }
+  }
+
+  /* Fullscreen toggle */
+  const handleFullscreen = () => {
+    const wrap = videoWrapRef.current
+    if (!wrap) return
+    if (!document.fullscreenElement) {
+      wrap.requestFullscreen?.() || wrap.webkitRequestFullscreen?.()
+    } else {
+      document.exitFullscreen?.() || document.webkitExitFullscreen?.()
+    }
+  }
+
+  /* Volume change */
+  const handleVolumeChange = (e) => {
+    const v = parseFloat(e.target.value)
+    setVolume(v)
+    const vid = heroVideoRef.current
+    if (vid) { vid.volume = v; vid.muted = v === 0 }
+    setMuted(v === 0)
+  }
+
+  /* Video events */
   useEffect(() => {
     const vid = heroVideoRef.current
     if (!vid) return
-    const onTime = () => { setCurrentTime(vid.currentTime); setProgress((vid.currentTime / vid.duration) * 100 || 0) }
-    const onMeta = () => setDuration(vid.duration)
-    const onEnd  = () => setIsPlaying(false)
+    const onTime  = () => { setCurrentTime(vid.currentTime); setProgress((vid.currentTime / vid.duration) * 100 || 0) }
+    const onMeta  = () => setDuration(vid.duration)
+    const onEnd   = () => setIsPlaying(false)
+    const onFs    = () => setIsFullscreen(!!document.fullscreenElement)
     vid.addEventListener('timeupdate',     onTime)
     vid.addEventListener('loadedmetadata', onMeta)
     vid.addEventListener('ended',          onEnd)
+    document.addEventListener('fullscreenchange', onFs)
+    document.addEventListener('webkitfullscreenchange', onFs)
     return () => {
       vid.removeEventListener('timeupdate',     onTime)
       vid.removeEventListener('loadedmetadata', onMeta)
       vid.removeEventListener('ended',          onEnd)
+      document.removeEventListener('fullscreenchange', onFs)
+      document.removeEventListener('webkitfullscreenchange', onFs)
     }
   }, [])
 
-  useEffect(() => { const vid = heroVideoRef.current; if (vid) vid.muted = muted }, [muted])
+  useEffect(() => {
+    const vid = heroVideoRef.current
+    if (vid) { vid.muted = muted; if (!muted) vid.volume = volume }
+  }, [muted])
 
+  /* Scroll-pause: pause when scrolled out of view, resume when back */
+  useEffect(() => {
+    const vid = heroVideoRef.current
+    if (!vid) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting && !vid.paused) {
+          vid.pause(); setIsPlaying(false)
+        }
+      },
+      { threshold: 0.15 }
+    )
+    observer.observe(vid)
+    return () => observer.disconnect()
+  }, [])
+
+  /* Stats counter trigger */
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) setStatsVisible(true) },
@@ -138,7 +196,7 @@ export default function Home() {
     return () => observer.disconnect()
   }, [])
 
-  const threats  = useCounter(14800, 1600, statsVisible)
+  const threats  = useCounter(2400,  1600, statsVisible)
   const reports  = useCounter(850,   1200, statsVisible)
   const recovery = useCounter(97,    1000, statsVisible)
 
@@ -202,7 +260,7 @@ export default function Home() {
           </div>
 
           {/* ── Cinematic player ── */}
-          <div className="cinematic-player">
+          <div className="cinematic-player" ref={videoWrapRef}>
 
             <div className="cinematic-topbar">
               <div className="cinematic-dots" aria-hidden="true"><span></span><span></span><span></span></div>
@@ -210,7 +268,11 @@ export default function Home() {
               <div className="cinematic-duration">2:57</div>
             </div>
 
-            <div className="cinematic-frame" onClick={handleVideoClick}>
+            <div
+              className="cinematic-frame"
+              onClick={handleFrameTap}
+              onTouchEnd={handleFrameTap}
+            >
               <video
                 ref={heroVideoRef}
                 className="cinematic-video"
@@ -218,10 +280,23 @@ export default function Home() {
                 playsInline
                 preload="auto"
                 poster={heroImage}
-                onClick={e => e.stopPropagation()}
               />
               <div className="cinematic-gradient" aria-hidden="true" />
               <div className="cinematic-watermark" aria-hidden="true">whts-client.vercel.app</div>
+
+              {/* Double-tap skip feedback */}
+              {skipHint === 'backward' && (
+                <div className="skip-hint skip-hint-left">
+                  <i className="bi bi-skip-backward-fill"></i>
+                  <span>-10s</span>
+                </div>
+              )}
+              {skipHint === 'forward' && (
+                <div className="skip-hint skip-hint-right">
+                  <i className="bi bi-skip-forward-fill"></i>
+                  <span>+10s</span>
+                </div>
+              )}
 
               {!isPlaying && (
                 <div className="cinematic-overlay">
@@ -231,7 +306,7 @@ export default function Home() {
                     </button>
                     <div className="cinematic-play-label">
                       <span className="cinematic-play-title">WHTSIP &amp; The Officials</span>
-                      <span className="cinematic-play-sub">Click anywhere to play · 2:57</span>
+                      <span className="cinematic-play-sub">Tap to play · double-tap sides to skip · 2:57</span>
                     </div>
                   </div>
                 </div>
@@ -243,48 +318,47 @@ export default function Home() {
                 <button className="cinematic-ctrl" onClick={handleVideoClick} aria-label={isPlaying ? 'Pause' : 'Play'}>
                   <i className={`bi ${isPlaying ? 'bi-pause-fill' : 'bi-play-fill'}`}></i>
                 </button>
-                <button className="cinematic-ctrl" onClick={() => setMuted(p => !p)} aria-label="Toggle mute">
-                  <i className={`bi ${muted ? 'bi-volume-mute-fill' : 'bi-volume-up-fill'}`}></i>
-                </button>
+
+                {/* Volume control */}
+                <div className="cinematic-vol-wrap"
+                  onMouseEnter={() => setShowVolSlider(true)}
+                  onMouseLeave={() => setShowVolSlider(false)}
+                >
+                  <button className="cinematic-ctrl" onClick={() => setMuted(p => !p)} aria-label="Toggle mute">
+                    <i className={`bi ${muted || volume === 0 ? 'bi-volume-mute-fill' : volume < 0.5 ? 'bi-volume-down-fill' : 'bi-volume-up-fill'}`}></i>
+                  </button>
+                  {showVolSlider && (
+                    <div className="cinematic-vol-slider-wrap">
+                      <input
+                        type="range"
+                        className="cinematic-vol-slider"
+                        min="0" max="1" step="0.05"
+                        value={muted ? 0 : volume}
+                        onChange={handleVolumeChange}
+                        aria-label="Volume"
+                      />
+                    </div>
+                  )}
+                </div>
+
                 <span className="cinematic-time">{formatTime(currentTime)} / {formatTime(duration)}</span>
               </div>
+
               <div className="cinematic-progress" onClick={handleSeek}>
                 <div className="cinematic-progress-track">
                   <div className="cinematic-progress-fill" style={{ width: `${progress}%` }} />
                   <div className="cinematic-progress-thumb" style={{ left: `${progress}%` }} />
                 </div>
               </div>
+
               <div className="cinematic-controls-right">
                 <span className="cinematic-badge"><i className="bi bi-shield-fill-check me-1"></i>WHTS</span>
+                <button className="cinematic-ctrl cinematic-fullscreen-btn" onClick={handleFullscreen} aria-label="Toggle fullscreen">
+                  <i className={`bi ${isFullscreen ? 'bi-fullscreen-exit' : 'bi-fullscreen'}`}></i>
+                </button>
               </div>
             </div>
 
-          </div>
-        </div>
-      </section>
-
-      {/* ════════ STATS ════════ */}
-      <section className="section-pad stats-section" ref={statsRef}>
-        <div className="container">
-          <div className="row g-3 text-center">
-            <div className="col-12 col-md-4">
-              <div className="stat">
-                <div className="value">{threats.toLocaleString()}+</div>
-                <div className="text-muted-cyber small mt-1">Threat scenarios documented</div>
-              </div>
-            </div>
-            <div className="col-12 col-md-4">
-              <div className="stat">
-                <div className="value">{reports.toLocaleString()}+</div>
-                <div className="text-muted-cyber small mt-1">Incidents reported through WHTS</div>
-              </div>
-            </div>
-            <div className="col-12 col-md-4">
-              <div className="stat">
-                <div className="value">{recovery}%</div>
-                <div className="text-muted-cyber small mt-1">Guided recovery success rate</div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -339,40 +413,6 @@ export default function Home() {
                 <div className="qa-arrow"><i className="bi bi-arrow-right"></i></div>
               </Link>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ════════ FEATURED THREATS ════════ */}
-      <section className="section-pad-lg">
-        <div className="container">
-          <div className="d-flex align-items-end justify-content-between gap-3 mb-4">
-            <div>
-              <div className="section-label mb-2">Threat Library</div>
-              <h2 className="fw-bold mb-1">Featured Threat Categories</h2>
-              <p className="text-muted-cyber mb-0">Know what you're up against. Click any category to learn more.</p>
-            </div>
-            <Link className="btn btn-outline-cyber d-none d-md-inline-flex" to="/threats">Browse all threats</Link>
-          </div>
-          <div className="row g-3">
-            {THREAT_CATS.map(cat => (
-              <div key={cat.slug} className="col-12 col-md-6 col-lg-4">
-                <Link to={`/threats/${cat.slug}`} className="text-decoration-none d-block h-100">
-                  <div className="card-glass card-hover p-3 h-100">
-                    <div className="d-flex align-items-start gap-3">
-                      <div className="icon-box">{cat.emoji}</div>
-                      <div>
-                        <div className="fw-bold text-white mb-1">{cat.title}</div>
-                        <div className="text-muted-cyber small">{cat.desc}</div>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-4 d-md-none">
-            <Link className="btn btn-outline-cyber" to="/threats">Browse all threats</Link>
           </div>
         </div>
       </section>
@@ -491,13 +531,13 @@ export default function Home() {
               law enforcement bodies. Valid reports are shared with relevant authorities.
             </p>
           </div>
-          <div className="agency-marquee-wrap mb-5">
-            <div className="agency-marquee-track">
-              {[...AGENCIES, ...AGENCIES].map((agency, i) => (
-                <div key={i} className="agency-marquee-item">
-                  <img src={agency.img} alt={agency.name} />
-                </div>
-              ))}
+          <div className="agencies-highlight-box mb-4">
+            <div className="agencies-highlight-inner">
+              <i className="bi bi-shield-fill-check agencies-highlight-icon"></i>
+              <p className="agencies-highlight-text">
+                WHTSIPA maintains verified working relationships with federal, international and
+                regulatory bodies. All valid incident reports are escalated to the appropriate authority.
+              </p>
             </div>
           </div>
           <div className="text-center">
@@ -525,6 +565,32 @@ export default function Home() {
               <Link className="btn btn-cyber" to="/threats">
                 <i className="bi bi-book me-2" />Browse all threats
               </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════ STATS — last section ════════ */}
+      <section className="section-pad home-stats-final" ref={statsRef}>
+        <div className="container">
+          <div className="row g-3 g-md-4">
+            <div className="col-12 col-md-4">
+              <div className="stat-final-card text-center">
+                <div className="stat-final-value">{threats.toLocaleString()}+</div>
+                <div className="stat-final-label">Threat scenarios documented</div>
+              </div>
+            </div>
+            <div className="col-12 col-md-4">
+              <div className="stat-final-card text-center">
+                <div className="stat-final-value">{reports.toLocaleString()}+</div>
+                <div className="stat-final-label">Incidents reported through WHTS</div>
+              </div>
+            </div>
+            <div className="col-12 col-md-4">
+              <div className="stat-final-card text-center">
+                <div className="stat-final-value">{recovery}%</div>
+                <div className="stat-final-label">Guided recovery success rate</div>
+              </div>
             </div>
           </div>
         </div>

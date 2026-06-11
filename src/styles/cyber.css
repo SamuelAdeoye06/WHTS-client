@@ -675,3 +675,24 @@
   gap: 1.25rem;
   align-items: center;
 }
+/* ── Home hero: mobile breathing room & border fixes ── */
+@media (max-width: 991.98px) {
+  .home-template-hero {
+    border-top: 1px solid #dbe6ef;
+    padding-top: 0.5rem;
+  }
+  .home-template-hero .container {
+    padding-top: 1.5rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .home-template-hero {
+    border-top: 1px solid #dbe6ef;
+    border-bottom: 1px solid #dbe6ef;
+  }
+  .home-template-hero .container {
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+  }
+}

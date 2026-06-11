@@ -407,83 +407,116 @@
 
 /* ── Main card ── */
 .tt-card-new {
-  border: 1px solid rgba(120, 214, 255, 0.18);
+  border: 1px solid #e2e8f0;
   border-radius: 16px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.04);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+  background: #ffffff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   transition: border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
 }
 
 .tt-card-new:hover {
-  border-color: rgba(120, 214, 255, 0.42);
+  border-color: #c7d2fe;
   transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 }
 
-/* Top bar — title + meta */
+/* Top bar — title+meta left, icon right */
 .tt-card-top {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
   padding: 1rem 1.25rem 0.75rem;
-  border-bottom: 1px solid rgba(120, 214, 255, 0.10);
-  flex-wrap: wrap;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+/* Left side: title stacked above Available On + Success Rates */
+.tt-card-top-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .tt-card-title {
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 800;
-  color: var(--cyan);
+  color: #1a56db;
+  line-height: 1.3;
 }
 
-.tt-card-meta {
+/* Available On + Success Rates inline below title */
+.tt-card-meta-inline {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.25rem;
-  flex-shrink: 0;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
 }
 
 .tt-available-on {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .tt-available-label {
   font-size: 0.72rem;
-  color: var(--green);
+  color: #16a34a;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .tt-device-icons {
   display: flex;
-  gap: 0.35rem;
-  color: rgba(233, 243, 255, 0.75);
-  font-size: 0.9rem;
+  gap: 0.3rem;
+  color: #475569;
+  font-size: 0.88rem;
 }
 
 .tt-card-success {
-  font-size: 0.82rem;
+  font-size: 0.78rem;
+  color: #334155;
+  white-space: nowrap;
 }
 
-/* Body */
-.tt-card-body-new {
+/* Icon on far right of top bar — bigger */
+.tt-card-icon-right {
+  flex-shrink: 0;
   display: flex;
-  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.tt-card-icon-img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #f8faff;
+  padding: 6px;
+}
+
+.tt-card-icon-img.tt-icon-invert-light {
+  filter: none;
+}
+
+.tt-card-icon-img.tt-icon-natural-light {
+  filter: brightness(1.0) saturate(0.9);
+}
+
+/* Body — full width, no side icon */
+.tt-card-body-new {
   padding: 1.25rem;
-  align-items: flex-start;
 }
 
 .tt-card-left {
-  flex: 1;
-  min-width: 0;
+  width: 100%;
 }
 
 .tt-card-desc {
-  color: rgba(233, 243, 255, 0.78);
+  color: #374151;
   font-size: 0.9rem;
   line-height: 1.65;
   margin-bottom: 1rem;
@@ -493,33 +526,32 @@
 .tt-how-label {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #f0f4ff;
+  color: #1e293b;
   white-space: nowrap;
 }
 
-/* Red "Request Tools" button */
+/* Red "Request Tools" button — works on light background */
 .tt-request-btn {
   display: inline-block;
-  background: rgba(220, 38, 38, 0.15);
-  color: #fca5a5 !important;
+  background: #dc2626;
+  color: #ffffff !important;
   font-weight: 700;
   font-size: 0.88rem;
   padding: 0.5rem 1.1rem;
   border-radius: 8px;
   text-decoration: none;
-  border: 1.5px solid rgba(220, 38, 38, 0.45);
-  transition: background 0.18s ease, border-color 0.18s ease, transform 0.15s ease;
+  border: none;
+  transition: background 0.18s ease, transform 0.15s ease;
   white-space: nowrap;
 }
 
 .tt-request-btn:hover {
-  background: rgba(220, 38, 38, 0.28);
-  border-color: rgba(220, 38, 38, 0.75);
+  background: #b91c1c;
   color: #fff !important;
   transform: translateY(-1px);
 }
 
-/* Dark navy step cards — slightly lighter on the dark page to create contrast */
+/* Light step cards */
 .tt-steps-row {
   display: flex;
   gap: 0.75rem;
@@ -527,170 +559,79 @@
   margin-top: 0.5rem;
 }
 
+.tt-step-card-light {
+  flex: 1;
+  min-width: 140px;
+  background: #f8faff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.85rem;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.tt-step-card-light:hover {
+  border-color: #c7d2fe;
+  background: #eef2ff;
+}
+
+/* Dark step cards — dark bg, light text as per design */
 .tt-step-card-dark {
   flex: 1;
   min-width: 140px;
-  background: rgba(255, 255, 255, 0.06);
+  background: #0f172a;
   border: 1px solid rgba(120, 214, 255, 0.14);
   border-radius: 10px;
   padding: 0.85rem;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .tt-step-card-dark:hover {
   border-color: rgba(120, 214, 255, 0.35);
+  background: #1e293b;
 }
 
 .tt-step-card-num {
   font-size: 1rem;
   font-weight: 900;
-  color: var(--cyan);
+  color: #22d3ee;
   margin-bottom: 0.4rem;
 }
 
 .tt-step-card-title {
   font-size: 0.82rem;
   font-weight: 700;
-  color: #ffffff;
+  color: #f1f5f9;
   margin-bottom: 0.3rem;
 }
 
 .tt-step-card-desc {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.58);
+  color: rgba(203, 213, 225, 0.75);
   line-height: 1.5;
 }
 
-/* Right icon */
-.tt-card-icon-side {
-  width: 100px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 0.5rem;
-}
-
-.tt-card-icon-img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  object-position: center center;
-  border-radius: 10px;
-}
-
-/* Dark-coloured icons — invert to white so they show on the dark card background */
-.tt-card-icon-img.tt-icon-invert {
-  filter: brightness(0) invert(1) opacity(0.72);
-}
-
-/* Light/coloured icons — already visible, just slight opacity softening */
-.tt-card-icon-img.tt-icon-natural {
-  filter: brightness(1.05) saturate(0.85) opacity(0.90);
-}
-
-/* Responsive */
-/* ── Threats & Tools cards — Mobile fix ── */
+/* ── Threats & Tools cards — responsive ── */
 @media (max-width: 767.98px) {
-
-  /* Card top — stack title above meta */
-  .tt-card-top {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .tt-card-meta {
-    align-items: flex-start;
-    flex-direction: row;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  /* Body — keep icon on the RIGHT even on mobile */
-  .tt-card-body-new {
-    flex-direction: row;  /* keep side by side */
-    gap: 0.75rem;
-    padding: 1rem;
-    align-items: flex-start;
-  }
-
-  .tt-card-left {
-    flex: 1;
-    min-width: 0;
-  }
-
-  /* Icon — smaller on mobile but stays on the right */
-  .tt-card-icon-side {
-    width: 64px;
-    flex-shrink: 0;
-    align-items: flex-start;
-    padding-top: 0;
-  }
-
-  .tt-card-icon-img {
-    width: 56px;
-    height: 56px;
-  }
-
-  /* Steps — stack vertically on mobile */
-  .tt-steps-row {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .tt-step-card-dark {
-    min-width: unset;
-    width: 100%;
-  }
-
-  /* How it works row — stack on very small */
-  .tt-how-label {
-    font-size: 0.88rem;
-  }
-
-  .tt-request-btn {
-    font-size: 0.82rem;
-    padding: 0.45rem 0.9rem;
-  }
+  .tt-card-top { flex-direction: row; gap: 0.75rem; align-items: flex-start; }
+  .tt-card-top-left { gap: 0.4rem; }
+  .tt-card-meta-inline { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
+  .tt-card-icon-img { width: 60px; height: 60px; }
+  .tt-card-body-new { padding: 1rem; }
+  .tt-steps-row { flex-direction: column; gap: 0.5rem; }
+  .tt-step-card-dark, .tt-step-card-light { min-width: unset; width: 100%; }
+  .tt-how-label { font-size: 0.88rem; }
+  .tt-request-btn { font-size: 0.82rem; padding: 0.45rem 0.9rem; }
 }
 
 @media (max-width: 575.98px) {
-  .tt-card-body-new {
-    padding: 0.85rem;
-  }
-
-  .tt-card-top {
-    padding: 0.85rem 0.85rem 0.65rem;
-  }
-
-  .tt-card-icon-side {
-    width: 52px;
-  }
-
-  .tt-card-icon-img {
-    width: 46px;
-    height: 46px;
-  }
-
-  .tt-card-title {
-    font-size: 0.95rem;
-  }
-
-  .tt-card-desc {
-    font-size: 0.85rem;
-  }
-
-  .tt-step-card-dark {
-    padding: 0.65rem 0.75rem;
-  }
-
-  .tt-step-card-title {
-    font-size: 0.78rem;
-  }
-
-  .tt-step-card-desc {
-    font-size: 0.7rem;
-  }
+  .tt-card-body-new { padding: 0.85rem; }
+  .tt-card-top { padding: 0.75rem; }
+  .tt-card-icon-img { width: 60px; height: 60px; } /* bigger on mobile */
+  .tt-card-title { font-size: 0.88rem; }
+  .tt-card-desc { font-size: 0.85rem; }
+  .tt-step-card-dark { padding: 0.65rem 0.75rem; }
+  .tt-step-card-title { font-size: 0.78rem; }
+  .tt-step-card-desc { font-size: 0.7rem; }
 }
 
 /* ── Threats & Tools dark section ── */
@@ -709,13 +650,14 @@
   color: #f87171;
   font-weight: 700;
   font-size: 0.8rem;
+  white-space: nowrap;
 }
 
 .tt-success-value {
-  color: var(--green);
-  font-weight: 700;
-  font-size: 0.9rem;
-  margin-left: 0.35rem;
+  color: #16a34a;
+  font-weight: 800;
+  font-size: 0.88rem;
+  margin-left: 0.3rem;
 }
 
 /* ════════════════════════════════════════════
@@ -969,4 +911,203 @@
   .by-whtsipa-tag {
     font-size: 0.68rem;
   }
+}
+/* ── Hero headline highlight box ── */
+.threats-hero-headline-box {
+  border: 2px solid rgba(160, 80, 255, 0.45);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  background: rgba(120, 40, 200, 0.12);
+  display: inline-block;
+}
+.threats-hero-headline-box h1 { margin-bottom: 0; }
+
+/* ── Threats section heading highlight ── */
+.threats-section-highlight {
+  display: inline-block;
+  background: linear-gradient(90deg, rgba(224, 0, 77, 0.12), transparent);
+  border-left: 3px solid #e0004d;
+  padding-left: 0.75rem;
+  border-radius: 0 6px 6px 0;
+}
+
+/* ── Education mode pill — circled/highlighted ── */
+.threats-edu-mode-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(34, 240, 255, 0.08);
+  border: 2px solid rgba(34, 240, 255, 0.55);
+  border-radius: 999px;
+  padding: 0.45rem 1.1rem;
+  color: rgba(233,243,255,0.9);
+  box-shadow: 0 0 18px rgba(34,240,255,0.18), inset 0 0 12px rgba(34,240,255,0.06);
+}
+.threats-edu-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #f59e0b;
+  box-shadow: 0 0 6px rgba(245,158,11,0.7);
+  flex-shrink: 0;
+}
+
+/* ── SVG illustrated info cards ── */
+.tt-info-svg-wrap {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 0.85rem;
+}
+.tt-info-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+}
+
+/* ── Highlighted tt-card when scrolled to ── */
+.tt-card-new.tt-card-highlighted {
+  border-color: rgba(34, 240, 255, 0.75) !important;
+  box-shadow:
+    0 0 0 3px rgba(34, 240, 255, 0.25),
+    0 0 40px rgba(34, 240, 255, 0.18),
+    0 8px 32px rgba(0,0,0,0.4) !important;
+  background: rgba(34, 240, 255, 0.06) !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+/* ── WHTSIPA SECURITY WORLD marquee dots ── */
+.threats-marquee-dot-green {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 6px rgba(34,197,94,0.7);
+  margin: 0 0.35rem;
+  vertical-align: middle;
+}
+.threats-marquee-dot-yellow {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #eab308;
+  box-shadow: 0 0 6px rgba(234,179,8,0.7);
+  margin: 0 0.35rem;
+  vertical-align: middle;
+}
+
+/* ── WHTSIPA SECURITY WORLD bar (above Spot a Threat) ── */
+.threats-security-world-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.7rem 1.5rem;
+  background: rgba(5, 9, 19, 0.85);
+  border-top: 1px solid rgba(120, 214, 255, 0.1);
+  border-bottom: 1px solid rgba(120, 214, 255, 0.1);
+}
+
+.threats-security-world-text {
+  font-size: 1.1rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #22c55e 20%, #eab308 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Threat Intelligence big label ── */
+.threats-intel-label {
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #e0004d;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.threats-intel-dot {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #e0004d;
+  box-shadow: 0 0 10px rgba(224, 0, 77, 0.6);
+  flex-shrink: 0;
+}
+
+/* ── Shared highlight box for hero + Types of Threats + Threats & Tools ── */
+.threats-section-highlight-box {
+  border: 2px solid rgba(160, 80, 255, 0.42);
+  border-radius: 14px;
+  padding: 1.1rem 1.35rem;
+  background: rgba(120, 40, 200, 0.10);
+  display: block;
+  width: 100%;
+  max-width: 72ch;
+}
+
+/* ── 4 info cards — all 4 in one row on tablet/mobile ── */
+@media (max-width: 991.98px) {
+  .tt-info-cards-row .col-6 {
+    width: 25% !important;
+    flex: 0 0 25% !important;
+    max-width: 25% !important;
+  }
+  .tot-info-card {
+    padding: 0.85rem 0.65rem;
+  }
+  .tt-info-svg-wrap {
+    margin-bottom: 0.5rem;
+  }
+  .tot-info-title {
+    font-size: 0.72rem;
+    margin-bottom: 0.35rem;
+  }
+  .tot-info-desc {
+    font-size: 0.65rem;
+    line-height: 1.4;
+  }
+  .by-whtsipa-tag {
+    font-size: 0.6rem;
+    margin-top: 0.5rem !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .tt-info-cards-row .col-6 {
+    width: 25% !important;
+    flex: 0 0 25% !important;
+    max-width: 25% !important;
+  }
+  .tot-info-card {
+    padding: 0.6rem 0.45rem;
+  }
+  .tot-info-title {
+    font-size: 0.62rem;
+  }
+  .tot-info-desc {
+    display: none; /* hide desc on mobile to keep cards compact */
+  }
+  .by-whtsipa-tag {
+    font-size: 0.58rem;
+    letter-spacing: 0.06em;
+    margin-top: 0.35rem !important;
+  }
+}
+
+/* ── Light card highlighted state ── */
+.tt-card-new.tt-card-highlighted {
+  border-color: #1a56db !important;
+  box-shadow:
+    0 0 0 3px rgba(26, 86, 219, 0.18),
+    0 0 32px rgba(26, 86, 219, 0.12),
+    0 8px 32px rgba(0,0,0,0.1) !important;
+  background: #f0f4ff !important;
 }

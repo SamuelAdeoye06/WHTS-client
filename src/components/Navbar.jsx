@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import logoWhts from '../assets/media/logo-whts.jpg'
@@ -22,6 +22,162 @@ const SEARCH_INDEX = [
     desc: t.overview ? t.overview.slice(0, 100) : '',
     path: `/threats/${slug}`,
   })).filter(t => t.title),
+]
+
+/* ── All 133 Google Translate languages (Abkhaz → Zulu) ── */
+const LANGUAGES = [
+  { code: 'AB',  name: 'Abkhaz',               native: 'аҧсуа'             },
+  { code: 'ACE', name: 'Acehnese',              native: 'Acèh'              },
+  { code: 'ACH', name: 'Acholi',                native: 'Acoli'             },
+  { code: 'AF',  name: 'Afrikaans',             native: 'Afrikaans'         },
+  { code: 'SQ',  name: 'Albanian',              native: 'Shqip'             },
+  { code: 'ALZ', name: 'Alur',                  native: 'Alur'              },
+  { code: 'AM',  name: 'Amharic',               native: 'አማርኛ'              },
+  { code: 'AR',  name: 'Arabic',                native: 'العربية'           },
+  { code: 'HY',  name: 'Armenian',              native: 'Հայերեն'           },
+  { code: 'AS',  name: 'Assamese',              native: 'অসমীয়া'            },
+  { code: 'AV',  name: 'Avar',                  native: 'авар'              },
+  { code: 'AW',  name: 'Awadhi',                native: 'अवधी'              },
+  { code: 'AY',  name: 'Aymara',                native: 'Aymar'             },
+  { code: 'AZ',  name: 'Azerbaijani',           native: 'Azərbaycan'        },
+  { code: 'BAN', name: 'Balinese',              native: 'Bali'              },
+  { code: 'BA',  name: 'Bashkir',               native: 'Башҡорт'           },
+  { code: 'EU',  name: 'Basque',                native: 'Euskara'           },
+  { code: 'BE',  name: 'Belarusian',            native: 'Беларуская'        },
+  { code: 'BEM', name: 'Bemba',                 native: 'Ichibemba'         },
+  { code: 'BN',  name: 'Bengali',               native: 'বাংলা'             },
+  { code: 'BEW', name: 'Betawi',                native: 'Betawi'            },
+  { code: 'BHO', name: 'Bhojpuri',              native: 'भोजपुरी'           },
+  { code: 'BS',  name: 'Bosnian',               native: 'Bosanski'          },
+  { code: 'BR',  name: 'Breton',                native: 'Brezhoneg'         },
+  { code: 'BG',  name: 'Bulgarian',             native: 'Български'         },
+  { code: 'BUA', name: 'Buryat',                native: 'буряад'            },
+  { code: 'CA',  name: 'Catalan',               native: 'Català'            },
+  { code: 'CEB', name: 'Cebuano',               native: 'Cebuano'           },
+  { code: 'NY',  name: 'Chichewa',              native: 'Chichewa'          },
+  { code: 'ZH',  name: 'Chinese (Simplified)',  native: '中文(简体)'         },
+  { code: 'ZHT', name: 'Chinese (Traditional)', native: '中文(繁體)'         },
+  { code: 'CV',  name: 'Chuvash',               native: 'Чӑваш'             },
+  { code: 'CO',  name: 'Corsican',              native: 'Corsu'             },
+  { code: 'HR',  name: 'Croatian',              native: 'Hrvatski'          },
+  { code: 'CS',  name: 'Czech',                 native: 'Čeština'           },
+  { code: 'DA',  name: 'Danish',                native: 'Dansk'             },
+  { code: 'DV',  name: 'Divehi',                native: 'ދިވެހި'             },
+  { code: 'DOI', name: 'Dogri',                 native: 'डोगरी'             },
+  { code: 'NL',  name: 'Dutch',                 native: 'Nederlands'        },
+  { code: 'DZ',  name: 'Dzongkha',              native: 'རྫོང་ཁ'            },
+  { code: 'EN',  name: 'English',               native: 'English'           },
+  { code: 'EO',  name: 'Esperanto',             native: 'Esperanto'         },
+  { code: 'ET',  name: 'Estonian',              native: 'Eesti'             },
+  { code: 'EWE', name: 'Ewe',                   native: 'Eʋegbe'            },
+  { code: 'FO',  name: 'Faroese',               native: 'Føroyskt'          },
+  { code: 'FIJ', name: 'Fijian',                native: 'Vakaviti'          },
+  { code: 'FIL', name: 'Filipino',              native: 'Filipino'          },
+  { code: 'FI',  name: 'Finnish',               native: 'Suomi'             },
+  { code: 'FR',  name: 'French',                native: 'Français'          },
+  { code: 'FY',  name: 'Frisian',               native: 'Frysk'             },
+  { code: 'FF',  name: 'Fula',                  native: 'Fulfulde'          },
+  { code: 'GL',  name: 'Galician',              native: 'Galego'            },
+  { code: 'KA',  name: 'Georgian',              native: 'ქართული'           },
+  { code: 'DE',  name: 'German',                native: 'Deutsch'           },
+  { code: 'EL',  name: 'Greek',                 native: 'Ελληνικά'          },
+  { code: 'GN',  name: 'Guarani',               native: 'Avañe\'ẽ'          },
+  { code: 'GU',  name: 'Gujarati',              native: 'ગુજરાતી'            },
+  { code: 'HT',  name: 'Haitian Creole',        native: 'Kreyòl Ayisyen'    },
+  { code: 'HA',  name: 'Hausa',                 native: 'Hausa'             },
+  { code: 'HAW', name: 'Hawaiian',              native: 'ʻŌlelo Hawaiʻi'    },
+  { code: 'IW',  name: 'Hebrew',                native: 'עברית'             },
+  { code: 'HIL', name: 'Hiligaynon',            native: 'Ilonggo'           },
+  { code: 'HI',  name: 'Hindi',                 native: 'हिंदी'              },
+  { code: 'HMN', name: 'Hmong',                 native: 'Hmong'             },
+  { code: 'HU',  name: 'Hungarian',             native: 'Magyar'            },
+  { code: 'IS',  name: 'Icelandic',             native: 'Íslenska'          },
+  { code: 'IG',  name: 'Igbo',                  native: 'Asụsụ Igbo'        },
+  { code: 'ILO', name: 'Ilocano',               native: 'Ilocano'           },
+  { code: 'ID',  name: 'Indonesian',            native: 'Bahasa Indonesia'  },
+  { code: 'GA',  name: 'Irish',                 native: 'Gaeilge'           },
+  { code: 'IT',  name: 'Italian',               native: 'Italiano'          },
+  { code: 'JA',  name: 'Japanese',              native: '日本語'              },
+  { code: 'JV',  name: 'Javanese',              native: 'Jawa'              },
+  { code: 'KN',  name: 'Kannada',               native: 'ಕನ್ನಡ'             },
+  { code: 'KK',  name: 'Kazakh',                native: 'Қазақша'           },
+  { code: 'KM',  name: 'Khmer',                 native: 'ភាសាខ្មែរ'          },
+  { code: 'RW',  name: 'Kinyarwanda',           native: 'Ikinyarwanda'      },
+  { code: 'KG',  name: 'Kongo',                 native: 'Kikongo'           },
+  { code: 'KO',  name: 'Korean',                native: '한국어'              },
+  { code: 'KRI', name: 'Krio',                  native: 'Krio'              },
+  { code: 'KU',  name: 'Kurdish (Kurmanji)',     native: 'Kurdî'             },
+  { code: 'CKB', name: 'Kurdish (Sorani)',       native: 'کوردی'             },
+  { code: 'KY',  name: 'Kyrgyz',                native: 'Кыргызча'          },
+  { code: 'LO',  name: 'Lao',                   native: 'ລາວ'               },
+  { code: 'LA',  name: 'Latin',                 native: 'Latina'            },
+  { code: 'LV',  name: 'Latvian',               native: 'Latviešu'          },
+  { code: 'LN',  name: 'Lingala',               native: 'Lingála'           },
+  { code: 'LT',  name: 'Lithuanian',            native: 'Lietuvių'          },
+  { code: 'LG',  name: 'Luganda',               native: 'Oluganda'          },
+  { code: 'LB',  name: 'Luxembourgish',         native: 'Lëtzebuergesch'    },
+  { code: 'MK',  name: 'Macedonian',            native: 'Македонски'        },
+  { code: 'MAI', name: 'Maithili',              native: 'मैथिली'            },
+  { code: 'MG',  name: 'Malagasy',              native: 'Malagasy'          },
+  { code: 'MS',  name: 'Malay',                 native: 'Bahasa Melayu'     },
+  { code: 'ML',  name: 'Malayalam',             native: 'മലയാളം'            },
+  { code: 'MT',  name: 'Maltese',               native: 'Malti'             },
+  { code: 'MI',  name: 'Maori',                 native: 'Māori'             },
+  { code: 'MR',  name: 'Marathi',               native: 'मराठी'             },
+  { code: 'MAW', name: 'Meitei (Manipuri)',      native: 'মৈতৈলোন্'          },
+  { code: 'MIN', name: 'Minang',                native: 'Minangkabau'       },
+  { code: 'MNI', name: 'Mizo',                  native: 'Mizo ṭawng'        },
+  { code: 'MN',  name: 'Mongolian',             native: 'Монгол'            },
+  { code: 'MY',  name: 'Myanmar (Burmese)',      native: 'မြန်မာ'            },
+  { code: 'NE',  name: 'Nepali',                native: 'नेपाली'             },
+  { code: 'NO',  name: 'Norwegian',             native: 'Norsk'             },
+  { code: 'OR',  name: 'Odia (Oriya)',           native: 'ଓଡ଼ିଆ'             },
+  { code: 'OM',  name: 'Oromo',                 native: 'Afaan Oromoo'      },
+  { code: 'PS',  name: 'Pashto',                native: 'پښتو'              },
+  { code: 'FA',  name: 'Persian',               native: 'فارسی'             },
+  { code: 'PL',  name: 'Polish',                native: 'Polski'            },
+  { code: 'PT',  name: 'Portuguese',            native: 'Português'         },
+  { code: 'PA',  name: 'Punjabi',               native: 'ਪੰਜਾਬੀ'            },
+  { code: 'QU',  name: 'Quechua',               native: 'Runasimi'          },
+  { code: 'RO',  name: 'Romanian',              native: 'Română'            },
+  { code: 'RU',  name: 'Russian',               native: 'Русский'           },
+  { code: 'SM',  name: 'Samoan',                native: 'Faa Samoa'         },
+  { code: 'SA',  name: 'Sanskrit',              native: 'संस्कृतम्'          },
+  { code: 'GD',  name: 'Scots Gaelic',          native: 'Gàidhlig'          },
+  { code: 'NSO', name: 'Sepedi',                native: 'Sesotho sa Leboa'  },
+  { code: 'SR',  name: 'Serbian',               native: 'Српски'            },
+  { code: 'ST',  name: 'Sesotho',               native: 'Sesotho'           },
+  { code: 'SN',  name: 'Shona',                 native: 'chiShona'          },
+  { code: 'SD',  name: 'Sindhi',                native: 'سنڌي'              },
+  { code: 'SI',  name: 'Sinhala',               native: 'සිංහල'             },
+  { code: 'SK',  name: 'Slovak',                native: 'Slovenčina'        },
+  { code: 'SL',  name: 'Slovenian',             native: 'Slovenščina'       },
+  { code: 'SO',  name: 'Somali',                native: 'Soomaali'          },
+  { code: 'ES',  name: 'Spanish',               native: 'Español'           },
+  { code: 'SU',  name: 'Sundanese',             native: 'Basa Sunda'        },
+  { code: 'SW',  name: 'Swahili',               native: 'Kiswahili'         },
+  { code: 'SS',  name: 'Swati',                 native: 'SiSwati'           },
+  { code: 'SV',  name: 'Swedish',               native: 'Svenska'           },
+  { code: 'TG',  name: 'Tajik',                 native: 'Тоҷикӣ'            },
+  { code: 'TA',  name: 'Tamil',                 native: 'தமிழ்'             },
+  { code: 'TT',  name: 'Tatar',                 native: 'Татар'             },
+  { code: 'TE',  name: 'Telugu',                native: 'తెలుగు'            },
+  { code: 'TH',  name: 'Thai',                  native: 'ไทย'               },
+  { code: 'TI',  name: 'Tigrinya',              native: 'ትግርኛ'              },
+  { code: 'TS',  name: 'Tsonga',                native: 'Xitsonga'          },
+  { code: 'TR',  name: 'Turkish',               native: 'Türkçe'            },
+  { code: 'TK',  name: 'Turkmen',               native: 'Türkmençe'         },
+  { code: 'TW',  name: 'Twi',                   native: 'Twi'               },
+  { code: 'UK',  name: 'Ukrainian',             native: 'Українська'        },
+  { code: 'UR',  name: 'Urdu',                  native: 'اردو'              },
+  { code: 'UG',  name: 'Uyghur',                native: 'ئۇيغۇرچە'          },
+  { code: 'UZ',  name: 'Uzbek',                 native: 'O\'zbek'           },
+  { code: 'VI',  name: 'Vietnamese',            native: 'Tiếng Việt'        },
+  { code: 'CY',  name: 'Welsh',                 native: 'Cymraeg'           },
+  { code: 'XH',  name: 'Xhosa',                 native: 'isiXhosa'          },
+  { code: 'YI',  name: 'Yiddish',               native: 'ייִדיש'             },
+  { code: 'YO',  name: 'Yoruba',                native: 'Yorùbá'            },
+  { code: 'ZU',  name: 'Zulu',                  native: 'isiZulu'           },
 ]
 
 function SearchOverlay({ onClose }) {
@@ -96,7 +252,22 @@ function SearchOverlay({ onClose }) {
 export default function Navbar() {
   const [navOpen, setNavOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
-  const [language, setLanguage] = useState('EN')
+  const [langOpen,   setLangOpen]   = useState(false)
+  const [langSearch, setLangSearch] = useState('')
+  const [activeLang, setActiveLang] = useState(LANGUAGES.find(l => l.code === 'EN'))
+  const [showSignOutToast, setShowSignOutToast] = useState(false)
+  const langRef = useRef(null)
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (langRef.current && !langRef.current.contains(e.target)) {
+        setLangOpen(false); setLangSearch('')
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
   const location = useLocation()
   const { user, logout } = useAuth()
   const navigate = useNavigate()
@@ -128,21 +299,70 @@ export default function Navbar() {
     </button>
   )
 
-  const languageSelector = (className = '') => (
-    <label className={`nav-language-select ${className}`} aria-label="Select language">
-      <span className="visually-hidden">Language</span>
-      <select value={language} onChange={(e) => setLanguage(e.target.value)}>
-        <option value="EN">EN</option>
-        <option value="FR">FR</option>
-        <option value="ES">ES</option>
-      </select>
-      <i className="bi bi-chevron-down" aria-hidden="true"></i>
-    </label>
+  /* Shared language button — shows full name, opens the custom dropdown */
+  const LangBtn = ({ className = '' }) => (
+    <div className={`nav-lang-wrap ${className}`} style={{ position: 'relative' }} ref={langRef}>
+      <button
+        className="nav-lang-btn"
+        onClick={() => setLangOpen(p => !p)}
+        aria-label="Select language"
+      >
+        <i className="bi bi-translate me-1"></i>
+        <span className="nav-lang-current">{activeLang.name}</span>
+        <i className={`bi bi-chevron-${langOpen ? 'up' : 'down'} nav-lang-chevron`}></i>
+      </button>
+      {langOpen && (
+        <div className="nav-lang-dropdown">
+          <div className="nav-lang-search-wrap">
+            <i className="bi bi-search nav-lang-search-icon"></i>
+            <input
+              className="nav-lang-search"
+              placeholder="Search language…"
+              value={langSearch}
+              onChange={e => setLangSearch(e.target.value)}
+              autoFocus
+            />
+          </div>
+          <ul className="nav-lang-list">
+            {LANGUAGES.filter(l =>
+              l.name.toLowerCase().includes(langSearch.toLowerCase()) ||
+              l.native.toLowerCase().includes(langSearch.toLowerCase())
+            ).map(l => (
+              <li key={l.code}>
+                <button
+                  className={`nav-lang-option${activeLang.code === l.code ? ' active' : ''}`}
+                  onClick={() => { setActiveLang(l); setLangOpen(false); setLangSearch('') }}
+                >
+                  <span className="nav-lang-native">{l.native}</span>
+                  <span className="nav-lang-name">{l.name}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
   )
 
   return (
     <>
       {searchOpen && <SearchOverlay onClose={() => setSearchOpen(false)} />}
+
+      {showSignOutToast && (
+        <div style={{
+          position: 'fixed', bottom: '2rem', left: '50%', transform: 'translateX(-50%)',
+          zIndex: 9999, background: '#0f172a', border: '1px solid #0d9488',
+          borderRadius: '12px', padding: '0.85rem 1.5rem',
+          display: 'flex', alignItems: 'center', gap: '0.75rem',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.35)',
+          animation: 'fadeInUp 0.25s ease',
+        }}>
+          <i className="bi bi-box-arrow-right" style={{ color: '#0d9488', fontSize: '1.1rem' }}></i>
+          <span style={{ color: '#e9f3ff', fontWeight: 600, fontSize: '0.95rem' }}>
+            You've been signed out successfully.
+          </span>
+        </div>
+      )}
 
       <nav className={`navbar navbar-expand-lg cyber-navbar ${isDarkPage ? 'navbar-dark' : 'navbar-light navbar-white'}`}>
         <div className="container nav-inner">
@@ -159,10 +379,14 @@ export default function Navbar() {
               </Link>
             </div>
             <div className="nav-utility-row">
-              {languageSelector()}
+              <LangBtn />
               <Link className="nav-utility-link" to="/contact">Contact us</Link>
               {user ? (
-                <button className="nav-utility-link" type="button" onClick={() => { logout(); navigate('/') }}>
+                <button className="nav-utility-link" type="button" onClick={() => {
+                  logout()
+                  setShowSignOutToast(true)
+                  setTimeout(() => { setShowSignOutToast(false); navigate('/') }, 2200)
+                }}>
                   Sign out
                 </button>
               ) : (
@@ -175,7 +399,7 @@ export default function Navbar() {
           </div>
 
           <div className="nav-mobile-left">
-            {languageSelector('nav-language-mobile')}
+            <LangBtn className="nav-lang-mobile" />
             <button className="navbar-toggler border-0" type="button"
               aria-controls="mainNav" aria-expanded={navOpen}
               aria-label="Toggle navigation" onClick={() => setNavOpen(p => !p)}>
@@ -201,7 +425,7 @@ export default function Navbar() {
               </li>
 
               <li className="nav-item">
-                <NavLink className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`} to="/threats">Threats</NavLink>
+                <NavLink className={({ isActive }) => `nav-link threats-link ${isActive ? 'active-link' : ''}`} to="/threats">Threats</NavLink>
               </li>
 
               <li className="nav-item dropdown">
@@ -248,23 +472,9 @@ export default function Navbar() {
             </ul>
 
             <div className="nav-auth-actions">
-              {user ? (
-                <>
-                  <span className="nav-user-name"><i className="bi bi-person-circle me-1"></i>{user.name?.split(' ')[0] || 'Account'}</span>
-                  <button className="btn btn-outline-cyber btn-sm-nav" onClick={() => { logout(); navigate('/') }}>Sign Out</button>
-                </>
-              ) : (
-                <>
-                  <Link className="btn btn-outline-cyber btn-sm-nav" to="/signin">Sign In</Link>
-                  <Link className="btn btn-cyber btn-sm-nav" to="/signup">Sign Up</Link>
-                </>
-              )}
-              <Link className="btn btn-report-cta btn-sm-nav nav-report-mobile" to="/report" state={{ scrollTo: 'report' }}>
-                <i className="bi bi-shield-exclamation me-1"></i>Report
-              </Link>
+              <LangBtn />
             </div>
           </div>
-
         </div>
       </nav>
     </>

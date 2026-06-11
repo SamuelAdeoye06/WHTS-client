@@ -4,6 +4,7 @@ import '../styles/cyber.css'
 import './Report.css'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import api from '../services/api'
 
 /* ── Incident types ── */
 const INCIDENT_TYPES = [
@@ -216,7 +217,9 @@ function FileUpload({ files, onChange }) {
 export default function Report() {
   const [reportType, setReportType]     = useState('personal') // 'personal' | 'public'
   const [files, setFiles]               = useState([])
-  const [submitted, setSubmitted]       = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+  const [loading,   setLoading]   = useState(false)
+  const [error,     setError]     = useState('')
   const [activeRecovery, setActiveRecovery] = useState(null)
 
   const { user } = useAuth()
@@ -231,48 +234,34 @@ export default function Report() {
   const set = (key) => (e) => setForm(prev => ({ ...prev, [key]: e.target.value }))
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!user) {
-      // Not logged in — send to sign in, come back to report after
       navigate('/signin', { state: { from: '/report', scrollTo: 'report' } })
       return
     }
-    // ── BACKEND: Replace setSubmitted(true) with: ──
-    // try {
-    //   const formData = new FormData()
-    //   formData.append('reportType', reportType)
-    //   formData.append('fullName', form.fullName)
-    //   formData.append('email', form.email)
-    //   formData.append('phone', form.phone)
-    //   formData.append('country', form.country)
-    //   formData.append('incidentType', form.incidentType)
-    //   formData.append('detail', form.detail)
-    //   if (reportType === 'public') {
-    //     formData.append('organization', form.organization)
-    //     formData.append('targetedName', form.targetedName)
-    //     formData.append('socialHandles', form.socialHandles)
-    //   }
-    //   files.forEach(f => formData.append('evidence', f))
-    //   await api.post('/reports/submit', formData, {
-    //     headers: { 'Content-Type': 'multipart/form-data' }
-    //   })
-    //   setSubmitted(true)
-    // } catch (err) {
-    //   setError('Submission failed. Please try again.')
-    // }
-    //
-    // Also create: src/services/api.js
-    // import axios from 'axios'
-    // const api = axios.create({ baseURL: import.meta.env.VITE_API_URL })
-    // api.interceptors.request.use(config => {
-    //   const user = JSON.parse(localStorage.getItem('whts_user') || '{}')
-    //   if (user.token) config.headers.Authorization = `Bearer ${user.token}`
-    //   return config
-    // })
-    // export default api
-    setSubmitted(true)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    setLoading(true)
+    setError('')
+    try {
+      await api.post('/reports/submit', {
+        reportType,
+        incidentType:  form.incidentType,
+        fullName:      form.fullName,
+        email:         form.email,
+        phone:         form.phone,
+        country:       form.country,
+        organization:  form.organization,
+        targetedName:  form.targetedName,
+        socialHandles: form.socialHandles,
+        detail:        form.detail,
+      })
+      setSubmitted(true)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } catch (err) {
+      setError(err.response?.data?.message || 'Submission failed. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -419,7 +408,9 @@ export default function Report() {
             {/* Success message */}
             {submitted ? (
               <div className="banner p-5 text-center">
-                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✅</div>
+                  <div style={{ fontSize: '3rem', marginBottom: '1rem', color: '#0d9488' }}>
+                    <i className="bi bi-check-circle-fill"></i>
+                  </div>
                 <h3 className="fw-bold glow-text mb-3">Report Submitted</h3>
                 <p className="text-muted-cyber mb-4" style={{ maxWidth: '48ch', margin: '0 auto 1.5rem' }}>
                   Thank you for taking action. Your report has been received and a support ticket
@@ -510,7 +501,7 @@ export default function Report() {
 
                     {/* Submit */}
                     <div className="col-12 mt-2">
-                    <button type="submit" className="btn btn-alert w-100" style={{ padding: '0.85rem' }}>
+                      <button type="submit" className="btn btn-alert w-100" style={{ padding: '0.85rem', color: '#fff', background: 'linear-gradient(180deg, rgba(220,38,38,0.85), rgba(185,28,28,0.9))', border: '1px solid rgba(220,38,38,0.6)' }}>
                       {user
                         ? <><i className="bi bi-send me-2"></i>Submit Report</>
                         : <><i className="bi bi-lock me-2"></i>Sign In to Submit Report</>
@@ -596,43 +587,45 @@ export default function Report() {
           </div>
         </section>
 
-        {/* ════════════════════════════
+            {/* ════════════════════════════
             CONTACT / NEWSLETTER
             ════════════════════════════ */}
         <section className="section-pad" id="contact">
           <div className="container">
             <div className="row g-4">
 
-              {/* Newsletter signup */}
-              <div className="col-12 col-lg-6">
-                <div className="banner p-4 h-100">
-                  <div className="section-label mb-2">Stay Informed</div>
-                  <h3 className="fw-bold mb-2">Never Miss an Update</h3>
-                  <p className="text-muted-cyber small mb-4">
-                    Sign up for the latest cybersecurity alerts, threat intelligence,
-                    and new recovery solutions to stay secure online.
-                  </p>
-                  <div className="row g-3">
-                    <div className="col-12 col-md-6">
-                      <CyberInput id="signupFirst" label="First Name" placeholder="First name" />
-                    </div>
-                    <div className="col-12 col-md-6">
-                      <CyberInput id="signupLast" label="Last Name" placeholder="Last name" />
-                    </div>
-                    <div className="col-12">
-                      <CyberInput id="signupEmail" label="Email Address" type="email" placeholder="you@example.com" />
-                    </div>
-                    <div className="col-12">
-                      <button className="btn btn-cyber w-100">
-                        <i className="bi bi-bell me-2"></i>Sign Up for Recovery Alerts
-                      </button>
+              {/* Newsletter signup — only shown to guests */}
+              {!user && (
+                <div className="col-12 col-lg-6">
+                  <div className="banner p-4 h-100">
+                    <div className="section-label mb-2">Stay Informed</div>
+                    <h3 className="fw-bold mb-2">Never Miss an Update</h3>
+                    <p className="text-muted-cyber small mb-4">
+                      Sign up for the latest cybersecurity alerts, threat intelligence,
+                      and new recovery solutions to stay secure online.
+                    </p>
+                    <div className="row g-3">
+                      <div className="col-12 col-md-6">
+                        <CyberInput id="signupFirst" label="First Name" placeholder="First name" />
+                      </div>
+                      <div className="col-12 col-md-6">
+                        <CyberInput id="signupLast" label="Last Name" placeholder="Last name" />
+                      </div>
+                      <div className="col-12">
+                        <CyberInput id="signupEmail" label="Email Address" type="email" placeholder="you@example.com" />
+                      </div>
+                      <div className="col-12">
+                        <button className="btn btn-cyber w-100">
+                          <i className="bi bi-bell me-2"></i>Sign Up for Recovery Alerts
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
 
-              {/* Contact card */}
-              <div className="col-12 col-lg-6">
+              {/* Contact / support card — full width when signed in, half when guest */}
+              <div className={`col-12 ${!user ? 'col-lg-6' : 'col-lg-8 mx-auto'}`}>
                 <div className="banner p-4 h-100">
                   <div className="section-label mb-2">Direct Support</div>
                   <h3 className="fw-bold mb-2">Need Immediate Help?</h3>
@@ -642,7 +635,9 @@ export default function Report() {
                   </p>
                   <div className="d-flex flex-column gap-3">
                     <div className="d-flex gap-3 align-items-center card-glass p-3">
-                      <div className="icon-box">💬</div>
+                      <div className="icon-box">
+                        <i className="bi bi-chat-dots-fill"></i>
+                      </div>
                       <div>
                         <div className="fw-bold">Live Chat Support</div>
                         <div className="text-muted-cyber small">Bot first, then a human representative joins for urgent cases.</div>
@@ -657,7 +652,7 @@ export default function Report() {
                         <div className="text-muted-cyber small">Direct line for urgent incident reports and recovery guidance.</div>
                       </div>
                     </div>
-                    <a className="btn btn-alert w-100" href="#report">
+                    <a className="btn btn-alert w-100" href="#report" style={{ color: '#fff' }}>
                       <i className="bi bi-exclamation-triangle me-2"></i>Open a Support Ticket Now
                     </a>
                   </div>

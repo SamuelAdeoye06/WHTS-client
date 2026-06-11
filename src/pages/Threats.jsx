@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { QUIZ_LIST, QUIZ_DATA } from '../data/quizData'
+import WhatsipModal from '../components/WhatsipModal'
 import '../styles/cyber.css'
 import './Threats.css'
 import { THREATS_AND_TOOLS } from '../data/threatsToolsData'
@@ -308,7 +309,9 @@ export default function Threats() {
   const [activeQuiz,      setActiveQuiz]      = useState(null)
   const [failedScenarios, setFailedScenarios] = useState([])
   const [showRepPrompt,   setShowRepPrompt]   = useState(false)
-  const [activeSection,   setActiveSection]   = useState('spot-a-threat')
+  const [highlightedCard, setHighlightedCard] = useState(null)
+  const [activeModal,     setActiveModal]     = useState(null)
+  const [modalThreat,     setModalThreat]     = useState('')
 
   const handleFail = (slug) => {
     setFailedScenarios(prev => {
@@ -319,11 +322,24 @@ export default function Threats() {
     })
   }
 
-  const NAV_TABS = [
-    { id: 'spot-a-threat',    label: 'Spot a Threat'   },
-    { id: 'types-of-threats', label: 'Types of Threats' },
-    { id: 'threats-tools',    label: 'Threats & Tools'  },
-  ]
+  /* Smooth-scroll to a Threats & Tools card and highlight it */
+  const scrollToTTCard = (ttId) => {
+    const el = document.getElementById(`tt-card-${ttId}`)
+    if (!el) return
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    setHighlightedCard(ttId)
+    setTimeout(() => setHighlightedCard(null), 2800)
+  }
+
+  /* Double-click guard for Learn More */
+  const lastLearnClick = { current: 0 }
+  const handleLearnMore = (ttId) => {
+    const now = Date.now()
+    if (now - lastLearnClick.current < 400) {
+      scrollToTTCard(ttId)
+    }
+    lastLearnClick.current = now
+  }
 
   return (
     <div className="threats-page">
@@ -379,24 +395,26 @@ export default function Threats() {
                 </span>
                 <span className="text-muted-cyber small">Threat education · Prevention-first</span>
               </div>
-              <h1 className="glow-text fw-bold mb-3">Know Your Threats.<br />Stay One Step Ahead.</h1>
-              <p className="text-muted-cyber mb-2" style={{ maxWidth: '54ch' }}>
-                To add a layer of top-notch security to help prevent incoming threats and protect yourself
-                by learning to spot threats.
-              </p>
-              <p className="text-muted-cyber mb-4" style={{ maxWidth: '54ch' }}>
+              <div className="threats-hero-headline-box">
+                <h1 className="glow-text fw-bold mb-2">Know Your Threats.<br />Stay One Step Ahead.</h1>
+                <p className="text-muted-cyber mb-0" style={{ maxWidth: '54ch' }}>
+                  To add a layer of top-notch security to help prevent incoming threats and protect yourself
+                  by learning to spot threats.
+                </p>
+              </div>
+              <p className="text-muted-cyber mb-4 mt-2" style={{ maxWidth: '54ch' }}>
                 Take a quiz to spot scams and get tools to protect your information.
               </p>
               <div className="d-flex gap-2 flex-wrap threats-hero-btns">
-                <button className="btn btn-cyber" onClick={() => setActiveSection('spot-a-threat')}>
+                <a className="btn btn-cyber" href="#spot-a-threat" onClick={e => { e.preventDefault(); document.getElementById('spot-a-threat')?.scrollIntoView({ behavior: 'smooth' }) }}>
                   <i className="bi bi-controller me-2"></i>Spot a Threat
-                </button>
-                <button className="btn btn-outline-cyber" onClick={() => setActiveSection('types-of-threats')}>
+                </a>
+                <a className="btn btn-outline-cyber" href="#types-of-threats" onClick={e => { e.preventDefault(); document.getElementById('types-of-threats')?.scrollIntoView({ behavior: 'smooth' }) }}>
                   <i className="bi bi-list-ul me-2"></i>Types of Threats
-                </button>
-                <button className="btn btn-outline-cyber" onClick={() => { setActiveSection('threats-tools') }}>
+                </a>
+                <a className="btn btn-outline-cyber" href="#threats-tools" onClick={e => { e.preventDefault(); document.getElementById('threats-tools')?.scrollIntoView({ behavior: 'smooth' }) }}>
                   <i className="bi bi-grid me-2"></i>Threats &amp; Tools
-                </button>
+                </a>
                 <Link className="btn btn-alert" to="/report">
                   <i className="bi bi-exclamation-triangle me-2"></i>Need Urgent Help?
                 </Link>
@@ -422,29 +440,18 @@ export default function Threats() {
       </header>
 
       {/* ════════════════════════════
-          SECTION TABS NAV
+          WHTSIPA SECURITY WORLD BAR
           ════════════════════════════ */}
-      <div className="threats-tab-nav" id="threats-sections">
-        <div className="container">
-          <div className="threats-tab-row">
-            {NAV_TABS.map(tab => (
-              <button
-                key={tab.id}
-                className={`threats-tab-btn ${activeSection === tab.id ? 'active' : ''}`}
-                onClick={() => setActiveSection(tab.id)}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-        </div>
+      <div className="threats-security-world-bar">
+        <span className="threats-marquee-dot-green"></span>
+        <span className="threats-security-world-text">WHTSIPA SECURITY WORLD</span>
+        <span className="threats-marquee-dot-yellow"></span>
       </div>
 
       {/* ════════════════════════════
           SECTION 1 — SPOT A THREAT
           ════════════════════════════ */}
-      {activeSection === 'spot-a-threat' && (
-        <section className="section-pad-lg threats-section-alt" id="spot-a-threat">
+      <section className="section-pad-lg threats-section-alt" id="spot-a-threat">
           <div className="container">
 
             {/* Header */}
@@ -458,9 +465,12 @@ export default function Threats() {
                 Click any scenario below to begin its 5-question interactive quiz. Each question
                 displays a phone screenshot where you click to identify the real vs the threat.
               </p>
-              <span className="pill mid">
-                <span className="dot" /><span className="fw-bold" style={{ fontSize: '0.7rem' }}>EDUCATION MODE · Powered by WHTSIPA</span>
-              </span>
+              <div className="threats-edu-mode-pill">
+                <span className="threats-edu-dot" />
+                <span className="fw-bold" style={{ fontSize: '0.7rem' }}>
+                  EDUCATION MODE · Powered <span style={{ color: '#e0004d' }}>BY WHTSIPA</span>
+                </span>
+              </div>
             </div>
 
             {/* Quiz grid */}
@@ -490,25 +500,25 @@ export default function Threats() {
 
           </div>
         </section>
-      )}
 
       {/* ════════════════════════════
           SECTION 2 — TYPES OF THREATS
           ════════════════════════════ */}
-      {activeSection === 'types-of-threats' && (
-        <section className="section-pad-lg" id="types-of-threats">
+      <section className="section-pad-lg" id="types-of-threats">
           <div className="container">
 
             {/* Header */}
             <div className="mb-5">
-              <div className="section-label mb-2">Threat Intelligence</div>
-              <h2 className="fw-bold mb-3">Types of Threats</h2>
-              <p className="text-muted-cyber mb-2" style={{ maxWidth: '72ch' }}>
-                In today's digital and interconnected world, companies, individuals and government
-                organisations face relentless types of threats that drive millions online worldwide
-                in search of immediate solutions.
-              </p>
-              <p className="text-muted-cyber mb-4" style={{ maxWidth: '72ch' }}>
+              <div className="threats-intel-label mb-3">Threat Intelligence <span className="threats-intel-dot"></span></div>
+              <div className="threats-section-highlight-box">
+                <h2 className="fw-bold mb-2">Types of Threats</h2>
+                <p className="text-muted-cyber mb-0" style={{ maxWidth: '72ch' }}>
+                  In today's digital and interconnected world, companies, individuals and government
+                  organisations face relentless types of threats that drive millions online worldwide
+                  in search of immediate solutions.
+                </p>
+              </div>
+              <p className="text-muted-cyber mb-4 mt-3" style={{ maxWidth: '72ch' }}>
                 On our recent research we discovered a lot of companies and individuals shut down
                 operations because of digital threats. <strong className="text-white">We have a solution.</strong>
               </p>
@@ -544,20 +554,19 @@ export default function Threats() {
                         <button
                           className="tot-learn-link"
                           style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
-                          onClick={() => {
-                            setActiveSection('threats-tools')
-                            setTimeout(() => {
-                              const el = document.getElementById(`tt-card-${ttId}`)
-                              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                            }, 80)
-                          }}
+                          onClick={() => handleLearnMore(ttId)}
+                          title="Double-click to jump to tools section"
                         >
                           Learn more <i className="bi bi-arrow-right ms-1"></i>
                         </button>
                       ) : (
-                        <Link to="/report" className="tot-learn-link">
+                        <button
+                          className="tot-learn-link"
+                          style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+                          onClick={() => { setModalThreat(''); setActiveModal('contact') }}
+                        >
                           Request help <i className="bi bi-arrow-right ms-1"></i>
-                        </Link>
+                        </button>
                       )}
                     </div>
                   </div>
@@ -565,68 +574,153 @@ export default function Threats() {
               })}
             </div>
 
-            {/* Purchase note */}
-            <div className="tot-purchase-note mt-5">
-              <div className="d-flex align-items-start gap-3">
-                <span style={{ fontSize: '1.5rem' }}>🛒</span>
-                <div>
-                  <div className="fw-bold text-white mb-1">Purchase of All Self-Service Tools</div>
-                  <p className="text-muted-cyber small mb-2">
-                    We provide full demonstration versions after purchase. You will receive an email
-                    with instructions on how to use the tools for your digital security needs.
-                    Clear AI-powered demonstration videos are included so you can watch, practice
-                    and confidently apply the techniques in your daily life.
-                  </p>
-                  <p className="text-muted-cyber small mb-3">
-                    <strong className="text-white">Can't find your tool?</strong> Make a request below.
-                  </p>
-                  <Link to="/report" className="btn btn-alert btn-sm">
-                    <i className="bi bi-send me-2"></i>Make a Request
-                  </Link>
-                </div>
-              </div>
-            </div>
-
           </div>
         </section>
-      )}
 
       {/* ════════════════════════════
           SECTION 3 — THREATS & TOOLS
           ════════════════════════════ */}
-      {activeSection === 'threats-tools' && (
-        <section className="section-pad-lg threats-tools-section" id="threats-tools">
+      <section className="section-pad-lg threats-tools-section" id="threats-tools">
           <div className="container">
 
             {/* Header */}
             <div className="mb-5">
-              <div className="tt-hero-red-bar-inline mb-3">
-                <span>THREATS &amp; Tools</span>
+              <div className="tt-hero-red-bar-inline mb-4">
+                <span>THREATS &amp; TOOLS</span>
               </div>
-              <p style={{ color: 'rgba(233,243,255,0.78)', maxWidth: '70ch' }}>
-                At <strong>Threats &amp; Tools</strong>, we assert that knowledge and tools are Digital Power —
-                the strongest form of protection. Our Self-Defense Training Certifications program combines
-                practical real-world training with high quality, secure software tools. It equips individuals,
-                families, and business teams with the skills they need to handle real-world threats
-                confidently and legally as signed.
-              </p>
+              <div className="threats-section-highlight-box">
+                <p className="mb-0" style={{ color: 'rgba(233,243,255,0.9)' }}>
+                  At <strong>Threats &amp; Tools</strong>, we assert that knowledge and tools are Digital Power —
+                  the strongest form of protection. Our Self-Defense Training Certifications program combines
+                  practical real-world training with high quality, secure software tools. It equips individuals,
+                  families, and business teams with the skills they need to handle real-world threats
+                  confidently and legally as signed.
+                </p>
+              </div>
             </div>
 
-            {/* 4 Info cards */}
-            <div className="row g-4 mb-5">
+            {/* 4 illustrated info cards — all 4 in one row */}
+            <div className="row g-3 mb-5 tt-info-cards-row flex-nowrap flex-md-nowrap">
               {[
-                { icon: '🔍', title: 'Type of Threats',
-                  desc: 'Understand the most common and emerging threats you may face online and in real life.' },
-                { icon: '📊', title: 'Threat & Tool Analysis',
-                  desc: 'Get insights on how specific threats work and which tools best protect against them. We analyze real scenarios, compare protection options and recommend the most suitable tools.' },
-                { icon: '⚙️', title: 'How Our Tools Work',
-                  desc: 'Learn how our recommended protection tools function online. Through simple explanations, step-by-step guides and demo videos you\'ll see how each tool operates.' },
-                { icon: '📬', title: 'Request Tools',
-                  desc: 'Need a specific tool? Submit your request here. Our AI assistant is available 24/7 and a live representative will personally review your request for personalized support.' },
+                {
+                  svg: (
+                    <svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg" className="tt-info-svg">
+                      <rect width="200" height="140" rx="12" fill="#f3e8ff"/>
+                      {/* Background shapes */}
+                      <circle cx="160" cy="30" r="28" fill="#e9d5ff" opacity="0.6"/>
+                      <circle cx="40" cy="110" r="20" fill="#ddd6fe" opacity="0.5"/>
+                      {/* Screen/monitor */}
+                      <rect x="55" y="30" width="90" height="60" rx="6" fill="#7c3aed"/>
+                      <rect x="59" y="34" width="82" height="52" rx="4" fill="#1e1b4b"/>
+                      {/* Warning lines on screen */}
+                      <rect x="65" y="42" width="50" height="4" rx="2" fill="#f87171" opacity="0.9"/>
+                      <rect x="65" y="52" width="38" height="4" rx="2" fill="#fbbf24" opacity="0.8"/>
+                      <rect x="65" y="62" width="44" height="4" rx="2" fill="#34d399" opacity="0.8"/>
+                      <rect x="65" y="72" width="30" height="4" rx="2" fill="#60a5fa" opacity="0.8"/>
+                      {/* Alert icon */}
+                      <circle cx="120" cy="55" r="10" fill="#ef4444" opacity="0.9"/>
+                      <rect x="119" y="49" width="2" height="6" rx="1" fill="white"/>
+                      <circle cx="120" cy="57" r="1.2" fill="white"/>
+                      {/* Stand */}
+                      <rect x="93" y="90" width="14" height="6" rx="2" fill="#7c3aed"/>
+                      <rect x="83" y="96" width="34" height="4" rx="2" fill="#6d28d9"/>
+                      {/* Person left */}
+                      <circle cx="30" cy="55" r="10" fill="#c084fc"/>
+                      <path d="M16 95 Q30 72 44 95" fill="#a855f7" stroke="none"/>
+                      <rect x="23" y="65" width="14" height="18" rx="4" fill="#9333ea"/>
+                      {/* Person right */}
+                      <circle cx="170" cy="55" r="10" fill="#f9a8d4"/>
+                      <path d="M156 95 Q170 72 184 95" fill="#ec4899" stroke="none"/>
+                      <rect x="163" y="65" width="14" height="18" rx="4" fill="#db2777"/>
+                    </svg>
+                  ),
+                  title: 'Type of Threats',
+                  desc: 'Understand the most common and emerging threats you may face online and in real life.',
+                },
+                {
+                  svg: (
+                    <svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg" className="tt-info-svg">
+                      <rect width="200" height="140" rx="12" fill="#ede9fe"/>
+                      <circle cx="160" cy="20" r="22" fill="#ddd6fe" opacity="0.5"/>
+                      {/* Whiteboard */}
+                      <rect x="30" y="20" width="100" height="75" rx="6" fill="white" stroke="#c4b5fd" strokeWidth="2"/>
+                      {/* Chart bars */}
+                      <rect x="45" y="65" width="12" height="22" rx="2" fill="#8b5cf6"/>
+                      <rect x="63" y="52" width="12" height="35" rx="2" fill="#7c3aed"/>
+                      <rect x="81" y="42" width="12" height="45" rx="2" fill="#6d28d9"/>
+                      <rect x="99" y="35" width="12" height="52" rx="2" fill="#5b21b6"/>
+                      {/* Trend line */}
+                      <polyline points="51,65 69,50 87,40 105,33" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round"/>
+                      <circle cx="105" cy="33" r="4" fill="#10b981"/>
+                      {/* Presenter person */}
+                      <circle cx="155" cy="48" r="12" fill="#fbbf24"/>
+                      <rect x="147" y="62" width="16" height="28" rx="5" fill="#1d4ed8"/>
+                      {/* Pointing arm */}
+                      <line x1="147" y1="72" x2="130" y2="58" stroke="#1d4ed8" strokeWidth="3" strokeLinecap="round"/>
+                      {/* Legs */}
+                      <rect x="149" y="88" width="6" height="22" rx="3" fill="#1e40af"/>
+                      <rect x="159" y="88" width="6" height="22" rx="3" fill="#1e40af"/>
+                    </svg>
+                  ),
+                  title: 'Threat & Tool Analysis',
+                  desc: 'Get insights on how specific threats work and which tools best protect against them.',
+                },
+                {
+                  svg: (
+                    <svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg" className="tt-info-svg">
+                      <rect width="200" height="140" rx="12" fill="#fce7f3"/>
+                      <circle cx="170" cy="25" r="25" fill="#fbcfe8" opacity="0.6"/>
+                      {/* Laptop base */}
+                      <rect x="40" y="68" width="120" height="8" rx="3" fill="#e879f9"/>
+                      <rect x="30" y="76" width="140" height="5" rx="2" fill="#c026d3"/>
+                      {/* Laptop screen */}
+                      <rect x="50" y="28" width="100" height="42" rx="5" fill="#86198f"/>
+                      <rect x="54" y="32" width="92" height="34" rx="3" fill="#0f172a"/>
+                      {/* Shield on screen */}
+                      <path d="M100 38 L88 43 L88 54 Q88 62 100 66 Q112 62 112 54 L112 43 Z" fill="#e879f9"/>
+                      <path d="M100 42 L91 46 L91 54 Q91 60 100 63 Q109 60 109 54 L109 46 Z" fill="#a21caf"/>
+                      <path d="M96 52 L99 55 L106 47" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                      {/* Tool icons floating */}
+                      <rect x="160" y="50" width="20" height="14" rx="3" fill="#f0abfc" opacity="0.8"/>
+                      <rect x="162" y="53" width="16" height="2" rx="1" fill="#a21caf"/>
+                      <rect x="162" y="57" width="10" height="2" rx="1" fill="#a21caf"/>
+                      <rect x="20" y="50" width="20" height="14" rx="3" fill="#f0abfc" opacity="0.8"/>
+                      <circle cx="30" cy="57" r="4" fill="#a21caf" opacity="0.7"/>
+                    </svg>
+                  ),
+                  title: 'How Our Tools Work',
+                  desc: "Learn how our protection tools function. Step-by-step guides and demo videos show each tool in action.",
+                },
+                {
+                  svg: (
+                    <svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg" className="tt-info-svg">
+                      <rect width="200" height="140" rx="12" fill="#fef3c7"/>
+                      <circle cx="165" cy="22" r="25" fill="#fde68a" opacity="0.6"/>
+                      {/* Envelope body */}
+                      <rect x="35" y="45" width="100" height="65" rx="7" fill="#f59e0b"/>
+                      <rect x="38" y="48" width="94" height="59" rx="5" fill="white"/>
+                      {/* Envelope flap */}
+                      <path d="M35 45 L85 80 L135 45 Z" fill="#d97706"/>
+                      {/* Email lines */}
+                      <rect x="50" y="72" width="60" height="4" rx="2" fill="#e5e7eb"/>
+                      <rect x="50" y="82" width="45" height="4" rx="2" fill="#e5e7eb"/>
+                      <rect x="50" y="92" width="52" height="4" rx="2" fill="#e5e7eb"/>
+                      {/* Shield badge */}
+                      <circle cx="130" cy="62" r="20" fill="#1d4ed8"/>
+                      <path d="M130 48 L120 53 L120 62 Q120 70 130 74 Q140 70 140 62 L140 53 Z" fill="#3b82f6"/>
+                      <path d="M126 61 L129 64 L136 56" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                      {/* Stars / sparkles */}
+                      <text x="158" y="80" fontSize="14" fill="#f59e0b">✦</text>
+                      <text x="22" y="65" fontSize="10" fill="#fbbf24">✦</text>
+                    </svg>
+                  ),
+                  title: 'Request Tools',
+                  desc: 'Need a specific tool? Submit your request here. Our AI assistant is available 24/7 with live representative support.',
+                },
               ].map(item => (
-                <div key={item.title} className="col-6 col-md-6 col-lg-3">
-                  <div className="tot-info-card">
-                    <div className="tot-info-icon">{item.icon}</div>
+                <div key={item.title} className="col-6 col-md-3 col-lg-3">
+                  <div className="tot-info-card h-100">
+                    <div className="tt-info-svg-wrap">{item.svg}</div>
                     <div className="tot-info-title">{item.title}</div>
                     <div className="tot-info-desc">{item.desc}</div>
                     <div className="by-whtsipa-tag mt-3">BY WHTSIPA</div>
@@ -650,44 +744,58 @@ export default function Threats() {
                 <div
                   key={threat.id}
                   id={`tt-card-${threat.id}`}
-                  className="tt-card-new"
+                  className={`tt-card-new${highlightedCard === threat.id ? ' tt-card-highlighted' : ''}`}
                   style={{ cursor: 'pointer' }}
                   onClick={(e) => {
-                    // Don't navigate if they clicked the Request Tools button
                     if (e.target.closest('.tt-request-btn')) return
                     navigate(`/threats/${detailSlug}`)
                   }}
                 >
-
-                  {/* Top bar */}
+                  {/* Top bar — title left, icon right */}
                   <div className="tt-card-top">
-                    <div className="tt-card-title">{threat.name}</div>
-                    <div className="tt-card-meta">
-                      <div className="tt-available-on">
-                        <span className="tt-available-label">Available On</span>
-                        <div className="tt-device-icons">
-                          <i className="bi bi-display"></i>
-                          <i className="bi bi-laptop"></i>
-                          <i className="bi bi-tablet"></i>
-                          <i className="bi bi-phone"></i>
+                    <div className="tt-card-top-left">
+                      <div className="tt-card-title">{threat.name}</div>
+                      <div className="tt-card-meta-inline">
+                        <div className="tt-available-on">
+                          <span className="tt-available-label">Available On</span>
+                          <div className="tt-device-icons">
+                            <i className="bi bi-display"></i>
+                            <i className="bi bi-laptop"></i>
+                            <i className="bi bi-tablet"></i>
+                            <i className="bi bi-phone"></i>
+                          </div>
+                        </div>
+                        <div className="tt-card-success">
+                          <span className="tt-success-label">Success Rates:</span>
+                          <span className="tt-success-value">{threat.successRate}</span>
                         </div>
                       </div>
-                      <div className="tt-card-success">
-                        <span className="tt-success-label">Success Rates:</span>
-                        <span className="tt-success-value">{threat.successRate}</span>
-                      </div>
+                    </div>
+                    <div className="tt-card-icon-right">
+                      <img
+                        src={ICON_MAP[threat.icon]}
+                        alt={threat.name}
+                        className={`tt-card-icon-img${INVERT_ICONS.has(threat.icon) ? ' tt-icon-invert-light' : ' tt-icon-natural-light'}`}
+                      />
                     </div>
                   </div>
 
-                  {/* Body */}
+                  {/* Body — full width */}
                   <div className="tt-card-body-new">
                     <div className="tt-card-left">
                       <p className="tt-card-desc">{threat.description}</p>
-                      <div className="d-flex align-items-center gap-3 flex-wrap mb-3">
-                        <div className="tt-how-label">How it works?</div>
-                        <Link className="tt-request-btn" to="/report" state={{ scrollTo: 'contact' }}>
+                      <div className="d-flex align-items-center justify-content-between gap-3 flex-wrap mb-3">
+                        <div className="tt-how-label">How it works? <i className="bi bi-question-circle ms-1"></i></div>
+                        <button
+                          className="tt-request-btn"
+                          onClick={e => {
+                            e.stopPropagation()
+                            setModalThreat(threat.name)
+                            setActiveModal('request')
+                          }}
+                        >
                           Request Tools
-                        </Link>
+                        </button>
                       </div>
                       <div className="tt-steps-row">
                         {threat.steps.map((step, i) => (
@@ -698,13 +806,6 @@ export default function Threats() {
                           </div>
                         ))}
                       </div>
-                    </div>
-                    <div className="tt-card-icon-side">
-                      <img
-                        src={ICON_MAP[threat.icon]}
-                        alt={threat.name}
-                        className={`tt-card-icon-img${INVERT_ICONS.has(threat.icon) ? ' tt-icon-invert' : ' tt-icon-natural'}`}
-                      />
                     </div>
                   </div>
 
@@ -724,16 +825,15 @@ export default function Threats() {
                     questions instantly. A live representative will personally review and handle your
                     request for personalized recommendations and support.
                   </p>
-                  <Link to="/report" className="btn btn-alert btn-sm">
+                  <button className="btn btn-alert btn-sm" onClick={() => { setModalThreat(''); setActiveModal('request') }}>
                     <i className="bi bi-send me-2"></i>Make a Request
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>
 
           </div>
         </section>
-      )}
 
       {/* ════════════════════════════
           FINAL CTA
@@ -748,16 +848,29 @@ export default function Threats() {
               Report it now and let WHTSIP guide your recovery.
             </p>
             <div className="d-flex justify-content-center gap-3 flex-wrap">
-              <Link className="btn btn-alert" to="/report">
+              <button className="btn btn-alert" onClick={() => { setModalThreat(''); setActiveModal('report') }}>
                 <i className="bi bi-exclamation-triangle me-2"></i>Report an Incident
-              </Link>
-              <Link className="btn btn-cyber" to="/report#recover">
-                <i className="bi bi-shield-check me-2"></i>Start Recovery
-              </Link>
+              </button>
+              <a
+                className="btn btn-cyber"
+                href="#spot-a-threat"
+                onClick={e => { e.preventDefault(); document.getElementById('spot-a-threat')?.scrollIntoView({ behavior: 'smooth' }) }}
+              >
+                <i className="bi bi-controller me-2"></i>Spot a Threat
+              </a>
             </div>
           </div>
         </div>
       </section>
+
+      {/* ── Modals ── */}
+      {activeModal && (
+        <WhatsipModal
+          mode={activeModal}
+          threatTitle={modalThreat}
+          onClose={() => { setActiveModal(null); setModalThreat('') }}
+        />
+      )}
 
     </div>
   )

@@ -1,0 +1,34 @@
+// Central Axios instance — all API calls go through here
+import axios from 'axios'
+
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  timeout: 10000,
+})
+
+// Attach JWT token from localStorage to every request
+api.interceptors.request.use(config => {
+  try {
+    const stored = localStorage.getItem('whts_user')
+    if (stored) {
+      const { token } = JSON.parse(stored)
+      if (token) config.headers.Authorization = `Bearer ${token}`
+    }
+  } catch { /* ignore */ }
+  return config
+})
+
+// Global response error handler
+api.interceptors.response.use(
+  res => res,
+  err => {
+    if (err.response?.status === 401) {
+      // Token expired — clear local session
+      localStorage.removeItem('whts_user')
+      window.location.href = '/signin'
+    }
+    return Promise.reject(err)
+  }
+)
+
+export default api

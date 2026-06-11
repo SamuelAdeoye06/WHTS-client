@@ -17,6 +17,9 @@ import Contact from './pages/Contact'
 import EssentialEight from './pages/EssentialEight'
 import ForVictimsGovernment from './pages/ForVictimsGovernment'
 import Blog from './pages/Blog'
+import VerifyEmail from './pages/VerifyEmail'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 import './styles/cyber.css'
 
 const KNOWN_ROUTES = [
@@ -33,6 +36,7 @@ function Layout() {
     matchPath({ path: pattern, end: true }, location.pathname)
   )
   const isBare = BARE_ROUTES.includes(location.pathname) || !isKnownRoute
+  const isThreatsPage = location.pathname === '/threats'
   const isDarkTheme = location.pathname === '/threats' ||
     location.pathname.startsWith('/threats/')
 
@@ -48,6 +52,9 @@ function Layout() {
           <Route path="/report"                 element={<Report />} />
           <Route path="/signin"                 element={<SignIn />} />
           <Route path="/signup"                 element={<SignUp />} />
+          <Route path="/verify-email"           element={<VerifyEmail />} />
+          <Route path="/forgot-password"        element={<ForgotPassword />} />
+          <Route path="/reset-password"         element={<ResetPassword />} />
           <Route path="/about"                  element={<About />} />
           <Route path="/about-officials"        element={<AboutOfficials />} />
           <Route path="/contact"                element={<Contact />} />
@@ -58,7 +65,7 @@ function Layout() {
           <Route path="*"                       element={<NotFound />} />
         </Routes>
       </main>
-      {!isBare && <Footer />}
+      {!isBare && !isThreatsPage && <Footer />}
     </div>
   )
 }

@@ -1,6 +1,8 @@
 import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import { THREAT_DATA } from '../data/threatData'
 import { QUIZ_LIST } from '../data/quizData'
+import WhatsipModal from '../components/WhatsipModal'
 import '../styles/cyber.css'
 import './ThreatDetail.css'
 
@@ -111,6 +113,7 @@ export default function ThreatDetail() {
   const { slug } = useParams()
   const navigate = useNavigate()
   const threat = THREAT_DATA[slug]
+  const [activeModal, setActiveModal] = useState(null) // 'hire' | 'report' | 'request' | 'contact' | 'recovery'
 
   // Find a related quiz for this slug
   const relatedQuiz = QUIZ_LIST.find(q =>
@@ -185,7 +188,7 @@ export default function ThreatDetail() {
 
                 <div className="d-flex flex-column flex-sm-row gap-2">
                   <Link className="btn btn-danger px-4" to="/report" style={{ borderRadius: 12, fontWeight: 600 }}>
-                    <i className="bi bi-exclamation-triangle me-2"></i>Report this incident
+                    <i className="bi bi-exclamation-triangle me-2"></i>Report this threat
                   </Link>
                   <Link className="btn btn-outline-secondary px-4" to="/report" state={{ scrollTo: 'recover' }} style={{ borderRadius: 12, fontWeight: 600 }}>
                     <i className="bi bi-shield-check me-2"></i>View recovery steps
@@ -200,7 +203,7 @@ export default function ThreatDetail() {
                     {threat.tagline}
                   </div>
                   <div className="e8-scan-bar mb-2"><span /></div>
-                  <div className="mb-4" style={{ color: '#6b7280', fontSize: '0.85rem' }}>Continuously monitored by WHTS intelligence</div>
+                  <div className="mb-4" style={{ color: '#6b7280', fontSize: '0.85rem' }}>Continuously monitored by WHTSIPA intelligence</div>
                   <div className="d-flex align-items-start gap-3 p-3 rounded-3"
                     style={{ background: riskStyle.bg, border: `1px solid ${riskStyle.border}` }}>
                     <i className="bi bi-shield-exclamation mt-1" style={{ color: riskStyle.text, fontSize: '1.1rem', flexShrink: 0 }}></i>
@@ -270,18 +273,19 @@ export default function ThreatDetail() {
                   </div>
                 </div>
 
-                {/* WHTS solutions */}
+                {/* WHTSIPA solutions */}
                 <div className="banner p-4">
                   <div className="d-flex align-items-start gap-3">
                     <div className="icon-box" style={{ flexShrink: 0 }}>🛡️</div>
                     <div>
                       <div className="section-label mb-1">WHTSIPA Solutions</div>
-                      <h3 className="fw-bold mb-2">How WHTS Protects You</h3>
+                      <h3 className="fw-bold mb-2">How WHTSIPA Protects You</h3>
                       <p className="text-muted-cyber small mb-3">
                         <ToolsText text={threat.solutions} />
                       </p>
-                      <Link className="btn btn-cyber" to="/report#contact">
-                        <i className="bi bi-headset me-2"></i>Talk to Our Team
+                      <Link className="btn btn-cyber" to="/report#contact"
+                        onClick={e => { e.preventDefault(); setActiveModal('hire') }}>
+                        <i className="bi bi-headset me-2"></i>Hire Our Team
                       </Link>
                     </div>
                   </div>
@@ -304,7 +308,7 @@ export default function ThreatDetail() {
                     </p>
                     <Link
                       className="btn btn-outline-cyber w-100"
-                      to={`/threats#quizzes`}
+                      to="/threats#spot-a-threat"
                       state={{ openQuiz: relatedQuiz.slug }}
                     >
                       <i className="bi bi-play-fill me-2"></i>Start Quiz
@@ -316,12 +320,12 @@ export default function ThreatDetail() {
                 <div className="card-glass p-4 mb-4">
                   <div className="fw-bold mb-3">Quick Actions</div>
                   <div className="d-flex flex-column gap-2">
-                    <Link className="btn btn-alert" to="/report">
+                    <button className="btn btn-alert" onClick={() => setActiveModal('report')}>
                       <i className="bi bi-send me-2"></i>Report This Threat
-                    </Link>
-                    <Link className="btn btn-cyber" to="/report#recover">
-                      <i className="bi bi-arrow-repeat me-2"></i>Start Recovery
-                    </Link>
+                    </button>
+                    <button className="btn btn-cyber" onClick={() => setActiveModal('recovery')}>
+                      <i className="bi bi-arrow-repeat me-2"></i>View Recovery Steps
+                    </button>
                     <Link className="btn btn-outline-cyber" to="/threats">
                       <i className="bi bi-grid me-2"></i>Browse All Threats
                     </Link>
@@ -336,7 +340,14 @@ export default function ThreatDetail() {
                   </div>
                   <div className="text-muted-cyber small">
                     Contact law enforcement or your national cybercrime authority immediately.
-                    Then <Link to="/report#contact" style={{ color: 'var(--cyan)' }}>contact WHTS</Link> for expert recovery support.
+                    Then{' '}
+                    <button
+                      style={{ background: 'none', border: 'none', padding: 0, color: 'var(--cyan)', cursor: 'pointer', textDecoration: 'underline', fontSize: 'inherit' }}
+                      onClick={() => setActiveModal('contact')}
+                    >
+                      contact WHTSIPA
+                    </button>
+                    {' '}for expert recovery support.
                   </div>
                 </div>
 
@@ -376,21 +387,30 @@ export default function ThreatDetail() {
                 Experienced {threat.title}?
               </h2>
               <p className="text-muted-cyber mb-4 mx-auto" style={{ maxWidth: '50ch' }}>
-                Don't wait. Every minute counts. Submit a secure report to WHTS and
+                Don't wait. Every minute counts. Submit a secure report to WHTSIPA and
                 get guided recovery support from our Active Representative.
               </p>
               <div className="d-flex justify-content-center gap-3 flex-wrap">
-                <Link className="btn btn-alert" to="/report">
-                  <i className="bi bi-exclamation-triangle me-2"></i>Report Now
-                </Link>
-                <Link className="btn btn-cyber" to="/threats">
-                  <i className="bi bi-grid me-2"></i>Explore All Threats
-                </Link>
+                <button className="btn btn-alert" onClick={() => setActiveModal('report')}>
+                  <i className="bi bi-exclamation-triangle me-2"></i>Report an Incident
+                </button>
+                <button className="btn btn-cyber" onClick={() => setActiveModal('recovery')}>
+                  <i className="bi bi-shield-check me-2"></i>View Recovery Steps
+                </button>
               </div>
             </div>
           </div>
         </section>
       </>
+
+      {/* ── Modals ── */}
+      {activeModal && (
+        <WhatsipModal
+          mode={activeModal}
+          threatTitle={threat?.title || ''}
+          onClose={() => setActiveModal(null)}
+        />
+      )}
     </div>
   )
 }
