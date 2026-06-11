@@ -472,7 +472,6 @@ export default function Navbar() {
             </ul>
 
             <div className="nav-auth-actions">
-              <LangBtn />
             </div>
           </div>
         </div>

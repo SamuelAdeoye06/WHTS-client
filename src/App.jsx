@@ -36,9 +36,9 @@ function Layout() {
     matchPath({ path: pattern, end: true }, location.pathname)
   )
   const isBare = BARE_ROUTES.includes(location.pathname) || !isKnownRoute
-  const isThreatsPage = location.pathname === '/threats'
-  const isDarkTheme = location.pathname === '/threats' ||
+  const isThreatsPage = location.pathname === '/threats' ||
     location.pathname.startsWith('/threats/')
+  const isDarkTheme = isThreatsPage
 
   return (
     <div className={isDarkTheme ? 'site-shell site-dark' : 'site-shell site-light'}>

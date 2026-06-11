@@ -1102,6 +1102,9 @@
     letter-spacing: 0.06em;
     margin-top: 0.35rem !important;
   }
+  .threats-security-world-text{
+    font-size: 0.95rem;
+  }
 }
 
 /* ── Light card highlighted state ── */
