@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import logoWhts from '../assets/media/logo-whts.jpg'
+import logoWhtsDark from '../assets/media/logo-whts-dark.png'
 
 export default function Footer() {
   const year = new Date().getFullYear()
@@ -19,7 +20,7 @@ export default function Footer() {
           <div className="col-12 col-lg-3">
             <div className="mb-3">
               <img
-                src={logoWhts}
+                src={logoWhtsDark}
                 alt="The Watch Eyes - WHTS"
                 style={{ height: '80px', width: 'auto', borderRadius: '10px', mixBlendMode: 'lighten' }}
               />
@@ -71,7 +72,7 @@ export default function Footer() {
             <div className="footer-col-title">About</div>
             <ul className="list-unstyled mb-0">
               <li className="mb-2">
-                <button className="footer-link-btn" onClick={() => navigate('/about')}>About WHTS</button>
+                <button className="footer-link-btn" onClick={() => navigate('/about')}>About WHTSIPA</button>
               </li>
               <li className="mb-2">
                 <button className="footer-link-btn" onClick={() => navigate('/about-officials')}>The Officials</button>

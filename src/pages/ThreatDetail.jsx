@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { THREAT_DATA } from '../data/threatData'
 import { QUIZ_LIST } from '../data/quizData'
 import WhatsipModal from '../components/WhatsipModal'
+import ThreatsFooter from '../components/ThreatsFooter'
 import '../styles/cyber.css'
 import './ThreatDetail.css'
 
@@ -411,6 +412,8 @@ export default function ThreatDetail() {
           </div>
         </section>
       </>
+
+      <ThreatsFooter />
 
       {/* ── Modals ── */}
       {activeModal && (

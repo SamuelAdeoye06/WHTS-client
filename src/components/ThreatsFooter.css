@@ -1,0 +1,57 @@
+/* ============================================
+   THREATS PAGE FOOTER
+   src/components/ThreatsFooter.css
+   ============================================ */
+
+.threats-footer {
+  background: #092036;
+  border-top: 1px solid rgba(120, 214, 255, 0.12);
+  padding: 3.5rem 0 0;
+  color: #f0f4ff;
+}
+
+.threats-footer-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto;
+  padding-bottom: 2.5rem;
+}
+
+.threats-footer-logo {
+  height: 150px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.threats-footer-title {
+  font-size: clamp(1.1rem, 2.2vw, 1.4rem);
+  font-weight: 800;
+  color: #f0f4ff;
+  letter-spacing: -0.01em;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.threats-footer-text {
+  font-size: 0.92rem;
+  line-height: 1.75;
+  color: rgba(233, 243, 255, 0.72);
+  margin: 0;
+}
+
+@media (max-width: 991.98px) {
+  .threats-footer-logo {
+    height: 130px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .threats-footer { padding: 2.5rem 0 0; }
+  .threats-footer-logo { height: 110px; margin-bottom: 1.1rem; }
+  .threats-footer-inner { padding-bottom: 2rem; }
+}

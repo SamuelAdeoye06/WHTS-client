@@ -28,6 +28,62 @@ const OFFICIALS = [
     color: '#3b82f6',
   },
   {
+    id: 'lazarus',
+    name: 'Lazarus Group',
+    codename: 'LAZARUS',
+    type: 'Nation-State APT',
+    origin: 'North Korea',
+    since: 'Est. 2007',
+    description: 'A state-sponsored advanced persistent threat group for some of the largest financial cyber heists in history, including $81M Bangladesh Bank and widespread cryptocurrency claims.',
+    capabilities: ['Financial system targeting', 'Cryptocurrency theft', 'Destructive wiper attacks', 'Supply chain compromise'],
+    threat: 'EXTREME',
+    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/vc_h264/v1780248016/lazarus_nhudt2.mp4',
+    poster: lazarusPoster,
+    color: '#a855f7',
+  },
+  {
+    id: 'apt29',
+    name: 'APT29 (Cozy Bear)',
+    codename: 'APT29',
+    type: 'Nation-State APT',
+    origin: 'Russia (SVR)',
+    since: 'Est. 2008',
+    description: 'A Russian intelligence-linked advanced persistent threat group for the SolarWinds supply chain attack, the DNC breach, and ongoing espionage campaigns against governments, think tanks,and COVID-19 vaccine researchers.',
+    capabilities: ['Supply chain attacks', 'Long-term stealth persistence', 'Government espionage', 'Cloud infrastructure abuse'],
+    threat: 'EXTREME',
+    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/vc_h264/v1780492583/apt29_lwnncf.mp4',
+    poster: apt29Poster,
+    color: '#22c55e',
+  },
+  {
+    id: 'shadow-brokers',
+    name: 'The Shadow Brokers',
+    codename: 'SHADOW BROKERS',
+    type: 'Exploit Broker / Threat Actor',
+    origin: 'Unknown',
+    since: 'Est. 2016',
+    description: 'A mysterious threat that leaked classified NSA hacking tools including EternalBlue — the exploit that powered the WannaCry and NotPetya attacks affecting hundreds of thousands of systems worldwide.',
+    capabilities: ['Classified exploit leaking', 'NSA tool exfiltration', 'Zero-day brokering', 'Critical infrastructure targeting'],
+    threat: 'EXTREME',
+    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/vc_h264/v1780463969/shadow-brokers_ga6tmk.mp4',
+    poster: shadowBrokersPoster,
+    color: '#f59e0b',
+  },
+  {
+    id: 'virus',
+    name: 'Virus',
+    codename: 'VIRUS',
+    type: 'Malware Development Group',
+    origin: 'Eastern Europe',
+    since: 'Est. 2010',
+    description: 'A prolific malware development and distribution network for some of the most destructive ransomware and banking trojans deployed globally. Known for constant evolution to evade detection.',
+    capabilities: ['Ransomware development', 'Banking trojan deployment', 'Botnet operations', 'Cryptomining malware'],
+    threat: 'HIGH',
+    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/vc_h264/v1780384928/virus_aol82c.mp4',
+    poster: virusPoster,
+    color: '#ef4444',
+  },
+  {
     id: 'anonymous',
     name: 'Anonymous',
     codename: 'ANONYMOUS',
@@ -40,62 +96,6 @@ const OFFICIALS = [
     videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/vc_h264/v1780406450/anonymous_mtu7vb.mp4',
     poster: anonymousPoster,
     color: '#6b7280',
-  },
-  {
-    id: 'virus',
-    name: 'Virus',
-    codename: 'VIRUS',
-    type: 'Malware Development Group',
-    origin: 'Eastern Europe',
-    since: 'Est. 2010',
-    description: 'A prolific malware development and distribution network responsible for some of the most destructive ransomware and banking trojans deployed globally. Known for constant evolution to evade detection.',
-    capabilities: ['Ransomware development', 'Banking trojan deployment', 'Botnet operations', 'Cryptomining malware'],
-    threat: 'HIGH',
-    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/vc_h264/v1780384928/virus_aol82c.mp4',
-    poster: virusPoster,
-    color: '#ef4444',
-  },
-  {
-    id: 'lazarus',
-    name: 'Lazarus Group',
-    codename: 'LAZARUS',
-    type: 'Nation-State APT',
-    origin: 'North Korea',
-    since: 'Est. 2007',
-    description: 'A North Korean state-sponsored advanced persistent threat group responsible for some of the largest financial cyber heists in history, including $81M Bangladesh Bank theft and widespread cryptocurrency theft.',
-    capabilities: ['Financial system targeting', 'Cryptocurrency theft', 'Destructive wiper attacks', 'Supply chain compromise'],
-    threat: 'EXTREME',
-    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/vc_h264/v1780248016/lazarus_nhudt2.mp4',
-    poster: lazarusPoster,
-    color: '#a855f7',
-  },
-  {
-    id: 'shadow-brokers',
-    name: 'The Shadow Brokers',
-    codename: 'SHADOW BROKERS',
-    type: 'Exploit Broker / Threat Actor',
-    origin: 'Unknown',
-    since: 'Est. 2016',
-    description: 'A mysterious threat actor that leaked classified NSA hacking tools including EternalBlue — the exploit that powered the WannaCry and NotPetya attacks affecting hundreds of thousands of systems worldwide.',
-    capabilities: ['Classified exploit leaking', 'NSA tool exfiltration', 'Zero-day brokering', 'Critical infrastructure targeting'],
-    threat: 'EXTREME',
-    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/vc_h264/v1780463969/shadow-brokers_ga6tmk.mp4',
-    poster: shadowBrokersPoster,
-    color: '#f59e0b',
-  },
-  {
-    id: 'apt29',
-    name: 'APT29 (Cozy Bear)',
-    codename: 'APT29',
-    type: 'Nation-State APT',
-    origin: 'Russia (SVR)',
-    since: 'Est. 2008',
-    description: 'A Russian intelligence-linked advanced persistent threat group responsible for the SolarWinds supply chain attack, the DNC breach, and ongoing espionage campaigns against governments, think tanks, and COVID-19 vaccine researchers.',
-    capabilities: ['Supply chain attacks', 'Long-term stealth persistence', 'Government espionage', 'Cloud infrastructure abuse'],
-    threat: 'EXTREME',
-    videoUrl: 'https://res.cloudinary.com/dqch0tjrm/video/upload/vc_h264/v1780492583/apt29_lwnncf.mp4',
-    poster: apt29Poster,
-    color: '#22c55e',
   },
 ]
 
@@ -376,7 +376,7 @@ function CombinedVideo() {
 
             <div className="combined-ctrl-right">
               <span className="combined-ctrl-badge">
-                <i className="bi bi-shield-fill-check me-1"></i>WHTS
+                <i className="bi bi-shield-fill-check me-1"></i>WHTSIPA
               </span>
             </div>
           </div>
@@ -397,12 +397,11 @@ export default function AboutOfficials() {
             Meet The Six Officials
           </h1>
           <p className="mx-auto mb-4" style={{ maxWidth: '60ch', fontSize: '1.05rem', color: '#4a5568' }}>
-            WHTSIPA tracks and monitors six elite threat actor groups — the most sophisticated
-            cyber operations in the world. Understanding them is the first step to staying protected.
+            WHTSIPA Tracks and Monitors with Six Elite Threat Actor Groups — The chosen Sophisticated Cyber Operations in the World. Understanding them is the first step toward effective protection.
           </p>
           <div className="d-flex gap-3 justify-content-center flex-wrap">
             <Link className="btn btn-primary px-4" to="/about" style={{ borderRadius: 12, fontWeight: 600 }}>
-              <i className="bi bi-arrow-left me-2"></i>About WHTS
+              <i className="bi bi-arrow-left me-2"></i>About WHTSIPA
             </Link>
             <Link className="btn btn-danger px-4" to="/report" style={{ borderRadius: 12, fontWeight: 600 }}>
               <i className="bi bi-exclamation-triangle me-2"></i>Report an Incident
@@ -434,7 +433,7 @@ export default function AboutOfficials() {
               These threats are real. Your protection matters.
             </h2>
             <p className="mb-4 mx-auto" style={{ maxWidth: '50ch', color: '#4a5568' }}>
-              WHTSIPA actively monitors all six groups. If you suspect you've been targeted
+              WHTSIPA actively work together with all six groups. If you suspect you've been targeted
               by any of these actors, report it immediately.
             </p>
             <div className="d-flex justify-content-center gap-3 flex-wrap">

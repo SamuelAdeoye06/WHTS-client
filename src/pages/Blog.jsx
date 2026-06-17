@@ -114,18 +114,34 @@ export default function Blog() {
           </div>
           <div className="scan-bar mb-5"><span /></div>
           <div className="blog-content">
-            {article.content.split('\n\n').map((para, i) => {
-              if (para.startsWith('**') && para.includes('.**')) {
-                const [bold, ...rest] = para.split('.**')
-                return (
-                  <p key={i}>
-                    <strong style={{ color: 'var(--cyan)' }}>{bold.replace(/\*\*/g, '')}.</strong>
-                    {rest.join('.**')}
-                  </p>
-                )
+            {(() => {
+              // Collapse the source string's line-wrap whitespace into single
+              // spaces so paragraph parsing doesn't depend on exact indentation.
+              const normalized = article.content.replace(/\s+/g, ' ').trim()
+
+              const paragraphs = []
+
+              // Any plain intro text before the first "**Bold lead-in.**" marker.
+              const firstBoldIdx = normalized.search(/\*\*/)
+              const leading = firstBoldIdx > 0 ? normalized.slice(0, firstBoldIdx).trim() : ''
+              if (leading) paragraphs.push({ bold: null, text: leading })
+
+              // Each bold-led sentence plus the plain text that follows it,
+              // stopping right before the next bold marker (or end of string).
+              const stepRe = /\*\*([^*]+?)\*\*\s*([\s\S]*?)(?=\*\*[^*]+?\*\*|$)/g
+              let m
+              while ((m = stepRe.exec(normalized)) !== null) {
+                paragraphs.push({ bold: m[1].trim(), text: m[2].trim() })
               }
-              return <p key={i} className="text-muted-cyber">{para.trim()}</p>
-            })}
+
+              return paragraphs.map((p, i) => (
+                <p key={i} className={p.bold ? '' : 'text-muted-cyber'}>
+                  {p.bold && <strong style={{ color: 'var(--cyan)' }}>{p.bold}</strong>}
+                  {p.bold && p.text ? ' ' : ''}
+                  {p.bold ? <span className="text-muted-cyber">{p.text}</span> : p.text}
+                </p>
+              ))
+            })()}
           </div>
           <div className="banner p-4 mt-5 text-center">
             <h4 className="fw-bold mb-2">Think You've Been Targeted?</h4>

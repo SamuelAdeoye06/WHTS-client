@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import logoWhts from '../assets/media/logo-whts.jpg'
+import logoWhtsDark from '../assets/media/logo-whts-dark.png'
 import { THREAT_DATA } from '../data/threatData'
 import './Navbar.css'
 
@@ -368,7 +369,7 @@ export default function Navbar() {
         <div className="container nav-inner">
 
           <Link className="navbar-brand" to="/" aria-label="WHTS home">
-            <img src={logoWhts} alt="The Watch Eyes - WHTS" className="brand-logo" />
+            <img src={isDarkPage ? logoWhtsDark : logoWhts} alt="The Watch Eyes - WHTS" className="brand-logo" />
           </Link>
 
           <div className="nav-top-actions">
@@ -419,7 +420,7 @@ export default function Navbar() {
 
           <div className={`collapse navbar-collapse nav-menu-row ${navOpen ? 'show' : ''}`} id="mainNav">
             <ul className="navbar-nav mb-2 mb-lg-0 align-items-lg-center gap-lg-1">
-
+              <hr />
               <li className="nav-item">
                 <NavLink className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`} to="/">Home</NavLink>
               </li>

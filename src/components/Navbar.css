@@ -574,71 +574,71 @@
   color: #1d4ed8 !important;
 }
 
-/* ── Footer theme variants ── */
-.site-dark .footer {
-  background: #070b20;
+/* ── Footer — always dark, on every page regardless of theme ── */
+.footer {
+  background: #092036 !important;
   border-top: 1px solid rgba(120, 214, 255, 0.12);
-  color: #f0f4ff;
+  color: #f0f4ff !important;
 }
 
-.site-light .footer {
-  background: #ffffff;
-  border-top: 1px solid #e2e8f0;
-  color: #0f172a;
+.footer .footer-col-title {
+  color: rgba(233, 243, 255, 0.92) !important;
 }
 
-.site-light .footer .footer-col-title {
-  color: #0f172a;
+.footer .footer-link,
+.footer .footer-link-btn,
+.footer .text-muted-cyber {
+  color: rgba(233, 243, 255, 0.72) !important;
 }
 
-.site-light .footer .footer-link,
-.site-light .footer .footer-link-btn,
-.site-light .footer .text-muted-cyber {
-  color: #4a5568 !important;
+.footer .footer-link:hover,
+.footer .footer-link-btn:hover {
+  color: var(--cyan) !important;
 }
 
-.site-light .footer .footer-link:hover,
-.site-light .footer .footer-link-btn:hover {
-  color: #1d4ed8 !important;
-}
-
-.site-light .footer .text-white {
-  color: #0f172a !important;
-}
-
-.site-light .footer .btn-alert,
-.site-light .footer .btn-cyber {
+.footer .text-white {
   color: #ffffff !important;
 }
 
-.site-light .footer .btn-alert {
+.footer .btn-alert,
+.footer .btn-cyber {
+  color: #ffffff !important;
+}
+
+.footer .btn-alert {
   background: #c1123d;
   border-color: #c1123d;
 }
 
-.site-light .footer .btn-cyber {
-  background: #07104a;
-  border-color: #07104a;
+.footer .btn-cyber {
+  background: #1a56db;
+  border-color: #1a56db;
 }
 
-.site-light .footer img {
-  mix-blend-mode: normal !important;
+.footer img {
+  mix-blend-mode: lighten !important;
 }
 
-.site-light .footer .card-glass {
-  background: #f8fafc;
-  border-color: #e2e8f0;
+.footer .card-glass {
+  background: rgba(255,255,255,0.04) !important;
+  border-color: rgba(120,214,255,0.15) !important;
   box-shadow: none;
 }
 
-.site-light .footer .icon-box {
-  background: #eef2ff;
-  border-color: #c7d2fe;
+.footer .icon-box {
+  background: rgba(120,214,255,0.1) !important;
+  border-color: rgba(120,214,255,0.25) !important;
   box-shadow: none;
 }
 
-.site-light .footer [style*="border-top"] {
-  border-top-color: #e2e8f0 !important;
+.footer .pill {
+  background: rgba(255,255,255,0.05) !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  color: #f0f4ff !important;
+}
+
+.footer .pill.low {
+  border-color: rgba(46,229,157,0.38) !important;
 }
 
 /* Unified cyber.gov.au-style header layout for every theme */

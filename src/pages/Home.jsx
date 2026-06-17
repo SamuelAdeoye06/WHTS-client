@@ -253,8 +253,11 @@ export default function Home() {
               Introducing Our Elite Cybersecurity Partners
             </h2>
             <p className="home-video-sub">
-              This video defines our mission, our partners, and who we are communicating with
-              online. Watch to understand the full scope of WHTS intelligence operations.
+              This video defines our mission, our partners, and who you are communicating with
+              online.
+            </p>
+            <p className="home-video-sub">
+              Watch to understand the full scope of WHTS intelligence operations.
             </p>
             <div className="home-video-sub-badge">WHTSIP &amp; The Officials</div>
           </div>

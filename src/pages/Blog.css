@@ -77,15 +77,30 @@
   padding-top: 2rem;
 }
 
+.blog-article-page h1.glow-text {
+  color: #f0f4ff;
+}
+
 .blog-content p {
   font-size: 0.95rem;
   line-height: 1.8;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
   color: rgba(233,243,255,0.82);
+}
+
+.blog-content p:has(strong) {
+  padding-left: 1rem;
+  border-left: 2px solid rgba(34, 240, 255, 0.3);
 }
 
 .blog-content strong {
   font-weight: 700;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.blog-article-page .banner h4 {
+  color: #f0f4ff;
 }
 /* Light theme blog cards */
 .blog-card-light {

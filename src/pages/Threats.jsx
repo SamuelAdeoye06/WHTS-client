@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { QUIZ_LIST, QUIZ_DATA } from '../data/quizData'
 import WhatsipModal from '../components/WhatsipModal'
+import ThreatsFooter from '../components/ThreatsFooter'
 import '../styles/cyber.css'
 import './Threats.css'
 import { THREATS_AND_TOOLS } from '../data/threatsToolsData'
@@ -868,6 +869,8 @@ export default function Threats() {
           </div>
         </div>
       </section>
+
+      <ThreatsFooter />
 
       {/* ── Modals ── */}
       {activeModal && (

@@ -42,6 +42,7 @@
   50%       { opacity: 0.6; transform: scale(0.8); }
 }
 
+.page-light .home-video-heading,
 .home-video-heading {
   font-size: clamp(1.6rem, 3.2vw, 2.4rem);
   font-weight: 900;
