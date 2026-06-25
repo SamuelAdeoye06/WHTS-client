@@ -645,10 +645,19 @@ textarea.cyber-input { resize: vertical; min-height: 120px; }
   flex-shrink: 0;
   background: #1d4ed8 !important;
   border: none !important;
+  color: #ffffff !important;
+  transition: all 0.2s ease !important;
+}
+
+.livechat-send-btn i,
+.livechat-send-btn svg {
+  color: #ffffff !important;
+  fill: #ffffff !important;
 }
 
 .livechat-send-btn:hover {
   background: #1e40af !important;
+  transform: scale(1.05);
 }
 
 /* ── Chat Options Panel ── */
