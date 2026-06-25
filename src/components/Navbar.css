@@ -973,8 +973,15 @@
     row-gap: 0.3rem;
   }
 
-  .cyber-navbar .navbar-brand {
+  .cyber-navbar .navbar-brand,
+  .navbar-white .navbar-brand {
     text-align: center;
+    margin-right: 0 !important;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    grid-area: brand;
+    padding: 0;
   }
 
   .cyber-navbar .nav-top-actions {

@@ -692,6 +692,33 @@
   flex-shrink: 0;
 }
 
+.combined-video-find-us-wrap {
+  text-align: right;
+  margin-top: 0.75rem;
+}
+
+.combined-ctrl-find-us {
+  color: #ef4444 !important;
+  background: none;
+  border: none;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-decoration: none !important;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.15s ease, opacity 0.15s ease;
+}
+
+.combined-ctrl-find-us:hover {
+  color: #f87171 !important;
+  text-decoration: none !important;
+}
+
+
+
 .combined-ctrl-badge {
   font-size: 0.68rem;
   font-weight: 700;

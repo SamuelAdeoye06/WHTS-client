@@ -5,7 +5,7 @@ import './Home.css'
 
 import heroImage from '../assets/media/hero-image.png'
 
-const heroVideo = 'https://res.cloudinary.com/dqch0tjrm/video/upload/v1779575838/hero-video-compressed_rdbyn5.mp4'
+const heroVideo = 'https://res.cloudinary.com/dqch0tjrm/video/upload/v1782308519/hero-video-comp_zzd0se.mp4'
 
 function useCounter(target, duration = 1400, trigger) {
   const [count, setCount] = useState(0)

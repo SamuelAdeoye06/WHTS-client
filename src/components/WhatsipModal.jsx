@@ -1,45 +1,317 @@
 /**
  * WhatsipModal — shared inline modal for:
- *   mode="hire"    → Hire Our Team intake form
- *   mode="report"  → Report This Threat form  
- *   mode="request" → Request Tools (WhatsApp / Telegram / form)
- *   mode="contact" → Contact WHTS (WhatsApp / Telegram / Email)
- *   mode="recovery" → View Recovery Steps (accordion, no auth needed)
- *
- * Requires user to be logged in (except recovery mode).
- * Placeholder contacts — swap WHATSAPP_NUMBER and TELEGRAM_USERNAME when real ones arrive.
+ *   mode="hire"     → Hire Our Team intake form
+ *   mode="report"   → Report This Threat form
+ *   mode="request"  → Request Tools  ← completely rebuilt with intelligent chatbot
+ *   mode="contact"  → Contact WHTS
+ *   mode="recovery" → View Recovery Steps (no auth)
  */
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import './WhatsipModal.css'
 
-/* ── Real contact details ── */
+/* ── Contact details ── */
 const WHATSAPP_NUMBER   = '19293816441'
 const TELEGRAM_USERNAME = 'WHTSIPA_DigitalTools'
 const SUPPORT_EMAIL     = 'support@whtsipa.com'
+const TG_CHANNEL_LINK   = 'https://t.me/WHTSIPA_DigitalTools'
 
-/* Generate a ticket ID */
 const genTicketId = () => {
   const d = new Date()
-  const datePart = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`
-  const rand = Math.floor(10000 + Math.random() * 90000)
-  return `WHTSIPA-TKT-${datePart}-${rand}`
+  const dp = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`
+  return `WHTSIPA-TKT-${dp}-${Math.floor(10000 + Math.random() * 90000)}`
 }
 
+/* ══════════════════════════════════════════
+   TOOLS CHATBOT CONVERSATION TREE
+   ══════════════════════════════════════════ */
+const TOOLS_FLOW = {
+  main: {
+    text: "Welcome to WHTSIPA Tools AI Assistant! I can help you browse security tools, purchase specific ones, or submit a custom request. What would you like to do?",
+    options: [
+      { text: "🛠️ Browse available tools", next: "browse" },
+      { text: "🛒 Purchase a specific tool", next: "purchase" },
+      { text: "📝 Request a new / custom tool", next: "custom_req" },
+      { text: "🧱 Botnet & network tools", next: "botnet" },
+      { text: "🔍 Tracking & OSINT tools", next: "tracking" },
+      { text: "🤝 Connect with a representative", next: "live_rep" },
+    ]
+  },
+  browse: {
+    text: "We offer security tools across these categories. Which area are you interested in?",
+    options: [
+      { text: "🦠 Malware & ransomware removal", next: "malware_tools" },
+      { text: "🔐 Account & identity protection", next: "account_tools" },
+      { text: "🌐 Network & DDoS protection", next: "network_tools" },
+      { text: "📡 Surveillance & monitoring", next: "surveillance_tools" },
+      { text: "💰 Crypto & financial fraud tools", next: "crypto_tools" },
+      { text: "⬅️ Back to main menu", next: "main" },
+    ]
+  },
+  malware_tools: {
+    text: "Our Malware & Ransomware suite includes:\n• Advanced Antivirus EDR\n• Ransomware Decryption Assistance\n• Spyware & Keylogger Detector\n• RAT (Remote Access Trojan) Neutralizer\n\nAll tools come with expert guidance from our team.",
+    options: [
+      { text: "🛒 Purchase a malware tool", next: "purchase_confirm" },
+      { text: "📝 Request custom malware solution", next: "custom_req" },
+      { text: "⬅️ Back to browse", next: "browse" },
+    ]
+  },
+  account_tools: {
+    text: "Our Account & Identity Protection tools include:\n• MFA Enforcement Suite\n• SIM Swap Prevention Tool\n• Account Recovery Assistance\n• Dark Web Identity Monitor\n• Password Strength Auditor",
+    options: [
+      { text: "🛒 Purchase an account tool", next: "purchase_confirm" },
+      { text: "📝 Request custom solution", next: "custom_req" },
+      { text: "⬅️ Back to browse", next: "browse" },
+    ]
+  },
+  network_tools: {
+    text: "Our Network Security tools include:\n• DDoS Mitigation & Traffic Scrubbing\n• Botnet Detection & Cleanup\n• Network Segmentation Tool\n• API Security Gateway\n• Firewall Configuration Auditor",
+    options: [
+      { text: "🛒 Purchase a network tool", next: "purchase_confirm" },
+      { text: "🧱 Tell me more about botnet tools", next: "botnet" },
+      { text: "⬅️ Back to browse", next: "browse" },
+    ]
+  },
+  surveillance_tools: {
+    text: "Our Surveillance & Monitoring tools include:\n• CCTV Security Audit & Lockdown (NPAPK)\n• Insider Threat Monitor (UBA)\n• Real-time Activity Logger\n• Social Media Monitoring Dashboard",
+    options: [
+      { text: "🛒 Purchase a surveillance tool", next: "purchase_confirm" },
+      { text: "📝 Request custom monitoring", next: "custom_req" },
+      { text: "⬅️ Back to browse", next: "browse" },
+    ]
+  },
+  crypto_tools: {
+    text: "Our Crypto & Financial Fraud tools include:\n• Crypto Wallet Recovery Assistant\n• Blockchain Transaction Tracer\n• Crypto Drainer Detector\n• Investment Scam Evidence Package",
+    options: [
+      { text: "🛒 Purchase a crypto tool", next: "purchase_confirm" },
+      { text: "📝 Request wallet recovery help", next: "custom_req" },
+      { text: "⬅️ Back to browse", next: "browse" },
+    ]
+  },
+  purchase: {
+    text: "To purchase a specific tool, let me know which category interests you. Our team will provide pricing and complete the transaction securely.",
+    options: [
+      { text: "🦠 Malware / Ransomware Tools", next: "malware_tools" },
+      { text: "🧱 Botnet Tools", next: "botnet" },
+      { text: "🔍 Tracking / OSINT Tools", next: "tracking" },
+      { text: "💰 Crypto Recovery Tools", next: "crypto_tools" },
+      { text: "📲 Get pricing on Telegram", action: "open_tg" },
+      { text: "⬅️ Back to main menu", next: "main" },
+    ]
+  },
+  purchase_confirm: {
+    text: "Great choice! To complete your purchase, our team will verify your requirements and provide a secure payment link. Connect directly via Telegram or WhatsApp with your Ticket ID for the fastest processing.",
+    options: [
+      { text: "📲 Continue on Telegram (WHTSIPA Tools)", action: "open_tg" },
+      { text: "💬 Continue on WhatsApp", action: "open_wa" },
+      { text: "⬅️ Back to main menu", next: "main" },
+    ]
+  },
+  custom_req: {
+    text: "Requesting a custom tool is easy! Our engineering team reviews all requests. We can build or source tools for any specific threat you're facing. What type of tool do you need?",
+    options: [
+      { text: "🧱 Botnet-related tool", next: "botnet" },
+      { text: "🔍 Tracking / investigation tool", next: "tracking" },
+      { text: "🔐 Identity / account protection", next: "account_tools" },
+      { text: "📡 Surveillance / monitoring tool", next: "surveillance_tools" },
+      { text: "📲 Submit request on Telegram", action: "open_tg" },
+      { text: "⬅️ Back to main menu", next: "main" },
+    ]
+  },
+  botnet: {
+    text: "Our Botnet & Network Security tools include:\n• Botnet Detection & Cleanup\n• Device Quarantine & Segmentation\n• Zombie Network Analyzer\n• C2 Server Takedown Assistance\n• Botnet Blocker Suite\n\nThese tools permanently eliminate botnet infections and fully secure your network.",
+    options: [
+      { text: "🛒 Purchase a botnet tool", next: "purchase_confirm" },
+      { text: "📝 Request botnet investigation", next: "botnet_request" },
+      { text: "🤝 Talk to a specialist now", next: "live_rep" },
+      { text: "⬅️ Back to main menu", next: "main" },
+    ]
+  },
+  botnet_request: {
+    text: "For a botnet investigation or full cleanup, our specialists will analyze your network, identify all infected nodes, and provide a complete remediation plan. Connect via Telegram for the fastest response.",
+    options: [
+      { text: "📲 Start on Telegram (WHTSIPA Tools)", action: "open_tg" },
+      { text: "💬 Start on WhatsApp", action: "open_wa" },
+      { text: "⬅️ Back to main menu", next: "main" },
+    ]
+  },
+  tracking: {
+    text: "Our Tracking & OSINT tools include:\n• Grabify IP Tracker (capture IP via custom links)\n• Scammer IP Tracing Tool\n• Social Media Footprint Analyzer\n• Phone Number OSINT Tool\n• Digital Identity Tracer\n\nThese tools help neutralize and trace active threats.",
+    options: [
+      { text: "🛒 Purchase a tracking tool", next: "purchase_confirm" },
+      { text: "📝 Request scammer trace", next: "tracking_request" },
+      { text: "🤝 Talk to a specialist", next: "live_rep" },
+      { text: "⬅️ Back to main menu", next: "main" },
+    ]
+  },
+  tracking_request: {
+    text: "Our tracking specialists can trace a scammer using IP logging, social media OSINT, and digital footprint analysis. We document everything for potential legal action. Ready to begin?",
+    options: [
+      { text: "📲 Start request on Telegram", action: "open_tg" },
+      { text: "💬 Start request on WhatsApp", action: "open_wa" },
+      { text: "⬅️ Back to main menu", next: "main" },
+    ]
+  },
+  live_rep: {
+    text: "Our live representatives are available to assist you immediately. We respond fastest on Telegram at @WHTSIPA_DigitalTools. Choose your preferred channel:",
+    options: [
+      { text: "📲 Telegram — WHTSIPA Tools (Immediate)", action: "open_tg" },
+      { text: "💬 WhatsApp — 24/7 Support", action: "open_wa" },
+      { text: "⬅️ Back to main menu", next: "main" },
+    ]
+  },
+}
+
+/* ══════════════════════════════════════════
+   TOOLS LIVE CHAT COMPONENT
+   ══════════════════════════════════════════ */
+function ToolsLiveChat({ ticketId, threatTitle, onClose, onBack, userName, waLink }) {
+  const [currentNode, setCurrentNode] = useState('main')
+  const [messages, setMessages] = useState([
+    {
+      sender: 'agent',
+      text: `Hello ${userName || 'there'}! Welcome to WHTSIPA Tools AI Chat.${threatTitle ? ` I see you need tools for: ${threatTitle}.` : ''} I'm here to help you find, request, or purchase the right security tools. What can I assist you with?`,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    }
+  ])
+  const [isTyping, setIsTyping] = useState(false)
+  const chatEndRef = useRef(null)
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages, isTyping])
+
+  const selectOption = (opt) => {
+    const userMsg = {
+      sender: 'user',
+      text: opt.text,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    }
+    setMessages(prev => [...prev, userMsg])
+    setIsTyping(true)
+
+    if (opt.action) {
+      setTimeout(() => {
+        setIsTyping(false)
+        if (opt.action === 'open_tg') {
+          window.open(TG_CHANNEL_LINK, '_blank')
+          setMessages(prev => [...prev, {
+            sender: 'agent',
+            text: `Opening Telegram now at @WHTSIPA_DigitalTools. Your Ticket ID is: ${ticketId} — please share it with the representative for faster assistance.`,
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          }])
+        } else if (opt.action === 'open_wa') {
+          window.open(waLink, '_blank')
+          setMessages(prev => [...prev, {
+            sender: 'agent',
+            text: `Opening WhatsApp now. Your Ticket ID is: ${ticketId} — our team will respond shortly.`,
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          }])
+        }
+      }, 900)
+      return
+    }
+
+    if (opt.next) {
+      setTimeout(() => {
+        setIsTyping(false)
+        const next = TOOLS_FLOW[opt.next]
+        if (next) {
+          setCurrentNode(opt.next)
+          setMessages(prev => [...prev, {
+            sender: 'agent',
+            text: next.text,
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          }])
+        }
+      }, 1100)
+    }
+  }
+
+  const nodeData = TOOLS_FLOW[currentNode]
+
+  return (
+    <div className="wm-tools-chat">
+      {/* Header */}
+      <div className="wm-tools-chat-header">
+        <button className="wm-tools-back-btn" onClick={onBack} aria-label="Back">
+          <i className="bi bi-arrow-left"></i>
+        </button>
+        <div className="wm-tools-chat-avatar">
+          <i className="bi bi-robot text-white"></i>
+        </div>
+        <div className="wm-tools-chat-info">
+          <div className="wm-tools-chat-title">WHTSIPA Tools Assistant</div>
+          <div className="wm-tools-chat-status">
+            <span className="wm-tools-status-dot"></span>
+            AI Chatbot · Powered by WHTSIPA
+          </div>
+        </div>
+        <button className="wm-close wm-tools-close-btn" onClick={onClose} aria-label="Close">
+          <i className="bi bi-x-lg text-white"></i>
+        </button>
+      </div>
+
+      {/* Ticket bar */}
+      <div className="wm-tools-ticket-bar">
+        <i className="bi bi-ticket-perforated me-1"></i>
+        Ticket: <strong>{ticketId}</strong>
+      </div>
+
+      {/* Messages */}
+      <div className="wm-tools-chat-body">
+        {messages.map((m, i) => (
+          <div key={i} className={`wm-tools-msg-row ${m.sender === 'user' ? 'wm-tools-user-row' : 'wm-tools-agent-row'}`}>
+            <div className="wm-tools-bubble">
+              <div className="wm-tools-msg-text">{m.text}</div>
+              <div className="wm-tools-msg-time">{m.time}</div>
+            </div>
+          </div>
+        ))}
+        {isTyping && (
+          <div className="wm-tools-msg-row wm-tools-agent-row">
+            <div className="wm-tools-bubble wm-tools-typing">
+              <span className="wm-tools-typing-dot"></span>
+              <span className="wm-tools-typing-dot"></span>
+              <span className="wm-tools-typing-dot"></span>
+            </div>
+          </div>
+        )}
+        <div ref={chatEndRef} />
+      </div>
+
+      {/* Options */}
+      {!isTyping && nodeData?.options && (
+        <div className="wm-tools-options-panel">
+          <div className="wm-tools-options-label">Select an option:</div>
+          <div className="d-flex flex-column gap-1">
+            {nodeData.options.map((opt, i) => (
+              <button key={i} type="button" className="wm-tools-opt-btn" onClick={() => selectOption(opt)}>
+                {opt.text}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ══════════════════════════════════════════
+   MAIN WHATSIP MODAL COMPONENT
+   ══════════════════════════════════════════ */
 export default function WhatsipModal({ mode, onClose, threatTitle = '' }) {
   const { user } = useAuth()
   const navigate = useNavigate()
-  const [ticketId]       = useState(genTicketId)
-  const [step, setStep]  = useState('main')   // 'main' | 'form' | 'success'
-  const [form, setForm]  = useState({
+  const [ticketId] = useState(genTicketId)
+  const [step, setStep] = useState('main')
+  const [form, setForm] = useState({
     summary: '', services: [], duration: 'One-Time Assistance',
-    goals: '', name: user?.firstName || user?.name || '',
-    email: user?.email || '', phone: '', contactMethod: 'WhatsApp',
+    goals: '', name: '', email: '', phone: '', contactMethod: 'WhatsApp',
     evidence: null,
   })
 
-  // Pre-fill user info when user changes
   useEffect(() => {
     if (user) {
       setForm(f => ({
@@ -51,14 +323,11 @@ export default function WhatsipModal({ mode, onClose, threatTitle = '' }) {
   }, [user])
 
   const waMessage = encodeURIComponent(
-    `Hello WHTSIPA Team,\n\nTicket ID: ${ticketId}\nThreat: ${threatTitle || 'General Inquiry'}\nI need assistance.\n\n— ${user?.email || 'Guest'}`
-  )
-  const tgMessage = encodeURIComponent(
-    `Hello WHTSIPA! Ticket: ${ticketId} | Threat: ${threatTitle || 'General'}`
+    `Hello WHTSIPA Tools Team,\n\nTicket ID: ${ticketId}\nTool Request: ${threatTitle || 'General Security Tools'}\nI need assistance.\n\n— ${user?.email || 'Guest'}`
   )
   const waLink   = `https://wa.me/${WHATSAPP_NUMBER}?text=${waMessage}`
   const tgLink   = `https://t.me/${TELEGRAM_USERNAME}`
-  const mailLink = `mailto:${SUPPORT_EMAIL}?subject=WHTSIPA%20Support%20%7C%20${ticketId}&body=Ticket%20ID%3A%20${ticketId}%0AThreat%3A%20${encodeURIComponent(threatTitle || 'General')}`
+  const mailLink = `mailto:${SUPPORT_EMAIL}?subject=WHTSIPA%20Support%20%7C%20${ticketId}&body=Ticket%3A%20${ticketId}`
 
   /* Auth gate */
   if (!user && mode !== 'recovery') {
@@ -70,12 +339,11 @@ export default function WhatsipModal({ mode, onClose, threatTitle = '' }) {
             <div className="wm-auth-icon"><i className="bi bi-shield-lock-fill"></i></div>
             <h3 className="wm-auth-title">Sign Up to Continue</h3>
             <p className="wm-auth-desc">
-              You must create a free account and verify your email before you can submit
-              any report, hire our team, or contact support. This ensures secure tracking
-              and personalized service.
+              You must create a free account before you can request tools, hire our team,
+              or contact support. This ensures secure tracking and personalized service.
             </p>
             <div className="wm-auth-ticket">
-              Your Ticket ID will be: <strong>{ticketId}</strong>
+              Your Ticket ID: <strong>{ticketId}</strong>
               <br/><small>Save this — it will be yours after sign up.</small>
             </div>
             <div className="d-flex gap-2 flex-wrap justify-content-center mt-3">
@@ -92,17 +360,15 @@ export default function WhatsipModal({ mode, onClose, threatTitle = '' }) {
     )
   }
 
-  /* ── RECOVERY MODE — inline accordion, no auth ── */
+  /* Recovery mode */
   if (mode === 'recovery') {
-    const steps = threatTitle
-      ? [
-          { n: 1, title: 'Stop & Secure', desc: 'Immediately disconnect the affected device from the internet. Change all passwords from a safe, unaffected device.' },
-          { n: 2, title: 'Document Everything', desc: 'Screenshot all evidence — messages, transactions, profiles. Note dates, amounts, and any contact details of the scammer.' },
-          { n: 3, title: 'Report Internally', desc: 'Report to your bank, platform (e.g. Instagram, PayPal), and local cybercrime authority. Use our Report This Threat button.' },
-          { n: 4, title: 'Contact WHTSIPA', desc: 'Submit a full incident report via WhatsApp or Telegram. Our team will assign a specialist and begin your recovery case.' },
-          { n: 5, title: 'Monitor & Protect', desc: 'Set up account alerts, enable 2FA everywhere, and follow up with our team for ongoing monitoring and closure.' },
-        ]
-      : []
+    const steps = threatTitle ? [
+      { n: 1, title: 'Stop & Secure',      desc: 'Immediately disconnect the affected device. Change all passwords from a safe device.' },
+      { n: 2, title: 'Document Everything', desc: 'Screenshot all evidence — messages, transactions, profiles, dates, amounts.' },
+      { n: 3, title: 'Report Internally',   desc: 'Report to your bank, platform, and local cybercrime authority.' },
+      { n: 4, title: 'Contact WHTSIPA',     desc: 'Submit a full incident report via WhatsApp or Telegram for expert case assignment.' },
+      { n: 5, title: 'Monitor & Protect',   desc: 'Set up account alerts, enable 2FA everywhere, and follow up with our team.' },
+    ] : []
     return (
       <div className="wm-overlay" onClick={onClose}>
         <div className="wm-modal wm-recovery" onClick={e => e.stopPropagation()}>
@@ -112,29 +378,22 @@ export default function WhatsipModal({ mode, onClose, threatTitle = '' }) {
             <div>
               <div className="wm-mode-label">Recovery Guide</div>
               <h3 className="wm-title">View Recovery Steps</h3>
-              <p className="wm-subtitle">Step-by-step recovery for: <strong>{threatTitle || 'this threat'}</strong></p>
+              <p className="wm-subtitle">For: <strong>{threatTitle || 'this threat'}</strong></p>
             </div>
           </div>
           <div className="wm-steps-list">
             {steps.map(s => (
               <div key={s.n} className="wm-recovery-step">
                 <div className="wm-step-num">{s.n}</div>
-                <div>
-                  <div className="wm-step-title">{s.title}</div>
-                  <div className="wm-step-desc">{s.desc}</div>
-                </div>
+                <div><div className="wm-step-title">{s.title}</div><div className="wm-step-desc">{s.desc}</div></div>
               </div>
             ))}
           </div>
           <div className="wm-recovery-cta">
             <p className="wm-subtitle">Need personalised recovery support?</p>
             <div className="d-flex gap-2 flex-wrap">
-              <a href={waLink} target="_blank" rel="noreferrer" className="wm-channel-btn wm-wa">
-                <i className="bi bi-whatsapp"></i>WhatsApp (24/7)
-              </a>
-              <a href={tgLink} target="_blank" rel="noreferrer" className="wm-channel-btn wm-tg">
-                <i className="bi bi-telegram"></i>Telegram
-              </a>
+              <a href={waLink} target="_blank" rel="noreferrer" className="wm-channel-btn wm-wa"><i className="bi bi-whatsapp"></i>WhatsApp (24/7)</a>
+              <a href={tgLink} target="_blank" rel="noreferrer" className="wm-channel-btn wm-tg"><i className="bi bi-telegram"></i>Telegram</a>
             </div>
           </div>
         </div>
@@ -142,7 +401,7 @@ export default function WhatsipModal({ mode, onClose, threatTitle = '' }) {
     )
   }
 
-  /* ── CONTACT / HIRE — channel picker ── */
+  /* Contact / Hire picker */
   if (mode === 'contact' || (mode === 'hire' && step === 'main')) {
     return (
       <div className="wm-overlay" onClick={onClose}>
@@ -156,43 +415,20 @@ export default function WhatsipModal({ mode, onClose, threatTitle = '' }) {
               <p className="wm-subtitle">Choose how you'd like to connect.</p>
             </div>
           </div>
-          <div className="wm-ticket-ref">
-            <i className="bi bi-ticket-perforated me-2"></i>
-            Your Ticket Reference: <strong>{ticketId}</strong>
-          </div>
+          <div className="wm-ticket-ref"><i className="bi bi-ticket-perforated me-2"></i>Ticket Reference: <strong>{ticketId}</strong></div>
           <div className="wm-channels">
             <a href={waLink} target="_blank" rel="noreferrer" className="wm-channel-btn wm-wa">
-              <i className="bi bi-whatsapp"></i>
-              <span>
-                <strong>WhatsApp</strong>
-                <small>24/7 support — fastest response</small>
-              </span>
-              <i className="bi bi-arrow-right ms-auto"></i>
+              <i className="bi bi-whatsapp"></i><span><strong>WhatsApp</strong><small>24/7 support — fastest response</small></span><i className="bi bi-arrow-right ms-auto"></i>
             </a>
             <a href={tgLink} target="_blank" rel="noreferrer" className="wm-channel-btn wm-tg">
-              <i className="bi bi-telegram"></i>
-              <span>
-                <strong>Telegram</strong>
-                <small>Instant messaging support</small>
-              </span>
-              <i className="bi bi-arrow-right ms-auto"></i>
+              <i className="bi bi-telegram"></i><span><strong>Telegram</strong><small>Instant messaging support</small></span><i className="bi bi-arrow-right ms-auto"></i>
             </a>
             <a href={mailLink} className="wm-channel-btn wm-email">
-              <i className="bi bi-envelope"></i>
-              <span>
-                <strong>Email Us</strong>
-                <small>{SUPPORT_EMAIL}</small>
-              </span>
-              <i className="bi bi-arrow-right ms-auto"></i>
+              <i className="bi bi-envelope"></i><span><strong>Email Us</strong><small>{SUPPORT_EMAIL}</small></span><i className="bi bi-arrow-right ms-auto"></i>
             </a>
             {mode === 'hire' && (
               <button className="wm-channel-btn wm-form" onClick={() => setStep('form')}>
-                <i className="bi bi-file-earmark-text"></i>
-                <span>
-                  <strong>Submit Hire Request Form</strong>
-                  <small>Structured intake form — creates a ticket</small>
-                </span>
-                <i className="bi bi-arrow-right ms-auto"></i>
+                <i className="bi bi-file-earmark-text"></i><span><strong>Submit Hire Request Form</strong><small>Structured intake form — creates a ticket</small></span><i className="bi bi-arrow-right ms-auto"></i>
               </button>
             )}
           </div>
@@ -201,56 +437,99 @@ export default function WhatsipModal({ mode, onClose, threatTitle = '' }) {
     )
   }
 
-  /* ── REQUEST TOOLS ── */
+  /* ════════════════════════════════════════
+     REQUEST TOOLS — main picker
+     ════════════════════════════════════════ */
   if (mode === 'request' && step === 'main') {
     return (
       <div className="wm-overlay" onClick={onClose}>
-        <div className="wm-modal" onClick={e => e.stopPropagation()}>
+        <div className="wm-modal wm-request-main" onClick={e => e.stopPropagation()}>
           <button className="wm-close" onClick={onClose}><i className="bi bi-x-lg"></i></button>
+
           <div className="wm-header">
             <i className="bi bi-tools wm-header-icon" style={{ color: '#f59e0b' }}></i>
             <div>
-              <div className="wm-mode-label">Request Tools</div>
-              <h3 className="wm-title">Get Advanced Security Tools</h3>
-              <p className="wm-subtitle">Choose your preferred way to request tools.</p>
+              <div className="wm-mode-label">WHTSIPA Tools</div>
+              <h3 className="wm-title">Request Security Tools</h3>
+              <p className="wm-subtitle">
+                {threatTitle
+                  ? <>Requesting tools for: <strong>{threatTitle}</strong></>
+                  : 'Choose how you\'d like to proceed.'}
+              </p>
             </div>
           </div>
-          <div className="wm-ticket-ref">
-            <i className="bi bi-ticket-perforated me-2"></i>
-            Your Ticket Reference: <strong>{ticketId}</strong>
-          </div>
-          <div className="wm-channels">
-            <a href={waLink} target="_blank" rel="noreferrer" className="wm-channel-btn wm-wa">
-              <i className="bi bi-whatsapp"></i>
-              <span>
-                <strong>WhatsApp</strong>
-                <small>Pre-filled message with your Ticket ID</small>
-              </span>
-              <i className="bi bi-arrow-right ms-auto"></i>
-            </a>
-            <a href={tgLink} target="_blank" rel="noreferrer" className="wm-channel-btn wm-tg">
-              <i className="bi bi-telegram"></i>
-              <span>
-                <strong>Telegram</strong>
-                <small>Pre-filled message with your Ticket ID</small>
-              </span>
-              <i className="bi bi-arrow-right ms-auto"></i>
-            </a>
-            <button className="wm-channel-btn wm-form" onClick={() => setStep('form')}>
-              <i className="bi bi-file-earmark-text"></i>
-              <span>
-                <strong>Submit Request Form</strong>
-                <small>Structured form — creates a support ticket</small>
-              </span>
-              <i className="bi bi-arrow-right ms-auto"></i>
+
+          <div className="wm-ticket-ref"><i className="bi bi-ticket-perforated me-2"></i>Ticket: <strong>{ticketId}</strong></div>
+
+          {/* Two main options */}
+          <div className="wm-request-options">
+            <button className="wm-request-option-card wm-roc-chat" onClick={() => setStep('livechat')}>
+              <div className="wm-roc-icon"><i className="bi bi-robot"></i></div>
+              <div className="wm-roc-body">
+                <div className="wm-roc-title">
+                  <span>AI Live Chat</span>
+                  <span className="wm-roc-badge">Instant</span>
+                </div>
+                <div className="wm-roc-desc">
+                  Powered by WHTSIPA Chatbot — browse tools, request botnet tools, purchase, get custom recommendations and more
+                </div>
+              </div>
+              <i className="bi bi-arrow-right wm-roc-arrow"></i>
             </button>
+
+            <a href={TG_CHANNEL_LINK} target="_blank" rel="noopener noreferrer" className="wm-request-option-card wm-roc-tg text-decoration-none">
+              <div className="wm-roc-icon wm-roc-tg-icon"><i className="bi bi-telegram"></i></div>
+              <div className="wm-roc-body">
+                <div className="wm-roc-title">
+                  <span>Telegram Chat</span>
+                  <span className="wm-roc-badge wm-roc-badge-tg">Immediate</span>
+                </div>
+                <div className="wm-roc-username"><i className="bi bi-at me-1"></i>WHTSIPA_DigitalTools</div>
+                <div className="wm-roc-desc">Immediate response available on our Telegram</div>
+              </div>
+              <i className="bi bi-arrow-right wm-roc-arrow"></i>
+            </a>
+          </div>
+
+          {/* Footer — Telegram support channel */}
+          <div className="wm-request-footer-info">
+            <div className="wm-request-footer-label">
+              <i className="bi bi-send me-1"></i>Join Telegram Support Channel
+            </div>
+            <a href={TG_CHANNEL_LINK} target="_blank" rel="noopener noreferrer" className="wm-tg-support-link">
+              <i className="bi bi-telegram me-2"></i>
+              <span>WHTSIPA Tools</span>
+              <i className="bi bi-box-arrow-up-right ms-auto"></i>
+            </a>
           </div>
         </div>
       </div>
     )
   }
 
-  /* ── REPORT FORM / HIRE FORM / REQUEST FORM ── */
+  /* ════════════════════════════════════════
+     REQUEST TOOLS — intelligent live chat
+     ════════════════════════════════════════ */
+  if (mode === 'request' && step === 'livechat') {
+    return (
+      <div className="wm-overlay" onClick={onClose}>
+        <div className="wm-modal wm-livechat-modal" onClick={e => e.stopPropagation()}>
+          <ToolsLiveChat
+            ticketId={ticketId}
+            threatTitle={threatTitle}
+            onClose={onClose}
+            onBack={() => setStep('main')}
+            userName={user?.firstName || user?.name || ''}
+            waLink={waLink}
+          />
+        </div>
+      </div>
+    )
+  }
+
+  /* ════════════════════════════════════════
+     REPORT / HIRE / REQUEST FORM
+     ════════════════════════════════════════ */
   if (step === 'form' || mode === 'report') {
     const isReport  = mode === 'report'
     const isHire    = mode === 'hire'
@@ -267,8 +546,6 @@ export default function WhatsipModal({ mode, onClose, threatTitle = '' }) {
 
     const handleSubmit = (e) => {
       e.preventDefault()
-      // Backend integration point — POST to /api/reports or /api/tickets
-      // For now: simulate success
       setStep('success')
     }
 
@@ -282,16 +559,11 @@ export default function WhatsipModal({ mode, onClose, threatTitle = '' }) {
               <h3 className="wm-success-title">Ticket Created!</h3>
               <div className="wm-ticket-ref wm-ticket-large">{ticketId}</div>
               <p className="wm-success-desc">
-                Our specialist will assist you shortly. You'll be connected via your preferred
-                contact method. Please keep your Ticket ID for reference.
+                Our specialist will assist you shortly. Keep your Ticket ID for reference.
               </p>
               <div className="d-flex gap-2 flex-wrap justify-content-center">
-                <a href={waLink} target="_blank" rel="noreferrer" className="wm-channel-btn wm-wa">
-                  <i className="bi bi-whatsapp"></i>Continue on WhatsApp
-                </a>
-                <a href={tgLink} target="_blank" rel="noreferrer" className="wm-channel-btn wm-tg">
-                  <i className="bi bi-telegram"></i>Continue on Telegram
-                </a>
+                <a href={waLink} target="_blank" rel="noreferrer" className="wm-channel-btn wm-wa"><i className="bi bi-whatsapp"></i>Continue on WhatsApp</a>
+                <a href={tgLink} target="_blank" rel="noreferrer" className="wm-channel-btn wm-tg"><i className="bi bi-telegram"></i>Continue on Telegram</a>
               </div>
               <button className="btn btn-outline-cyber mt-3 w-100" onClick={onClose}>Close</button>
             </div>
@@ -311,41 +583,25 @@ export default function WhatsipModal({ mode, onClose, threatTitle = '' }) {
               <h3 className="wm-title">{title}</h3>
             </div>
           </div>
-          <div className="wm-ticket-ref">
-            <i className="bi bi-ticket-perforated me-2"></i>
-            Ticket: <strong>{ticketId}</strong> — Save this reference number.
-          </div>
+          <div className="wm-ticket-ref"><i className="bi bi-ticket-perforated me-2"></i>Ticket: <strong>{ticketId}</strong> — Save this reference.</div>
 
           <form className="wm-form" onSubmit={handleSubmit}>
-            {/* Incident Summary */}
             <div className="wm-field">
               <label>Incident / Case Summary <span className="wm-required">*</span></label>
-              <textarea
-                rows={3}
-                placeholder="Briefly describe the issue or threat you're experiencing..."
-                value={form.summary}
-                onChange={e => setForm(f => ({ ...f, summary: e.target.value }))}
-                required
-              />
+              <textarea rows={3} placeholder="Briefly describe the issue or threat you're experiencing..."
+                value={form.summary} onChange={e => setForm(f => ({ ...f, summary: e.target.value }))} required />
             </div>
 
-            {/* Services (hire only) */}
             {isHire && (
               <div className="wm-field">
                 <label>Services Requested</label>
                 <div className="wm-checkboxes">
                   {SERVICE_OPTIONS.map(opt => (
                     <label key={opt} className="wm-checkbox-item">
-                      <input
-                        type="checkbox"
-                        checked={form.services.includes(opt)}
+                      <input type="checkbox" checked={form.services.includes(opt)}
                         onChange={e => setForm(f => ({
-                          ...f,
-                          services: e.target.checked
-                            ? [...f.services, opt]
-                            : f.services.filter(s => s !== opt)
-                        }))}
-                      />
+                          ...f, services: e.target.checked ? [...f.services, opt] : f.services.filter(s => s !== opt)
+                        }))} />
                       <span>{opt}</span>
                     </label>
                   ))}
@@ -353,31 +609,22 @@ export default function WhatsipModal({ mode, onClose, threatTitle = '' }) {
               </div>
             )}
 
-            {/* Engagement Duration (hire) */}
             {isHire && (
               <div className="wm-field">
                 <label>Desired Engagement Duration</label>
                 <select value={form.duration} onChange={e => setForm(f => ({ ...f, duration: e.target.value }))}>
-                  {['One-Time Assistance (single incident)', '7 Days', '30 Days', '90 Days', 'Ongoing / Retainer', 'Other (specify)'].map(o => (
-                    <option key={o}>{o}</option>
-                  ))}
+                  {['One-Time Assistance (single incident)', '7 Days', '30 Days', '90 Days', 'Ongoing / Retainer', 'Other (specify)'].map(o => <option key={o}>{o}</option>)}
                 </select>
               </div>
             )}
 
-            {/* Goals */}
             <div className="wm-field">
               <label>{isHire ? 'Specific Goals / What You Need Help With' : isRequest ? 'Tools Required / Goals' : 'What Happened — Detailed Description'} <span className="wm-required">*</span></label>
-              <textarea
-                rows={3}
+              <textarea rows={3}
                 placeholder={isHire ? 'Describe outcomes you want...' : isRequest ? 'List the tools or features you need...' : 'Provide as much detail as possible...'}
-                value={form.goals}
-                onChange={e => setForm(f => ({ ...f, goals: e.target.value }))}
-                required
-              />
+                value={form.goals} onChange={e => setForm(f => ({ ...f, goals: e.target.value }))} required />
             </div>
 
-            {/* Contact Information */}
             <div className="wm-field">
               <label>Contact Information</label>
               <div className="wm-row">
@@ -387,7 +634,6 @@ export default function WhatsipModal({ mode, onClose, threatTitle = '' }) {
               <input placeholder="Phone / WhatsApp number" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} />
             </div>
 
-            {/* Preferred Contact Method */}
             <div className="wm-field">
               <label>Preferred Contact Method</label>
               <div className="wm-radio-row">
@@ -401,16 +647,10 @@ export default function WhatsipModal({ mode, onClose, threatTitle = '' }) {
               </div>
             </div>
 
-            {/* Evidence Upload */}
             <div className="wm-field">
               <label>Evidence Upload <span className="wm-optional">(optional)</span></label>
-              <input
-                type="file"
-                multiple
-                accept="image/*,.pdf,.txt,.doc,.docx"
-                className="wm-file-input"
-                onChange={e => setForm(f => ({ ...f, evidence: e.target.files }))}
-              />
+              <input type="file" multiple accept="image/*,.pdf,.txt,.doc,.docx" className="wm-file-input"
+                onChange={e => setForm(f => ({ ...f, evidence: e.target.files }))} />
               <small className="wm-hint">Screenshots, transaction records, emails, etc. Secure &amp; encrypted.</small>
             </div>
 

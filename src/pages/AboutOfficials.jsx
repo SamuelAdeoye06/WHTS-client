@@ -244,6 +244,7 @@ function OfficialPlayer({ official }) {
    ══════════════════════════════════════ */
 function CombinedVideo() {
   const videoRef = useRef(null)
+  const playerWrapRef = useRef(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [muted,     setMuted]     = useState(true)
   const [progress,  setProgress]  = useState(0)
@@ -270,6 +271,22 @@ function CombinedVideo() {
     if (!v) return
     const r = e.currentTarget.getBoundingClientRect()
     v.currentTime = ((e.clientX - r.left) / r.width) * v.duration
+  }
+
+  const playFullscreen = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    const v = videoRef.current
+    const wrap = playerWrapRef.current
+    if (!v) return
+    v.muted = false
+    setMuted(false)
+    v.play().then(() => {
+      setIsPlaying(true)
+      if (wrap) {
+        wrap.requestFullscreen?.() || wrap.webkitRequestFullscreen?.()
+      }
+    }).catch(e => console.log('Play error:', e))
   }
 
   useEffect(() => {
@@ -317,7 +334,7 @@ function CombinedVideo() {
         </div>
 
         {/* Cinematic player — full width */}
-        <div className="combined-video-player">
+        <div className="combined-video-player" ref={playerWrapRef}>
 
           {/* Top bar */}
           <div className="combined-video-topbar">
@@ -381,6 +398,12 @@ function CombinedVideo() {
             </div>
           </div>
 
+        </div>
+
+        <div className="combined-video-find-us-wrap">
+          <button className="combined-ctrl-find-us" onClick={playFullscreen} type="button">
+            FIND US
+          </button>
         </div>
       </div>
     </section>
