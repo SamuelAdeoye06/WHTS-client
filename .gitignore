@@ -24,4 +24,11 @@ dist-ssr
 *.sw?
 
 public/*
-*.env
+# Ignore sensitive local env files
+.env
+.env.local
+*.env.local
+
+# Allow Vite mode-specific env files to be committed (needed by Vercel build)
+!.env.development
+!.env.production
